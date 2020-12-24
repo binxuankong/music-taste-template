@@ -2,4 +2,11 @@
 
 {% block content %}
     <h1>{% block title %} Welcome to Music Taste Demo {% endblock %}</h1>
+    {% for user in users %}
+        <a href="{{ url_for('user', user_id=user['id']) }}">
+            <h2>{{ user['dname'] }}</h2>
+        </a>
+        <span class="badge badge-primary">{{ user['created'] }}</span>
+        <hr>
+    {% endfor %}
 {% endblock %}
