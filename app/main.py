@@ -4,8 +4,7 @@ import requests
 import spotipy
 from flask import Flask, render_template, request, url_for, flash, redirect, session
 from werkzeug.exceptions import abort
-from app.functions import get_user
-from app.spotifunc import get_user_profile, get_top_artists, get_top_tracks
+from app.dbfunc import sync_all_data
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'CALIWASAMISSIONBUTNOWAGLEAVING'
@@ -53,8 +52,11 @@ def callback():
 def profile():
     if 'token' in session:
         sp = spotipy.Spotify(auth=session['token'])
-        user_profile = get_user_profile(sp)
-        top_artists = get_top_artists(sp)
-        top_tracks = get_top_tracks(sp)
+        # Get new data
+        df_user, df_ta, df_tt = sync_all_data(sp)
+        # df_user, df_rp, df_cp, df_ta, df_tt = sync_all_data(sp)
+        user_profile = df_user.to_dict('records')[0]
+        top_artists = df_ta.loc[df_ta['timeframe'] == 'Long'].to_dict('records')
+        top_tracks = df_tt.loc[df_tt['timeframe'] == 'Long'].to_dict('records')
         return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks, session=session)
     return render_template('profile.html')

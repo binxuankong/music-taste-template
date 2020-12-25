@@ -18,8 +18,9 @@
 {% else %}
 
     <h2>{% block title %} {{ user['display_name'] }} {% endblock %}</h2>
-    <span class="badge badge-primary">{{ user['created'] }}</span>
+    <span class="badge badge-primary">{{ user['last_login'] }}</span>
     <p>Spotify profile: <a href="{{ user['spotify_url'] }}">{{ user['spotify_url'] }}</a></p>
+    <p>Followers: {{ user['followers'] }}</a></p>
     <p><img src="{{ user['image_url'] }}" alt="User Image" style="width:300px;height:300px"</p>
 
     <div class='top-artists'>
@@ -29,13 +30,15 @@
                 <th>Rank</th>
                 <th>Artist</th>
                 <th>Genres</th>
+                <th>Artist URL</th>
             </tr>
             <tr>
             {% for artist in artists %}
             <tr>
-                <td>{{ artist['Rank'] }}</td>
-                <td>{{ artist['Artist'] }}</td>
-                <td>{{ artist['Genres'] }}</td>
+                <td>{{ artist['rank'] }}</td>
+                <td>{{ artist['artist'] }}</td>
+                <td>{{ artist['genre'] }}</td>
+                <td>{{ artist['artist_url'] </td>
             </tr>
             {% endfor %}
         </table>
@@ -47,18 +50,19 @@
             <tr>
                 <th>Rank</th>
                 <th>Track</th>
-                <th>Artist</th>
+                <th>Artists</th>
                 <th>Album</th>
-                <th>Duration</th>
+                <th>Track URL</th>
+
             </tr>
             <tr>
             {% for track in tracks %}
             <tr>
-                <td>{{ track['Rank'] }}</td>
-                <td>{{ track['Track'] }}</td>
-                <td>{{ track['Artist'] }}</td>
-                <td>{{ track['Album'] }}</td>
-                <td>{{ track['Duration'] }}</td>
+                <td>{{ track['rank'] }}</td>
+                <td>{{ track['rrack'] }}</td>
+                <td>{{ track['artists'] }}</td>
+                <td>{{ track['album'] }}</td>
+                <td>{{ track['track_url'] }}</td>
             </tr>
             {% endfor %}
         </table>

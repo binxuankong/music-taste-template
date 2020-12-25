@@ -1,3 +1,5 @@
+import pandas as pd
+import datetime as dt
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -48,7 +50,7 @@ def get_user_df(sp):
         'spotify_url': user['external_urls']['spotify'],
         'image_url': user['images'][0]['url'],
         'followers': user['followers']['total'],
-        'last_login': datetime.datetime.now()
+        'last_login': dt.datetime.now()
     }, index=[0])
     return df_user
 
