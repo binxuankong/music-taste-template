@@ -4,7 +4,8 @@ import requests
 import spotipy
 from flask import Flask, render_template, request, url_for, flash, redirect, session
 from werkzeug.exceptions import abort
-from app.functions import get_db_connection, get_user, get_spotify_connection, get_user_profile, get_top_artists, get_top_tracks
+from app.functions import get_user
+from app.spotifunc import get_user_profile, get_top_artists, get_top_tracks
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'CALIWASAMISSIONBUTNOWAGLEAVING'
