@@ -4,7 +4,7 @@ import requests
 import spotipy
 from flask import Flask, render_template, request, url_for, flash, redirect, session
 from werkzeug.exceptions import abort
-from app.functions import get_db_connection, get_user, get_spotify_connection
+from app.functions import get_db_connection, get_user, get_spotify_connection, get_user_profile, get_top_artists, get_top_tracks
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'CALIWASAMISSIONBUTNOWAGLEAVING'
@@ -53,11 +53,10 @@ def callback():
 def profile():
     if 'token' in session:
         sp = spotipy.Spotify(auth=session['token'])
-        user_profile = sp.me()
-        user = {'display_name': user_profile['display_name'],
-                'spotify_url': user_profile['external_urls']['spotify'],
-                'image_url': user_profile['images'][0]['url']}
-        return render_template('profile.html', user=user)
+        user_profile = get_user_profile(sp)
+        top_artists = get_top_artists(sp)
+        top_tracks = get_top_tracks(sp)
+        return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks)
 
 @app.route('/link', methods=('GET', 'POST'))
 def link():
