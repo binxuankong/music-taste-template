@@ -13,8 +13,8 @@ API_BASE = "https://accounts.spotify.com"
 REDIRECT_URI = "http://music-taste-d.herokuapp.com/callback"
 # REDIRECT_URI = "http://127.0.0.1:5000/callback"
 SCOPE = "user-read-recently-played user-top-read"
-CLIENT_ID = "e08da5aa4af243e2ac533ca96170a077"
-CLIENT_SECRET = "116b8f9c375d467c9a1722af618923eb"
+CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
+CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
 
 @app.route('/')
 def index():

@@ -1,5 +1,7 @@
 env
+.env
 .DS_Store
 .cache
 __pycache__/
 */__pycache__/
+test.py
