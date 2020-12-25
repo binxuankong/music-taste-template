@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{% block title %} {{ user['display_name'] }} {% endblock %}</h2>
+    <p>Spotify profile: <a href="{{ user['spotify_url'] }}">{{ user['spotify_url'] }}</a></p>
+    <p><img src="{{ user['image_url'] }}" alt="User Image" style="width:300px;height:300px"</p>
+{% endblock %}
