@@ -20,7 +20,7 @@
     <h2>{% block title %} {{ user['display_name'] }} {% endblock %}</h2>
     <span class="badge badge-primary">{{ user['last_login'] }}</span>
     <p>Spotify profile: <a href="{{ user['spotify_url'] }}">{{ user['spotify_url'] }}</a></p>
-    <p>Followers: {{ user['followers'] }}</a></p>
+    <p>Followers: {{ user['followers'] }}</p>
     <p><img src="{{ user['image_url'] }}" alt="User Image" style="width:300px;height:300px"</p>
 
     <div class='top-artists'>
@@ -37,8 +37,8 @@
             <tr>
                 <td>{{ artist['rank'] }}</td>
                 <td>{{ artist['artist'] }}</td>
-                <td>{{ artist['genre'] }}</td>
-                <td>{{ artist['artist_url'] }}</td>
+                <td>{{ artist['genres'] }}</td>
+                <td><a href="{{ artist['artist_url'] }}">Artist Page</a></td>
             </tr>
             {% endfor %}
         </table>
@@ -59,10 +59,10 @@
             {% for track in tracks %}
             <tr>
                 <td>{{ track['rank'] }}</td>
-                <td>{{ track['rrack'] }}</td>
+                <td>{{ track['track'] }}</td>
                 <td>{{ track['artists'] }}</td>
                 <td>{{ track['album'] }}</td>
-                <td>{{ track['track_url'] }}</td>
+                <td><a href="{{ track['track_url'] }}">Open Track in Spotify</a></td>
             </tr>
             {% endfor %}
         </table>
