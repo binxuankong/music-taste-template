@@ -6,42 +6,6 @@ from spotipy.oauth2 import SpotifyOAuth
 RANGES = {'short_term': 'Short', 'medium_term': 'Medium', 'long_term': 'Long'}
 LIMIT = 50
 
-def get_user_profile(sp):
-    results = sp.me()
-    user_profile = {'display_name': results['display_name'],
-                    'spotify_url': results['external_urls']['spotify'],
-                    'image_url': results['images'][0]['url']}
-    return user_profile
-
-def get_top_artists(sp, time_frame='long_term', limit=LIMIT):
-    results = sp.current_user_top_artists(time_range=time_frame, limit=limit)
-    top_artists = []
-    for i, item in enumerate(results['items']):
-        top_artists.append({'Rank': i+1,
-                            'Artist': item['name'],
-                            'Genres': item['genres'],
-                            'Timeframe': RANGES[time_frame]})
-    return top_artists
-
-def get_top_tracks(sp, time_frame='long_term', limit=LIMIT):
-    results = sp.current_user_top_tracks(time_range=time_frame, limit=limit)
-    top_tracks = []
-    for i, item in enumerate(results['items']):
-        track = item['name']
-        artist = item['artists'][0]['name']
-        album = item['album']['name']
-        duration = int(item['duration_ms'])
-        minute = int((duration / (1000*60)) % 60)
-        second = int((duration / 1000) % 60)
-        duration = str(minute) + ':' + str(second)
-        top_tracks.append({'Rank': i+1,
-                           'Track': track,
-                           'Artist': artist,
-                           'Album': album,
-                           'Duration': duration,
-                           'Timeframe': RANGES[time_frame]})
-    return top_tracks
-
 def get_user_df(sp):
     user = sp.me()
     df_user = pd.DataFrame({
@@ -50,6 +14,7 @@ def get_user_df(sp):
         'spotify_url': user['external_urls']['spotify'],
         'image_url': user['images'][0]['url'],
         'followers': user['followers']['total'],
+        'date_created': dt.datetime.now(),
         'last_login': dt.datetime.now()
     }, index=[0])
     return df_user
@@ -64,6 +29,7 @@ def get_recently_played_df(sp):
             'track': rp['track']['name'],
             'artists': "; ".join(a['name'] for a in rp['track']['artists']),
             'album': rp['track']['album']['name'],
+            'release_date': rp['track']['album']['release_date'],
             'track_url': rp['track']['external_urls']['spotify'],
             'played_at': rp['played_at']
         }
@@ -116,6 +82,7 @@ def get_top_tracks_df(sp):
                 'track': t['name'],
                 'artists': "; ".join(a['name'] for a in t['artists']),
                 'album': t['album']['name'],
+                'release_date': t['album']['release_date'],
                 'track_url': t['external_urls']['spotify'],
                 'timeframe': RANGES[r]
             }

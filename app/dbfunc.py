@@ -1,11 +1,33 @@
 import os
+import pandas as pd
 from sqlalchemy import create_engine
+from app.queries import user_update_query
 from app.spotifunc import get_user_df, get_recently_played_df, get_current_playlists_df, get_top_artists_df, get_top_tracks_df
 
 TABLES = ['Users', 'RecentlyPlayed', 'CurrentPlaylists', 'TopArtists', 'TopTracks']
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+def update_user_profile(df_user):
+    engine = create_engine(DATABASE_URL)
+    u = df_user.to_dict('records')[0]
+    df_exist = pd.read_sql_query('SELECT * FROM "Users" u WHERE u.user_id = %(user_id)s', engine, \
+                                 params={'user_id': u['user_id']})
+    if len(df_exist) == 0:
+        df_user.to_sql('Users', engine, if_exists='append', index=False)
+    else:
+        engine.execute(user_update_query, user_id=u['user_id'], display_name=u['display_name'], spotify_url=u['spotify_url'], \
+            image_url=u['image_url'], followers=u['followers'], last_login=u['last_login'])
+    engine.dispose()
+    return u
+
+def get_top_songs(user_id, timeframe='Long'):
+    engine = create_engine(DATABASE_URL)
+    df = pd.read_sql_query('SELECT * FROM "TopArtists" ta WHERE ta.user_id = %(user_id)s and ta.timeframe = %(timeframe)s',
+                           engine, user_id=user_id, timeframe=timeframe)
+    engine.dispose()
+    return engine
 
 def sync_all_data(sp):
-    DATABASE_URL = os.environ.get('DATABASE_URL')
     engine = create_engine(DATABASE_URL)
     # User profile
     df_user = get_user_df(sp)

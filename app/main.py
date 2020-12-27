@@ -4,14 +4,15 @@ import requests
 import spotipy
 from flask import Flask, render_template, request, url_for, flash, redirect, session
 from werkzeug.exceptions import abort
+from app.spotifunc import get_user_profile
 from app.dbfunc import sync_all_data
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'CALIWASAMISSIONBUTNOWAGLEAVING'
 
 API_BASE = "https://accounts.spotify.com"
-REDIRECT_URI = "http://music-taste-d.herokuapp.com/callback"
-# REDIRECT_URI = "http://127.0.0.1:5000/callback"
+# REDIRECT_URI = "http://music-taste-d.herokuapp.com/callback"
+REDIRECT_URI = "http://127.0.0.1:5000/callback"
 SCOPE = "user-read-recently-played user-top-read"
 CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
 CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
@@ -48,15 +49,37 @@ def callback():
     session['token'] = res_body.get('access_token')
     return redirect(url_for('index'))
 
-@app.route('/profile')
+@app.route("/view_credentials", methods = ["POST", "GET"])
+def view_credentials():
+
+    if request.method == "GET":
+        if request.form.get('submit_button') == 'View Admin':
+            output = db.execute('SELECT * FROM admin').fetchall()
+            return render_template("adminDashboard.html", output=output)
+        elif request.form.get('submit_button') == 'View Tutor':
+            output = db.execute('SELECT * FROM login_signup_tutor').fetchall()
+            return render_template("adminDashboard.html", output=output)
+
+@app.route('/profile', methods = ["POST", "GET"])
 def profile():
     if 'token' in session:
         sp = spotipy.Spotify(auth=session['token'])
+        # Get user profile
+        df_user = get_user_profile(sp)
+        user_profile = update_user_profile(df_user)
         # Get new data
         df_user, df_ta, df_tt = sync_all_data(sp)
         # df_user, df_rp, df_cp, df_ta, df_tt = sync_all_data(sp)
-        user_profile = df_user.to_dict('records')[0]
-        top_artists = df_ta.loc[df_ta['timeframe'] == 'Long'].to_dict('records')
-        top_tracks = df_tt.loc[df_tt['timeframe'] == 'Long'].to_dict('records')
+        
+        timeframe = 'Long'
+        if request.method == "GET":
+            if request.form.get('range_button') == 'All time':
+                timeframe = 'Long'
+            elif request.form.get('range_button') == 'Past few months':
+                timeframe = 'Medium'
+            elif request.form.get('range_button') == 'Recent':
+                timeframe = 'Short'
+        top_artists = df_ta.loc[df_ta['timeframe'] == timeframe].to_dict('records')
+        top_tracks = df_tt.loc[df_tt['timeframe'] == timeframe].to_dict('records')
         return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks, session=session)
-    return render_template('profile.html')
+    return render_template('profile.html', user=None)

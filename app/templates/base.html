@@ -24,12 +24,12 @@
           <li class="nav-item active">
             <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
           </li>
-          {% if not session %}
-          <li class="nav-item active">
+          {% if session %}
+          <li class="nav-item">
             <a class="nav-link" href="/link">Link Spotify</a>
           </li>
           {% else %}
-          <li class="nav-item">
+          <li class="nav-item active">
             <a class="nav-link" href="/link">Link Spotify</a>
           </li>
           {% endif %}
