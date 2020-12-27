@@ -20,12 +20,19 @@ def update_user_profile(df_user):
     engine.dispose()
     return u
 
-def get_top_songs(user_id, timeframe='Long'):
+def get_top_artists(user_id, timeframe='Long'):
     engine = create_engine(DATABASE_URL)
-    df = pd.read_sql_query('SELECT * FROM "TopArtists" ta WHERE ta.user_id = %(user_id)s and ta.timeframe = %(timeframe)s',
-                           engine, user_id=user_id, timeframe=timeframe)
+    df = pd.read_sql_query('SELECT * FROM "TopArtists" WHERE user_id = %(user_id)s and timeframe = %(timeframe)s', engine, \
+        params={'user_id': user_id, 'timeframe': timeframe})
     engine.dispose()
-    return engine
+    return df.to_dict('records')
+
+def get_top_tracks(user_id, timeframe='Long'):
+    engine = create_engine(DATABASE_URL)
+    df = pd.read_sql_query('SELECT * FROM "TopTracks" WHERE user_id = %(user_id)s and timeframe = %(timeframe)s', engine, \
+        params={'user_id': user_id, 'timeframe': timeframe})
+    engine.dispose()
+    return df.to_dict('records')
 
 def sync_all_data(sp):
     engine = create_engine(DATABASE_URL)

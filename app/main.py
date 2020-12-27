@@ -4,8 +4,8 @@ import requests
 import spotipy
 from flask import Flask, render_template, request, url_for, flash, redirect, session
 from werkzeug.exceptions import abort
-from app.spotifunc import get_user_profile
-from app.dbfunc import sync_all_data
+from app.spotifunc import get_user_df
+from app.dbfunc import update_user_profile, get_top_artists, get_top_tracks
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'CALIWASAMISSIONBUTNOWAGLEAVING'
@@ -65,12 +65,8 @@ def profile():
     if 'token' in session:
         sp = spotipy.Spotify(auth=session['token'])
         # Get user profile
-        df_user = get_user_profile(sp)
+        df_user = get_user_df(sp)
         user_profile = update_user_profile(df_user)
-        # Get new data
-        df_user, df_ta, df_tt = sync_all_data(sp)
-        # df_user, df_rp, df_cp, df_ta, df_tt = sync_all_data(sp)
-        
         timeframe = 'Long'
         if request.method == "GET":
             if request.form.get('range_button') == 'All time':
@@ -79,7 +75,7 @@ def profile():
                 timeframe = 'Medium'
             elif request.form.get('range_button') == 'Recent':
                 timeframe = 'Short'
-        top_artists = df_ta.loc[df_ta['timeframe'] == timeframe].to_dict('records')
-        top_tracks = df_tt.loc[df_tt['timeframe'] == timeframe].to_dict('records')
+        top_artists = get_top_artists(user_profile['user_id'], timeframe)
+        top_tracks = get_top_tracks(user_profile['user_id'], timeframe)
         return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks, session=session)
     return render_template('profile.html', user=None)
