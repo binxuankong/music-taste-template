@@ -62,12 +62,13 @@ def sync_all_data(sp):
 
 def sync_data(df, table, engine):
     if len(df) > 0:
-        user_id = df['user_id'][0]
-        delete_user_data(user_id, table, engine)
+        delete_user_data(df, table, engine)
         insert_new_data(df, table, engine)
 
-def delete_user_data(user_id, table, engine):
-    engine.execute('DELETE FROM "{}" WHERE user_id = %(user_id)s'.format(table), user_id=user_id)
+def delete_user_data(df, table, engine):
+    user_id = df['user_id'][0]
+    timeframe = df['timeframe'][0]]
+    engine.execute('DELETE FROM "{}" WHERE user_id = %(user_id)s AND timeframe = %(timeframe)s'.format(table), user_id=user_id, timeframe=timeframe)
 
 def insert_new_data(df, table, engine):
     df.to_sql(table, engine, index=False, if_exists='append')
