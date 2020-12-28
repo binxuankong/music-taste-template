@@ -67,7 +67,7 @@ def sync_data(df, table, engine):
 
 def delete_user_data(df, table, engine):
     user_id = df['user_id'][0]
-    timeframe = df['timeframe'][0]]
+    timeframe = df['timeframe'][0]
     engine.execute('DELETE FROM "{}" WHERE user_id = %(user_id)s AND timeframe = %(timeframe)s'.format(table), user_id=user_id, timeframe=timeframe)
 
 def insert_new_data(df, table, engine):
