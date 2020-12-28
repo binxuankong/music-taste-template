@@ -11,8 +11,8 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'CALIWASAMISSIONBUTNOWAGLEAVING'
 
 API_BASE = "https://accounts.spotify.com"
-# REDIRECT_URI = "http://music-taste-d.herokuapp.com/callback"
-REDIRECT_URI = "http://127.0.0.1:5000/callback"
+REDIRECT_URI = "http://music-taste-d.herokuapp.com/callback"
+# REDIRECT_URI = "http://127.0.0.1:5000/callback"
 SCOPE = "user-read-recently-played user-top-read"
 CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
 CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
