@@ -16,13 +16,16 @@
     <p>Spotify profile: <a href="{{ user['spotify_url'] }}">{{ user['spotify_url'] }}</a></p>
     <p>Followers: {{ user['followers'] }}</p>
     <p><img src="{{ user['image_url'] }}" alt="User Image" style="width:300px;height:300px"</p>
-
-    <a href="{{ url_for('profile')}}"> <input type="submit" name="range_button" value="Recent"></a>
-    <a href="{{ url_for('profile')}}"> <input type="submit" name="range_button" value="Past few months"></a>
-    <a href="{{ url_for('profile')}}"> <input type="submit" name="range_button" value="All time"></a>
+    <br>
+    <form method="POST" action="/profile">
+        <input type="submit" name="range_button" value="Recent">
+        <input type="submit" name="range_button" value="Past few months">
+        <input type="submit" name="range_button" value="All time">
+    </form>
+    <br>
 
     <div class='top-artists'>
-        <h3>Your top artists: </h3>
+        <h3>Your top artists ({{ timeframe }}): </h3>
         <table style="width:100%">
             <tr>
                 <th>Rank</th>
@@ -42,8 +45,10 @@
         </table>
     </div>
 
+    <br>
+
     <div class='top-tracks'>
-        <h3>Your top tracks: </h3>
+        <h3>Your top tracks ({{ timeframe }}): </h3>
         <table style="width:100%">
             <tr>
                 <th>Rank</th>

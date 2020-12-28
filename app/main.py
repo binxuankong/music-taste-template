@@ -11,8 +11,8 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'CALIWASAMISSIONBUTNOWAGLEAVING'
 
 API_BASE = "https://accounts.spotify.com"
-# REDIRECT_URI = "http://music-taste-d.herokuapp.com/callback"
-REDIRECT_URI = "http://127.0.0.1:5000/callback"
+REDIRECT_URI = "http://music-taste-d.herokuapp.com/callback"
+# REDIRECT_URI = "http://127.0.0.1:5000/callback"
 SCOPE = "user-read-recently-played user-top-read"
 CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
 CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
@@ -67,15 +67,15 @@ def profile():
         # Get user profile
         df_user = get_user_df(sp)
         user_profile = update_user_profile(df_user)
-        timeframe = 'Long'
-        if request.method == "GET":
+        timeframe = 'long_term'
+        if request.method == "POST":
             if request.form.get('range_button') == 'All time':
-                timeframe = 'Long'
+                timeframe = ('long_term', 'All time')
             elif request.form.get('range_button') == 'Past few months':
-                timeframe = 'Medium'
+                timeframe = ('medium_term', 'Past few months')
             elif request.form.get('range_button') == 'Recent':
-                timeframe = 'Short'
-        top_artists = get_top_artists(user_profile['user_id'], timeframe)
-        top_tracks = get_top_tracks(user_profile['user_id'], timeframe)
-        return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks, session=session)
+                timeframe = ('short_term', 'Recent')
+        top_artists = get_top_artists(sp, timeframe[0])
+        top_tracks = get_top_tracks(sp, timeframe[0])
+        return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks, session=session, timeframe=timeframe[1])
     return render_template('profile.html', user=None)

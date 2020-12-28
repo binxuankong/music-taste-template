@@ -20,17 +20,21 @@ def update_user_profile(df_user):
     engine.dispose()
     return u
 
-def get_top_artists(user_id, timeframe='Long'):
+def get_top_artists(sp, timeframe):
     engine = create_engine(DATABASE_URL)
-    df = pd.read_sql_query('SELECT * FROM "TopArtists" WHERE user_id = %(user_id)s and timeframe = %(timeframe)s', engine, \
-        params={'user_id': user_id, 'timeframe': timeframe})
+    df = get_top_artists_df(sp, timeframe)
+    sync_data(df, 'TopArtists', engine)
+    # df = pd.read_sql_query('SELECT * FROM "TopArtists" WHERE user_id = %(user_id)s and timeframe = %(timeframe)s', engine, \
+    #     params={'user_id': user_id, 'timeframe': timeframe})
     engine.dispose()
     return df.to_dict('records')
 
-def get_top_tracks(user_id, timeframe='Long'):
+def get_top_tracks(sp, timeframe='Long'):
     engine = create_engine(DATABASE_URL)
-    df = pd.read_sql_query('SELECT * FROM "TopTracks" WHERE user_id = %(user_id)s and timeframe = %(timeframe)s', engine, \
-        params={'user_id': user_id, 'timeframe': timeframe})
+    df = get_top_tracks_df(sp, timeframe)
+    sync_data(df, 'TopTracks', engine)
+    # df = pd.read_sql_query('SELECT * FROM "TopTracks" WHERE user_id = %(user_id)s and timeframe = %(timeframe)s', engine, \
+    #     params={'user_id': user_id, 'timeframe': timeframe})
     engine.dispose()
     return df.to_dict('records')
 
