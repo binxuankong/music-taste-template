@@ -2,6 +2,7 @@ import os
 import json
 import requests
 import spotipy
+import pandas as pd
 from flask import Flask, render_template, request, url_for, flash, redirect, session
 from werkzeug.exceptions import abort
 from app.spotifunc import get_user_df
@@ -78,3 +79,19 @@ def profile():
         top_tracks = get_top_tracks(sp, timeframe[0])
         return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks, session=session, timeframe=timeframe[1])
     return render_template('profile.html', user=None)
+
+def top_to_dict(top_df):
+    top_dict = {}
+    top_dict['Short'] = top_df.loc[top_df['timeframe'] == 'Short'].to_dict('records')[:10]
+    top_dict['Medium'] = top_df.loc[top_df['timeframe'] == 'Medium'].to_dict('records')[:10]
+    top_dict['Long'] = top_df.loc[top_df['timeframe'] == 'Long'].to_dict('records')[:10]
+    return top_dict
+
+@app.route('/sample')
+def sample():
+    user_id = 12120382831
+    top_artists = pd.read_csv('data/top_artists.csv')
+    top_tracks = pd.read_csv('data/top_tracks.csv')
+    top_artists = top_to_dict(top_artists.loc[top_artists['user_id'] == user_id])
+    top_tracks = top_to_dict(top_tracks.loc[top_tracks['user_id'] == user_id])
+    return render_template('sample.html', artists=top_artists, tracks=top_tracks)

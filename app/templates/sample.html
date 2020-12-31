@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+<head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+</head>
+
+{% block content %}
+<h2>{% block title %} Sample User Profile {% endblock %}</h2>
+<section id="tabs" class="top-tab">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <nav>
+                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-recent-tab" data-toggle="tab" href="#nav-recent" role="tab" aria-controls="nav-recent" aria-selected="true">Recent</a>
+                        <a class="nav-item nav-link" id="nav-months-tab" data-toggle="tab" href="#nav-months" role="tab" aria-controls="nav-month" aria-selected="false">Past Few Months</a>
+                        <a class="nav-item nav-link" id="nav-all-tab" data-toggle="tab" href="#nav-all" role="tab" aria-controls="nav-all" aria-selected="false">All Time</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-recent" role="tabpanel" aria-labelledby="nav-recent-tab">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th style="width:20%">Rank</th>
+                                    <th style="width:80%">Artist</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for artist in artists['Short'] %}
+                                <tr>
+                                    <td>{{ artist['rank'] }}</td>
+                                    <td><a href="{{ artist['artist_url'] }}">{{ artist['artist'] }}</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="nav-months" role="tabpanel" aria-labelledby="nav-months-tab">
+                        <table class="table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th style="width:20%">Rank</th>
+                                    <th style="width:80%">Artist</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for artist in artists['Medium'] %}
+                                <tr>
+                                    <td>{{ artist['rank'] }}</td>
+                                    <td><a href="{{ artist['artist_url'] }}">{{ artist['artist'] }}</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
+                        <table class="table" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th style="width:20%">Rank</th>
+                                    <th style="width:80%">Artist</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for artist in artists['Long'] %}
+                                <tr>
+                                    <td>{{ artist['rank'] }}</td>
+                                    <td><a href="{{ artist['artist_url'] }}">{{ artist['artist'] }}</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+         </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block script %}
+<script>
+    if (location.hash) {
+        $('a[href=\'' + location.hash + '\']').tab('show');
+    }
+
+    var activeTab = localStorage.getItem('activeTab');
+
+    if (activeTab) {
+        $('a[href="' + activeTab + '"]').tab('show');
+    }
+
+    $('body').on('click', 'a[data-toggle=\'tab\']', function (e) {
+        e.preventDefault()
+        var tab_name = this.getAttribute('href')
+        if (history.pushState) {
+            history.pushState(null, null, tab_name)
+        }
+        else {
+            location.hash = tab_name
+        }
+        localStorage.setItem('activeTab', tab_name)
+
+        $(this).tab('show');
+        return false;
+    });
+
+    $(window).on('popstate', function () {
+        var anchor = location.hash ||
+            $('a[data-toggle=\'tab\']').first().attr('href');
+        $('a[href=\'' + anchor + '\']').tab('show');
+    });
+</script>
+{% endblock %}
