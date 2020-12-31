@@ -49,56 +49,15 @@ def callback():
     session['token'] = res_body.get('access_token')
     return redirect(url_for('index'))
 
-@app.route("/view_credentials", methods = ["POST", "GET"])
-def view_credentials():
-
-    if request.method == "GET":
-        if request.form.get('submit_button') == 'View Admin':
-            output = db.execute('SELECT * FROM admin').fetchall()
-            return render_template("adminDashboard.html", output=output)
-        elif request.form.get('submit_button') == 'View Tutor':
-            output = db.execute('SELECT * FROM login_signup_tutor').fetchall()
-            return render_template("adminDashboard.html", output=output)
-
-@app.route('/profile', methods = ["POST", "GET"])
+@app.route('/profile')
 def profile():
     if 'token' in session:
         sp = spotipy.Spotify(auth=session['token'])
         # Get user profile
         df_user = get_user_df(sp)
         user_profile = update_user_profile(df_user)
-        timeframe = ('short_term', 'Recent')
-        if request.method == "POST":
-            if request.form.get('range_button') == 'All time':
-                timeframe = ('long_term', 'All time')
-            elif request.form.get('range_button') == 'Past few months':
-                timeframe = ('medium_term', 'Past few months')
-            elif request.form.get('range_button') == 'Recent':
-                timeframe = ('short_term', 'Recent')
-        top_artists = get_top_artists(sp, timeframe[0])
-        top_tracks = get_top_tracks(sp, timeframe[0])
-        return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks, session=session, timeframe=timeframe[1])
-    return render_template('profile.html', user=None)
-
-def top_to_dict(top_df):
-    top_dict = {}
-    top_dict['Short'] = top_df.loc[top_df['timeframe'] == 'Short'].to_dict('records')[:10]
-    top_dict['Medium'] = top_df.loc[top_df['timeframe'] == 'Medium'].to_dict('records')[:10]
-    top_dict['Long'] = top_df.loc[top_df['timeframe'] == 'Long'].to_dict('records')[:10]
-    return top_dict
-
-@app.route('/sample')
-def sample():
-    user_profile = {'user_id': '12120382831',
-    'display_name': 'Bin Xuan Kong',
-    'spotify_url': 'https://open.spotify.com/user/12120382831',
-    'image_url': 'https://scontent-hkt1-2.xx.fbcdn.net/v/t1.0-1/p320x320/11988649_10205375733654944_669349554023656758_n.jpg?_nc_cat=110&ccb=2&_nc_sid=0c64ff&_nc_ohc=AJow9AVGs5YAX8M8_c_&_nc_ht=scontent-hkt1-2.xx&tp=6&oh=7e0addad9882e303c4df5928dd93401f&oe=600D9BD2',
-    'followers': 53,
-    'date_created': '2020-12-27 18:24:31.543185',
-    'last_login': '2020-12-27 18:24:31.543192'}
-    top_artists = pd.read_csv('data/top_artists.csv')
-    top_tracks = pd.read_csv('data/top_tracks.csv')
-    user_id = int(user_profile['user_id'])
-    top_artists = top_to_dict(top_artists.loc[top_artists['user_id'] == user_id])
-    top_tracks = top_to_dict(top_tracks.loc[top_tracks['user_id'] == user_id])
-    return render_template('sample.html', user=user_profile, artists=top_artists, tracks=top_tracks)
+        top_artists = get_top_artists(sp)
+        top_tracks = get_top_tracks(sp)
+        return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks)
+    else:
+        return render_template('profile.html', user=None)

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+</style>
+
+{% if user %}
+
+    <h2>{% block title %} {{ user['display_name'] }} {% endblock %}</h2>
+    <p>Last login: <span class="badge badge-primary">{{ user['last_login'] }}</span></p>
+    <p>Spotify profile: <a href="{{ user['spotify_url'] }}">{{ user['spotify_url'] }}</a></p>
+    <p>Followers: {{ user['followers'] }}</p>
+    <p><img src="{{ user['image_url'] }}" alt="User Image" style="width:300px;height:300px"</p>
+    <br>
+    <form method="POST" action="/profile">
+        <input type="submit" name="range_button" value="Recent">
+        <input type="submit" name="range_button" value="Past few months">
+        <input type="submit" name="range_button" value="All time">
+    </form>
+    <br>
+
+    <div class='top-artists'>
+        <h3>Your top artists ({{ timeframe }}): </h3>
+        <table style="width:100%">
+            <tr>
+                <th>Rank</th>
+                <th>Artist</th>
+                <th>Genres</th>
+                <th>Artist URL</th>
+            </tr>
+            <tr>
+            {% for artist in artists %}
+            <tr>
+                <td>{{ artist['rank'] }}</td>
+                <td>{{ artist['artist'] }}</td>
+                <td>{{ artist['genres'] }}</td>
+                <td><a href="{{ artist['artist_url'] }}">Artist Page</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <br>
+
+    <div class='top-tracks'>
+        <h3>Your top tracks ({{ timeframe }}): </h3>
+        <table style="width:100%">
+            <tr>
+                <th>Rank</th>
+                <th>Track</th>
+                <th>Artists</th>
+                <th>Album</th>
+                <th>Release Date</th>
+                <th>Track URL</th>
+
+            </tr>
+            <tr>
+            {% for track in tracks %}
+            <tr>
+                <td>{{ track['rank'] }}</td>
+                <td>{{ track['track'] }}</td>
+                <td>{{ track['artists'] }}</td>
+                <td>{{ track['album'] }}</td>
+                <td>{{ track['release_date'] }} </td>
+                <td><a href="{{ track['track_url'] }}">Open Track in Spotify</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% else %}
+
+    <h2>Profile</h2>
+    <p>You need to link your Spotify account to see this page.</p>
+    <a type="button" class="btn btn-primary" href="/link">Link</a>
+
+{% endif %}
+
+{% endblock %}

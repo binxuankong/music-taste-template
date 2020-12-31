@@ -53,36 +53,38 @@ def get_current_playlists_df(sp):
         dict_list.append(this_playlist)
     return pd.DataFrame.from_dict(dict_list)
 
-def get_top_artists_df(sp, timeframe):
+def get_top_artists_df(sp):
     user_id = sp.me()['id']
     top_list = []
-    top_artists = sp.current_user_top_artists(time_range=timeframe, limit=LIMIT)
-    for i, a in enumerate(top_artists['items']):
-        this_artist = {
-            'user_id': user_id,
-            'rank': i+1,
-            'artist': a['name'],
-            'genres': "; ".join(g for g in a['genres']),
-            'artist_url': a['external_urls']['spotify'],
-            'timeframe': RANGES[timeframe]
-        }
-        top_list.append(this_artist)
+    for r in RANGES:
+        top_artists = sp.current_user_top_artists(time_range=r, limit=LIMIT)
+        for i, a in enumerate(top_artists['items']):
+            this_artist = {
+                'user_id': user_id,
+                'rank': i+1,
+                'artist': a['name'],
+                'genres': "; ".join(g for g in a['genres']),
+                'artist_url': a['external_urls']['spotify'],
+                'timeframe': RANGES[r]
+            }
+            top_list.append(this_artist)
     return pd.DataFrame.from_dict(top_list)
 
-def get_top_tracks_df(sp, timeframe):
+def get_top_tracks_df(sp):
     user_id = sp.me()['id']
     top_list = []
-    top_tracks = sp.current_user_top_tracks(time_range=timeframe, limit=LIMIT)
-    for i, t in enumerate(top_tracks['items']):
-        this_track = {
-            'user_id': user_id,
-            'rank': i+1,
-            'track': t['name'],
-            'artists': "; ".join(a['name'] for a in t['artists']),
-            'album': t['album']['name'],
-            'release_date': t['album']['release_date'],
-            'track_url': t['external_urls']['spotify'],
-            'timeframe': RANGES[timeframe]
-        }
-        top_list.append(this_track)
+    for r in RANGES:
+        top_tracks = sp.current_user_top_tracks(time_range=r, limit=LIMIT)
+        for i, t in enumerate(top_tracks['items']):
+            this_track = {
+                'user_id': user_id,
+                'rank': i+1,
+                'track': t['name'],
+                'artists': "; ".join(a['name'] for a in t['artists']),
+                'album': t['album']['name'],
+                'release_date': t['album']['release_date'],
+                'track_url': t['external_urls']['spotify'],
+                'timeframe': RANGES[r]
+            }
+            top_list.append(this_track)
     return pd.DataFrame.from_dict(top_list)

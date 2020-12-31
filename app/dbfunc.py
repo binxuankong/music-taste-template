@@ -20,23 +20,25 @@ def update_user_profile(df_user):
     engine.dispose()
     return u
 
-def get_top_artists(sp, timeframe):
+def get_top_artists(sp):
     engine = create_engine(DATABASE_URL)
-    df = get_top_artists_df(sp, timeframe)
+    df = get_top_artists_df(sp)
     sync_data(df, 'TopArtists', engine)
     # df = pd.read_sql_query('SELECT * FROM "TopArtists" WHERE user_id = %(user_id)s and timeframe = %(timeframe)s', engine, \
     #     params={'user_id': user_id, 'timeframe': timeframe})
     engine.dispose()
-    return df.to_dict('records')
+    # return df.to_dict('records')
+    return top_to_dict(df)
 
-def get_top_tracks(sp, timeframe='Long'):
+def get_top_tracks(sp):
     engine = create_engine(DATABASE_URL)
-    df = get_top_tracks_df(sp, timeframe)
+    df = get_top_tracks_df(sp)
     sync_data(df, 'TopTracks', engine)
     # df = pd.read_sql_query('SELECT * FROM "TopTracks" WHERE user_id = %(user_id)s and timeframe = %(timeframe)s', engine, \
     #     params={'user_id': user_id, 'timeframe': timeframe})
     engine.dispose()
-    return df.to_dict('records')
+    # return df.to_dict('records')
+    return top_to_dict(df)
 
 def sync_all_data(sp):
     engine = create_engine(DATABASE_URL)
@@ -72,3 +74,10 @@ def delete_user_data(df, table, engine):
 
 def insert_new_data(df, table, engine):
     df.to_sql(table, engine, index=False, if_exists='append')
+
+def top_to_dict(top_df):
+    top_dict = {}
+    top_dict['Short'] = top_df.loc[top_df['timeframe'] == 'Short'].to_dict('records')[:10]
+    top_dict['Medium'] = top_df.loc[top_df['timeframe'] == 'Medium'].to_dict('records')[:10]
+    top_dict['Long'] = top_df.loc[top_df['timeframe'] == 'Long'].to_dict('records')[:10]
+    return top_dict
