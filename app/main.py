@@ -59,5 +59,4 @@ def profile():
         top_artists = get_top_artists(sp)
         top_tracks = get_top_tracks(sp)
         return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks)
-    else:
-        return render_template('profile.html', user=None)
+    return render_template('profile.html', user=None)
