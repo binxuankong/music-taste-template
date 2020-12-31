@@ -6,10 +6,8 @@ h1 {
 }
 
 h2 {
-    border: 2px #eee solid;
     color: rgb(142, 22, 189);
-    text-align: center;
-    padding: 8px;
+    padding: 6px;
 }
 
 .top-tab {
@@ -48,6 +46,6 @@ h2 {
 }
 .top-tab a{
     text-decoration: none;
-    color: #333;
+    color: rgb(30, 215, 96);
     font-weight: 600;
 }
