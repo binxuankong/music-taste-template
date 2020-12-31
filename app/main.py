@@ -60,3 +60,25 @@ def profile():
         top_tracks = get_top_tracks(sp)
         return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks)
     return render_template('profile.html', user=None)
+
+@app.route('/sample')
+def sample():
+    def top_to_dict(top_df):
+        top_dict = {}
+        top_dict['Short'] = top_df.loc[top_df['timeframe'] == 'Short'].to_dict('records')[:10]
+        top_dict['Medium'] = top_df.loc[top_df['timeframe'] == 'Medium'].to_dict('records')[:10]
+        top_dict['Long'] = top_df.loc[top_df['timeframe'] == 'Long'].to_dict('records')[:10]
+        return top_dict
+    user_profile = {'user_id': '12120382831',
+    'display_name': 'Bin Xuan Kong',
+    'spotify_url': 'https://open.spotify.com/user/12120382831',
+    'image_url': 'https://scontent-hkt1-2.xx.fbcdn.net/v/t1.0-1/p320x320/11988649_10205375733654944_669349554023656758_n.jpg?_nc_cat=110&ccb=2&_nc_sid=0c64ff&_nc_ohc=AJow9AVGs5YAX8M8_c_&_nc_ht=scontent-hkt1-2.xx&tp=6&oh=7e0addad9882e303c4df5928dd93401f&oe=600D9BD2',
+    'followers': 53,
+    'date_created': '2020-12-27 18:24:31.543185',
+    'last_login': '2020-12-27 18:24:31.543192'}
+    top_artists = pd.read_csv('data/top_artists.csv')
+    top_tracks = pd.read_csv('data/top_tracks.csv')
+    user_id = int(user_profile['user_id'])
+    top_artists = top_to_dict(top_artists.loc[top_artists['user_id'] == user_id])
+    top_tracks = top_to_dict(top_tracks.loc[top_tracks['user_id'] == user_id])
+    return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks)
