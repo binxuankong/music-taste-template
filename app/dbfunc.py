@@ -2,7 +2,8 @@ import os
 import pandas as pd
 from sqlalchemy import create_engine
 from app.queries import user_update_query
-from app.spotifunc import get_user_df, get_recently_played_df, get_current_playlists_df, get_top_artists_df, get_top_tracks_df
+from app.spotifunc import get_user_df, get_recently_played_df, get_current_playlists_df, get_top_artists_df, get_top_tracks_df, \
+                          get_top_genres_df
 
 TABLES = ['Users', 'RecentlyPlayed', 'CurrentPlaylists', 'TopArtists', 'TopTracks']
 DATABASE_URL = os.environ.get('DATABASE_URL')
@@ -40,6 +41,13 @@ def get_top_tracks(sp):
     # return df.to_dict('records')
     return top_to_dict(df)
 
+def get_top_genres(top_artists):
+    engine = create_engine(DATABASE_URL)
+    df = get_top_genres_df(top_artists)
+    sync_data(df, 'TopGenres', engine)
+    engine.dispose()
+    return top_to_dict(df)
+
 def sync_all_data(sp):
     engine = create_engine(DATABASE_URL)
     # User profile
@@ -69,8 +77,9 @@ def sync_data(df, table, engine):
 
 def delete_user_data(df, table, engine):
     user_id = df['user_id'][0]
-    timeframe = df['timeframe'][0]
-    engine.execute('DELETE FROM "{}" WHERE user_id = %(user_id)s AND timeframe = %(timeframe)s'.format(table), user_id=user_id, timeframe=timeframe)
+    # timeframe = df['timeframe'][0]
+    # engine.execute('DELETE FROM "{}" WHERE user_id = %(user_id)s AND timeframe = %(timeframe)s'.format(table), user_id=user_id, timeframe=timeframe)
+    engine.execute('DELETE FROM "{}" WHERE user_id = %(user_id)s'.format(table), user_id=user_id)
 
 def insert_new_data(df, table, engine):
     df.to_sql(table, engine, index=False, if_exists='append')

@@ -88,3 +88,30 @@ def get_top_tracks_df(sp):
             }
             top_list.append(this_track)
     return pd.DataFrame.from_dict(top_list)
+
+def get_top_genres_df(top_artists, weight=128, shift=10):
+    df_genre = pd.DataFrame(columns=['user_id', 'rank', 'genre', 'timeframe'])
+    user_id = top_artists['Short'][0]['user_id']
+    top_genres_list = []
+    for timeframe in ['Short', 'Medium', 'Long']:
+        top_genres = {}
+        for artist in top_artists[timeframe]:
+            try:
+                points = weight / ((artist['rank'] + shift) ** 2)
+                genres = artist['genres'].split(';')
+                for genre in genres:
+                    genre = genre.strip().title()
+                    if genre in top_genres:
+                        top_genres[genre] += points
+                    else:
+                        top_genres[genre] = points
+            except:
+                pass
+        top_genres = {k: v for k, v in sorted(top_genres.items(), key=lambda item: item[1], reverse=True)}
+        top_genres = [g for g in list(top_genres.keys())[:LIMIT]]
+        user_ids = [user_id for i in range(len(top_genres))]
+        ranks = [i for i in range(1, len(top_genres)+1)]
+        timeframes = [timeframe for i in range(len(top_genres))]
+        df_genre = df_genre.append(pd.DataFrame(list(map(list, zip(*[user_ids, ranks, top_genres, timeframes]))), \
+                                                columns=['user_id', 'rank', 'genre', 'timeframe']))
+    return df_genre.reset_index(drop=True)

@@ -6,7 +6,7 @@ import pandas as pd
 from flask import Flask, render_template, request, url_for, flash, redirect, session
 from werkzeug.exceptions import abort
 from app.spotifunc import get_user_df
-from app.dbfunc import update_user_profile, get_top_artists, get_top_tracks
+from app.dbfunc import update_user_profile, get_top_artists, get_top_tracks, get_top_genres
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'CALIWASAMISSIONBUTNOWAGLEAVING'
@@ -58,7 +58,8 @@ def profile():
         user_profile = update_user_profile(df_user)
         top_artists = get_top_artists(sp)
         top_tracks = get_top_tracks(sp)
-        return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks)
+        top_genres = get_top_genres(top_artists)
+        return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks, genres=top_genres)
     return render_template('profile.html', user=None)
 
 @app.route('/sample')
@@ -78,7 +79,10 @@ def sample():
     'last_login': '2020-12-27 18:24:31.543192'}
     top_artists = pd.read_csv('data/top_artists.csv')
     top_tracks = pd.read_csv('data/top_tracks.csv')
+    top_genres = pd.read_csv('data/top_genres.csv')
     user_id = int(user_profile['user_id'])
+    top_genres = get_top_genres(top_artists)
     top_artists = top_to_dict(top_artists.loc[top_artists['user_id'] == user_id])
     top_tracks = top_to_dict(top_tracks.loc[top_tracks['user_id'] == user_id])
-    return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks)
+    top_genres = top_to_dict(top_genres.loc[top_tracks['user_id'] == user_id])
+    return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks, genres=top_genres)
