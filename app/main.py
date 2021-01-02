@@ -47,7 +47,7 @@ def callback():
     })
     res_body = res.json()
     session['token'] = res_body.get('access_token')
-    return redirect(url_for('index'))
+    return redirect(url_for('profile'))
 
 @app.route('/profile')
 def profile():
