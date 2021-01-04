@@ -16,9 +16,10 @@
             <p>Last updated: <span class="badge badge-primary">{{ user['last_updated'] }}</span></p>
             <p>Spotify profile: <a href="{{ user['spotify_url'] }}">{{ user['spotify_url'] }}</a></p>
             <p>Followers: {{ user['followers'] }}</p>
+            <p><a href="/update" class="btn btn-primary">Update data</a></p>
         </div>
-        <div style="float:right">
-            <img src="{{ user['image_url'] }}" alt="User Image" style="height:150px"/>
+        <div style="float:right; padding-top: 8px">
+            <img src="{{ user['image_url'] }}" alt="User Image" style="height:200px"/>
         </div>
         <div style="clear:both;"></div>
     </div>
@@ -36,25 +37,30 @@
                             <a class="nav-item nav-link" id="nav-all-tab" data-toggle="tab" href="#nav-all" role="tab" aria-controls="nav-all" aria-selected="false">All Time</a>
                         </div>
                     </nav>
-                    <div class="tab-content" id="nav-tabContent" style="padding-top:8px">
+                    <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-recent" role="tabpanel" aria-labelledby="nav-recent-tab">
                             {% for row in range(4) %}
                             <div class="row">
                                 {% for artist in artists['Short'][5*row:5*row+5] %}
                                 <div class="card">
                                     <div class="card-header">{{ artist['artist'] }}</div>
-                                    <div class="card-main"><img src="{{ artist['artist_image'] }}" alt="Artist Image" style="height:120px"/></div>
+                                    <div class="card-main">
+                                        <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image" style="height:120px"/></a>
+                                    </div>
                                 </div>
                                 {% endfor %}
                             </div>
                             {% endfor %}
+                        </div>
                         <div class="tab-pane fade" id="nav-months" role="tabpanel" aria-labelledby="nav-months-tab">
                             {% for row in range(4) %}
                             <div class="row">
                                 {% for artist in artists['Medium'][5*row:5*row+5] %}
                                 <div class="card">
                                     <div class="card-header">{{ artist['artist'] }}</div>
-                                    <div class="card-main"><img src="{{ artist['artist_image'] }}" alt="Artist Image" style="height:120px"/></div>
+                                    <div class="card-main">
+                                        <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image" style="height:120px"/></a>
+                                    </div>
                                 </div>
                                 {% endfor %}
                             </div>
@@ -66,7 +72,9 @@
                                 {% for artist in artists['Long'][5*row:5*row+5] %}
                                 <div class="card">
                                     <div class="card-header">{{ artist['artist'] }}</div>
-                                    <div class="card-main"><img src="{{ artist['artist_image'] }}" alt="Artist Image" style="height:120px"/></div>
+                                    <div class="card-main">
+                                        <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image" style="height:120px"/></a>
+                                    </div>
                                 </div>
                                 {% endfor %}
                             </div>
@@ -77,7 +85,7 @@
             </div>
         </div>
         <!-- ################################################## TOP TRACKS ################################################## -->
-        <h3 style="padding-top:24px">Top Tracks</h3>
+        <h3>Top Tracks</h3>
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -90,66 +98,48 @@
                     </nav>
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="tracks-recent" role="tabpanel" aria-labelledby="tracks-recent-tab">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th style="width:10%">Rank</th>
-                                        <th style="width:30%">Track</th>
-                                        <th style="width:30%">Artists</th>
-                                        <th style="width:30%">Album</th>
-                                    </tr>
-                                </thead>
+                            <table class="table table-striped">
                                 <tbody>
-                                    {% for track in tracks['Short'] %}
+                                    {% for track in tracks['Short'][:10] %}
                                     <tr>
-                                        <td>{{ track['rank'] }}</td>
-                                        <td><a href="{{ track['track_url'] }}">{{ track['track'] }}</a></td>
-                                        <td>{{ track['artists'] }}</td>
-                                        <td>{{ track['album'] }}</td>
+                                        <td width="20%"><a href="{{ track['track_url'] }}"><img src="{{ track['album_image'] }}" alt="Album Image" style="height:80px"/></a></td>
+                                        <td>
+                                            <a href="{{ track['track_url'] }}">{{ track['track'] }}</a><br>
+                                            <em>{{ track['artists'] }}</em><br>
+                                            {{ track['album'] }}
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                         <div class="tab-pane fade" id="tracks-months" role="tabpanel" aria-labelledby="tracks-months-tab">
-                            <table class="table" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th style="width:10%">Rank</th>
-                                        <th style="width:30%">Track</th>
-                                        <th style="width:30%">Artists</th>
-                                        <th style="width:30%">Album</th>
-                                    </tr>
-                                </thead>
+                            <table class="table table-striped">
                                 <tbody>
-                                    {% for track in tracks['Medium'] %}
+                                    {% for track in tracks['Medium'][:10] %}
                                     <tr>
-                                        <td>{{ track['rank'] }}</td>
-                                        <td><a href="{{ track['track_url'] }}">{{ track['track'] }}</a></td>
-                                        <td>{{ track['artists'] }}</td>
-                                        <td>{{ track['album'] }}</td>
+                                        <td width="20%"><a href="{{ track['track_url'] }}"><img src="{{ track['album_image'] }}" alt="Album Image" style="height:80px"/></a></td>
+                                        <td>
+                                            <a href="{{ track['track_url'] }}">{{ track['track'] }}</a><br>
+                                            <em>{{ track['artists'] }}</em><br>
+                                            {{ track['album'] }}
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                         <div class="tab-pane fade" id="tracks-all" role="tabpanel" aria-labelledby="tracks-all-tab">
-                            <table class="table" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th style="width:10%">Rank</th>
-                                        <th style="width:30%">Track</th>
-                                        <th style="width:30%">Artists</th>
-                                        <th style="width:30%">Album</th>
-                                    </tr>
-                                </thead>
+                            <table class="table table-striped">
                                 <tbody>
-                                    {% for track in tracks['Long'] %}
+                                    {% for track in tracks['Long'][:10] %}
                                     <tr>
-                                        <td>{{ track['rank'] }}</td>
-                                        <td><a href="{{ track['track_url'] }}">{{ track['track'] }}</a></td>
-                                        <td>{{ track['artists'] }}</td>
-                                        <td>{{ track['album'] }}</td>
+                                        <td width="20%"><a href="{{ track['track_url'] }}"><img src="{{ track['album_image'] }}" alt="Album Image" style="height:80px"/></a></td>
+                                        <td>
+                                            <a href="{{ track['track_url'] }}">{{ track['track'] }}</a><br>
+                                            <em>{{ track['artists'] }}</em><br>
+                                            {{ track['album'] }}
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -160,7 +150,7 @@
             </div>
         </div>
         <!-- ################################################## TOP GENRES ################################################## -->
-        <h3 style="padding-top:24px">Top Genres</h3>
+        <h3>Top Genres</h3>
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -173,58 +163,51 @@
                     </nav>
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="genres-recent" role="tabpanel" aria-labelledby="genres-recent-tab">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th style="width:10%">Rank</th>
-                                        <th style="width:90%">Genre</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for genre in genres['Short'] %}
-                                    <tr>
-                                        <td>{{ genre['rank'] }}</td>
-                                        <td>{{ genre['genre'] }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                            <div class="chart">
+                                <embed type="image/svg+xml" src= {{ genres['Short']|safe }} style="width:80%;height:80%" />
+                            </div>  
                         </div>
                         <div class="tab-pane fade" id="genres-months" role="tabpanel" aria-labelledby="genres-months-tab">
-                            <table class="table" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th style="width:10%">Rank</th>
-                                        <th style="width:90%">Genre</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for genre in genres['Medium'] %}
-                                    <tr>
-                                        <td>{{ genre['rank'] }}</td>
-                                        <td>{{ genre['genre'] }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                            <div class="chart">
+                                <embed type="image/svg+xml" src= {{ genres['Medium']|safe }} style="width:80%;height:80%" />
+                            </div>  
                         </div>
                         <div class="tab-pane fade" id="genres-all" role="tabpanel" aria-labelledby="genres-all-tab">
-                            <table class="table" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th style="width:10%">Rank</th>
-                                        <th style="width:90%">Genre</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for genre in genres['Long'] %}
-                                    <tr>
-                                        <td>{{ genre['rank'] }}</td>
-                                        <td>{{ genre['genre'] }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                            <div class="chart">
+                                <embed type="image/svg+xml" src= {{ genres['Long']|safe }} style="width:80%;height:80%" />
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ################################################## MUSIC MOODS ################################################## -->
+        <h3>Music Moods</h3>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <nav>
+                        <div class="nav nav-tabs nav-fill" id="moods-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="moods-recent-tab" data-toggle="tab" href="#moods-recent" role="tab" aria-controls="moods-recent" aria-selected="true">Recent</a>
+                            <a class="nav-item nav-link" id="moods-months-tab" data-toggle="tab" href="#moods-months" role="tab" aria-controls="moods-month" aria-selected="false">Past Few Months</a>
+                            <a class="nav-item nav-link" id="moods-all-tab" data-toggle="tab" href="#moods-all" role="tab" aria-controls="moods-all" aria-selected="false">All Time</a>
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="moods-recent" role="tabpanel" aria-labelledby="moods-recent-tab">
+                            <div class="chart">
+                                <embed type="image/svg+xml" src= {{ moods['Short']|safe }} style="width:100%;height:60%" />
+                            </div>  
+                        </div>
+                        <div class="tab-pane fade" id="moods-months" role="tabpanel" aria-labelledby="moods-months-tab">
+                            <div class="chart">
+                                <embed type="image/svg+xml" src= {{ moods['Medium']|safe }} style="width:100%;height:60%" />
+                            </div>  
+                        </div>
+                        <div class="tab-pane fade" id="moods-all" role="tabpanel" aria-labelledby="moods-all-tab">
+                            <div class="chart">
+                                <embed type="image/svg+xml" src= {{ moods['Long']|safe }} style="width:100%;height:60%" />
+                            </div>  
                         </div>
                     </div>
                 </div>

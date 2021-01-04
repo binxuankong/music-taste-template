@@ -10,13 +10,21 @@ h2 {
     padding: 8px;
 }
 
+.container {
+    padding-bottom: 48px;
+}
+
+.tab-content {
+    padding-top: 8px;
+}
+
 .top-tab {
     padding: 10%;
     margin-top: -8%;
 }
 
 .top-tab h3 {
-    border: 1px rgb(30, 215, 96) solid;
+    border: 2px rgb(30, 215, 96) solid;
     text-align: center;
     padding: 6px;
 }
@@ -31,7 +39,7 @@ h2 {
 }
 
 .top-tab #tabs .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
-    color: #0062cc;
+    color: rgb(142, 22, 189);
     background-color: transparent;
     border-color: transparent transparent #f3f3f3;
     border-bottom: 3px solid !important;
@@ -43,7 +51,7 @@ h2 {
     border: 1px solid transparent;
     border-top-left-radius: .25rem;
     border-top-right-radius: .25rem;
-    color: #0062cc;
+    color: rgb(142, 22, 189);
     font-size: 16px;
     font-weight: 600;
 }
@@ -52,15 +60,26 @@ h2 {
     border: none;
 }
 
-.top-tab thead{
+.top-tab thead {
     background: #f3f3f3;
     color: #333;
 }
 
-.top-tab a{
+.top-tab a {
     text-decoration: none;
     color: rgb(30, 215, 96);
     font-weight: 600;
+}
+
+td img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td em {
+    color: rgb(142, 22, 189);
+    font-weight: 500;
 }
 
 .row {
@@ -75,9 +94,15 @@ h2 {
     display: flex;                /* Children use Flexbox */
     flex-direction: column;       /* Rotate Axis */
     border: 1px solid rgb(142, 22, 189);    /* Set up Border */
-    border-radius: 2px;           /* Slightly Curve edges */
+    border-radius: 16px;           /* Slightly Curve edges */
     overflow: hidden;             /* Fixes the corners */
     margin: 2px;                  /* Add space between cards */
+}
+
+.card:hover {
+    transition: all 200ms linear;
+    background-color: rgb(142, 22, 189);
+    opacity: 80%;
 }
 
 .card-header {
@@ -95,4 +120,10 @@ h2 {
     justify-content: center;    /* Group Children in Center */
     align-items: center;        /* Group Children in Center (on cross axis) */
     padding: 12px 0;            /* Add padding to the top/bottom */
+}
+
+.chart embed {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }

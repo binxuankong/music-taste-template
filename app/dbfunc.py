@@ -28,40 +28,27 @@ def get_user_profile(user_id):
     engine.dispose()
     return user_profile
 
-def get_user_data(user_id):
+def get_top_artists(user_id):
     engine = create_engine(DATABASE_URL)
-    df_artists = pd.read_sql_query(top_artists_query, engine, params={'user_id': user_id})
-    df_tracks = pd.read_sql_query(top_tracks_query, engine, params={'user_id': user_id})
-    df_genres = pd.read_sql_query(top_genres_query, engine, params={'user_id': user_id})
-    df_features = pd.read_sql_query(music_features_query, engine, params={'user_id': user_id})
+    df = pd.read_sql_query(top_artists_query, engine, params={'user_id': user_id})
     engine.dispose()
-    return {'artists': top_to_dict(df_artists), 'tracks': top_to_dict(df_tracks), 'genres': top_to_dict(df_genres), \
-            'features': top_to_dict(df_features)}
-
-def get_top_artists(sp):
-    engine = create_engine(DATABASE_URL)
-    df = get_top_artists_df(sp)
-    sync_data(df, 'TopArtists', engine)
-    # df = pd.read_sql_query('SELECT * FROM "TopArtists" WHERE user_id = %(user_id)s and timeframe = %(timeframe)s', engine, \
-    #     params={'user_id': user_id, 'timeframe': timeframe})
-    engine.dispose()
-    # return df.to_dict('records')
     return top_to_dict(df)
 
-def get_top_tracks(sp):
+def get_top_tracks(user_id):
     engine = create_engine(DATABASE_URL)
-    df = get_top_tracks_df(sp)
-    sync_data(df, 'TopTracks', engine)
-    # df = pd.read_sql_query('SELECT * FROM "TopTracks" WHERE user_id = %(user_id)s and timeframe = %(timeframe)s', engine, \
-    #     params={'user_id': user_id, 'timeframe': timeframe})
+    df = pd.read_sql_query(top_tracks_query, engine, params={'user_id': user_id})
     engine.dispose()
-    # return df.to_dict('records')
     return top_to_dict(df)
 
-def get_top_genres(top_artists):
+def get_top_genres(user_id):
     engine = create_engine(DATABASE_URL)
-    df = get_top_genres_df(top_artists)
-    sync_data(df, 'TopGenres', engine)
+    df = pd.read_sql_query(top_genres_query, engine, params={'user_id': user_id})
+    engine.dispose()
+    return df
+
+def get_music_features(user_id):
+    engine = create_engine(DATABASE_URL)
+    df = pd.read_sql_query(music_features_query, engine, params={'user_id': user_id})
     engine.dispose()
     return top_to_dict(df)
 

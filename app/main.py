@@ -6,7 +6,8 @@ import pandas as pd
 from flask import Flask, render_template, request, url_for, flash, redirect, session
 from werkzeug.exceptions import abort
 from app.spotifunc import get_user_df
-from app.dbfunc import get_user_profile, get_user_data, update_user_profile, get_top_artists, get_top_tracks, get_top_genres
+from app.dbfunc import get_user_profile, update_user_profile, get_top_artists, get_top_tracks, get_top_genres, get_music_features
+from app.vizfunc import plot_genre_chart, plot_mood_gauge
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'CALIWASAMISSIONBUTNOWAGLEAVING'
@@ -62,17 +63,25 @@ def profile():
         return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks, genres=top_genres)
     return render_template('profile.html', user=None)
 
+@app.route('/update')
+def update():
+    return redirect(url_for('profile'))
+
 @app.route('/sample')
 def sample():
     if 'token' in session:
+        # Authenticate Spotify session
         sp = spotipy.Spotify(auth=session['token'])
         df_user = get_user_df(sp)
         user_id = df_user['user_id'][0]
+        # Get data from database
         user_profile = get_user_profile(user_id)
-        user_data = get_user_data(user_id)
-        top_artists = user_data['artists']
-        top_tracks = user_data['tracks']
-        top_genres = user_data['genres']
-        music_features = user_data['features']
-        return render_template('sample.html', user=user_profile, artists=top_artists, tracks=top_tracks, genres=top_genres)
+        top_artists = get_top_artists(user_id)
+        top_tracks = get_top_tracks(user_id)
+        top_genres = get_top_genres(user_id)
+        music_features = get_music_features(user_id)
+        # Plot charts
+        genre_data = plot_genre_chart(top_genres)
+        mood_data = plot_mood_gauge(music_features)
+        return render_template('sample.html', user=user_profile, artists=top_artists, tracks=top_tracks, genres=genre_data, moods=mood_data)
     return render_template('sample.html', user=user_profile, artists=top_artists, tracks=top_tracks, genres=top_genres)
