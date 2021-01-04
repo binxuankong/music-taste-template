@@ -1,7 +1,7 @@
 user_update_query = """
 UPDATE "Users"
 SET display_name = %(display_name)s, spotify_url = %(spotify_url)s, image_url = %(image_url)s,
-    followers = %(followers)s, last_login = %(last_login)s
+    followers = %(followers)s, last_updated = %(last_updated)s
 WHERE user_id = %(user_id)s
 """
 
@@ -39,4 +39,18 @@ music_features_query = """
 SELECT *
 FROM "MusicFeatures" mf
 WHERE mf.user_id = %(user_id)s
+"""
+
+artists_update_query = """
+UPDATE "Artists" as a
+SET genres = ta.genres, artist_image = ta.artist_image, artist_url = ta.artist_url, popularity = ta.popularity 
+FROM "TempArtists" as ta
+WHERE a.artist_id = ta.artist_id
+"""
+
+tracks_update_query = """
+UPDATE "Tracks" as t
+SET album_image = tt.album_image, track_url = tt.track_url 
+FROM "TempTracks" as tt
+WHERE t.track_id = tt.track_id 
 """
