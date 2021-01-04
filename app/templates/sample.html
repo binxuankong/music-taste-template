@@ -36,60 +36,41 @@
                             <a class="nav-item nav-link" id="nav-all-tab" data-toggle="tab" href="#nav-all" role="tab" aria-controls="nav-all" aria-selected="false">All Time</a>
                         </div>
                     </nav>
-                    <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-content" id="nav-tabContent" style="padding-top:8px">
                         <div class="tab-pane fade show active" id="nav-recent" role="tabpanel" aria-labelledby="nav-recent-tab">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th style="width:10%">Rank</th>
-                                        <th style="width:90%">Artist</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for artist in artists['Short'] %}
-                                    <tr>
-                                        <td>{{ artist['rank'] }}</td>
-                                        <td><a href="{{ artist['artist_url'] }}">{{ artist['artist'] }}</a></td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                            {% for row in range(4) %}
+                            <div class="row">
+                                {% for artist in artists['Short'][5*row:5*row+5] %}
+                                <div class="card">
+                                    <div class="card-header">{{ artist['artist'] }}</div>
+                                    <div class="card-main"><img src="{{ artist['artist_image'] }}" alt="Artist Image" style="height:120px"/></div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
                         <div class="tab-pane fade" id="nav-months" role="tabpanel" aria-labelledby="nav-months-tab">
-                            <table class="table" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th style="width:10%">Rank</th>
-                                        <th style="width:90%">Artist</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for artist in artists['Medium'] %}
-                                    <tr>
-                                        <td>{{ artist['rank'] }}</td>
-                                        <td><a href="{{ artist['artist_url'] }}">{{ artist['artist'] }}</a></td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                            {% for row in range(4) %}
+                            <div class="row">
+                                {% for artist in artists['Medium'][5*row:5*row+5] %}
+                                <div class="card">
+                                    <div class="card-header">{{ artist['artist'] }}</div>
+                                    <div class="card-main"><img src="{{ artist['artist_image'] }}" alt="Artist Image" style="height:120px"/></div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
                         </div>
                         <div class="tab-pane fade" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
-                            <table class="table" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th style="width:10%">Rank</th>
-                                        <th style="width:90%">Artist</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for artist in artists['Long'] %}
-                                    <tr>
-                                        <td>{{ artist['rank'] }}</td>
-                                        <td><a href="{{ artist['artist_url'] }}">{{ artist['artist'] }}</a></td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                            {% for row in range(4) %}
+                            <div class="row">
+                                {% for artist in artists['Long'][5*row:5*row+5] %}
+                                <div class="card">
+                                    <div class="card-header">{{ artist['artist'] }}</div>
+                                    <div class="card-main"><img src="{{ artist['artist_image'] }}" alt="Artist Image" style="height:120px"/></div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

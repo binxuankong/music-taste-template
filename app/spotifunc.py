@@ -15,7 +15,7 @@ def get_user_df(sp):
         'image_url': user['images'][0]['url'],
         'followers': user['followers']['total'],
         'date_created': dt.datetime.now(),
-        'last_login': dt.datetime.now()
+        'last_updated': dt.datetime.now()
     }, index=[0])
     return df_user
 

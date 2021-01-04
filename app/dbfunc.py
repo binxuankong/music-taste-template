@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 from sqlalchemy import create_engine
-from app.queries import user_update_query
+from app.queries import user_update_query, user_query, top_artists_query, top_tracks_query, top_genres_query, music_features_query
 from app.spotifunc import get_user_df, get_recently_played_df, get_current_playlists_df, get_top_artists_df, get_top_tracks_df, \
                           get_top_genres_df
 
@@ -20,6 +20,23 @@ def update_user_profile(df_user):
             image_url=u['image_url'], followers=u['followers'], last_login=u['last_login'])
     engine.dispose()
     return u
+
+def get_user_profile(user_id):
+    engine = create_engine(DATABASE_URL)
+    df_user = pd.read_sql_query(user_query, engine, params={'user_id': user_id})
+    user_profile = df_user.to_dict('records')[0]
+    engine.dispose()
+    return user_profile
+
+def get_user_data(user_id):
+    engine = create_engine(DATABASE_URL)
+    df_artists = pd.read_sql_query(top_artists_query, engine, params={'user_id': user_id})
+    df_tracks = pd.read_sql_query(top_tracks_query, engine, params={'user_id': user_id})
+    df_genres = pd.read_sql_query(top_genres_query, engine, params={'user_id': user_id})
+    df_features = pd.read_sql_query(music_features_query, engine, params={'user_id': user_id})
+    engine.dispose()
+    return {'artists': top_to_dict(df_artists), 'tracks': top_to_dict(df_tracks), 'genres': top_to_dict(df_genres), \
+            'features': top_to_dict(df_features)}
 
 def get_top_artists(sp):
     engine = create_engine(DATABASE_URL)
@@ -86,7 +103,7 @@ def insert_new_data(df, table, engine):
 
 def top_to_dict(top_df):
     top_dict = {}
-    top_dict['Short'] = top_df.loc[top_df['timeframe'] == 'Short'].to_dict('records')[:10]
-    top_dict['Medium'] = top_df.loc[top_df['timeframe'] == 'Medium'].to_dict('records')[:10]
-    top_dict['Long'] = top_df.loc[top_df['timeframe'] == 'Long'].to_dict('records')[:10]
+    top_dict['Short'] = top_df.loc[top_df['timeframe'] == 'Short'].to_dict('records')
+    top_dict['Medium'] = top_df.loc[top_df['timeframe'] == 'Medium'].to_dict('records')
+    top_dict['Long'] = top_df.loc[top_df['timeframe'] == 'Long'].to_dict('records')
     return top_dict
