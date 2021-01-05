@@ -45,56 +45,48 @@ def get_music_features(user_id):
     return top_to_dict(df)
 
 def create_new_user(sp):
-    try:
-        df_user = get_user_df(sp)
-        user_id = df_user['user_id'][0]
-        success = sync_all_data(sp)
-        # Create user profile
-        engine = create_engine(DATABASE_URL)
-        df_codes = pd.read_sql_query('SELECT code FROM "UserProfiles"', engine)
-        existing_codes = df_codes['code'].unique().tolist()
-        while True:
-            code = random.choice(ADJECTIVES) + '-' + random.choice(NOUNS) + '-' + str(random.randint(10, 99))
-            if code not in existing_codes:
-                break
-        df_profile = pd.DataFrame([[user_id, code, False]], columns=['user_id', 'code', 'public'])
-        df_profile.to_sql('UserProfiles', engine, index=False, if_exists='append')
-        # Dispose engine
-        engine.dispose()
-        return True
-    except:
-        return False
+    df_user = get_user_df(sp)
+    user_id = df_user['user_id'][0]
+    success = sync_all_data(sp)
+    # Create user profile
+    engine = create_engine(DATABASE_URL)
+    df_codes = pd.read_sql_query('SELECT code FROM "UserProfiles"', engine)
+    existing_codes = df_codes['code'].unique().tolist()
+    while True:
+        code = random.choice(ADJECTIVES) + '-' + random.choice(NOUNS) + '-' + str(random.randint(10, 99))
+        if code not in existing_codes:
+            break
+    df_profile = pd.DataFrame([[user_id, code, False]], columns=['user_id', 'code', 'public'])
+    df_profile.to_sql('UserProfiles', engine, index=False, if_exists='append')
+    # Dispose engine
+    engine.dispose()
 
 def sync_all_data(sp):
-    try:
-        engine = create_engine(DATABASE_URL)
-        # Extract from Spotify API
-        df_user = get_user_df(sp)
-        df_ta = get_top_artists_df(sp)
-        df_tt = get_top_tracks_df(sp)
-        df_tg = get_top_genres_df(top_to_dict(df_ta))
-        df_mf = get_music_features_df(sp, top_to_dict(df_tt))
-        # Artists and tracks
-        df_a = df_ta.drop(columns=['user_id', 'rank', 'timeframe']).drop_duplicates()
-        df_t = df_tt.drop(columns=['user_id', 'rank', 'timeframe']).drop_duplicates()
-        # Sync user data
-        user_profile = update_user_profile(df_user)
-        sync_data(df_ta[['user_id', 'rank', 'artist_id', 'timeframe']], 'TopArtists', engine)
-        sync_data(df_tt[['user_id', 'rank', 'track_id', 'timeframe']], 'TopTracks', engine)
-        sync_data(df_tg, 'TopGenres', engine)
-        sync_data(df_mf, 'MusicFeatures', engine)
-        # Sync artists and tracks
-        df_a.to_sql('TempArtists', engine, index=False, if_exists='replace')
-        df_t.to_sql('TempTracks', engine, index=False, if_exists='replace')
-        engine.execute(artists_update_query)
-        engine.execute(tracks_update_query)
-        engine.execute(artists_insert_query)
-        engine.execute(tracks_insert_query)
-        # Dispose engine
-        engine.dispose()
-        return True
-    except:
-        return False
+    engine = create_engine(DATABASE_URL)
+    # Extract from Spotify API
+    df_user = get_user_df(sp)
+    df_ta = get_top_artists_df(sp)
+    df_tt = get_top_tracks_df(sp)
+    df_tg = get_top_genres_df(top_to_dict(df_ta))
+    df_mf = get_music_features_df(sp, top_to_dict(df_tt))
+    # Artists and tracks
+    df_a = df_ta.drop(columns=['user_id', 'rank', 'timeframe']).drop_duplicates()
+    df_t = df_tt.drop(columns=['user_id', 'rank', 'timeframe']).drop_duplicates()
+    # Sync user data
+    user_profile = update_user_profile(df_user)
+    sync_data(df_ta[['user_id', 'rank', 'artist_id', 'timeframe']], 'TopArtists', engine)
+    sync_data(df_tt[['user_id', 'rank', 'track_id', 'timeframe']], 'TopTracks', engine)
+    sync_data(df_tg, 'TopGenres', engine)
+    sync_data(df_mf, 'MusicFeatures', engine)
+    # Sync artists and tracks
+    df_a.to_sql('TempArtists', engine, index=False, if_exists='replace')
+    df_t.to_sql('TempTracks', engine, index=False, if_exists='replace')
+    engine.execute(artists_update_query)
+    engine.execute(tracks_update_query)
+    engine.execute(artists_insert_query)
+    engine.execute(tracks_insert_query)
+    # Dispose engine
+    engine.dispose()
 
 def update_user_profile(df_user):
     engine = create_engine(DATABASE_URL)

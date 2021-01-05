@@ -82,10 +82,7 @@ def new():
         # Authenticate Spotify session
         sp = spotipy.Spotify(auth=session['token'])
         success = create_new_user(sp)
-        if success:
-            return redirect(url_for('profile'))
-        else:
-            return redirect(url_for('index'))
+        return redirect(url_for('profile'))
     return redirect(url_for('link'))
 
 @app.route('/update')
@@ -93,29 +90,20 @@ def update():
     if 'token' in session:
         # Authenticate Spotify session
         sp = spotipy.Spotify(auth=session['token'])
-        success = sync_all_data(sp)
-        if success:
-            return redirect(url_for('profile'))
-        else:
-            return redirect(url_for('index'))
+        sync_all_data(sp)
+        return redirect(url_for('profile'))
     return redirect(url_for('link'))
 
 @app.route('/privacy')
 def privacy():
     if 'user_id' in session:
-        success = update_user_privacy(session['user_id'])
-        if success:
-            return redirect(url_for('profile'))
-        else:
-            return redirect(url_for('index'))
+        update_user_privacy(session['user_id'])
+        return redirect(url_for('profile'))
     return redirect(url_for('link'))
 
 @app.route('/code')
 def code():
     if 'user_id' in session:
-        success = update_user_code(session['user_id'])
-        if success:
-            return redirect(url_for('profile'))
-        else:
-            return redirect(url_for('index'))
+        update_user_code(session['user_id'])
+        return redirect(url_for('profile'))
     return redirect(url_for('link'))
