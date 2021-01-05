@@ -57,7 +57,7 @@ WHERE user_id = %(user_id)s
 
 artists_update_query = """
 UPDATE "Artists" as a
-SET genres = ta.genres, artist_image = ta.artist_image, artist_url = ta.artist_url, popularity = ta.popularity 
+SET artist = ta.artist, genres = ta.genres, artist_image = ta.artist_image, artist_url = ta.artist_url, popularity = ta.popularity 
 FROM "TempArtists" as ta
 WHERE a.artist_id = ta.artist_id
 """
@@ -67,4 +67,18 @@ UPDATE "Tracks" as t
 SET album_image = tt.album_image, track_url = tt.track_url 
 FROM "TempTracks" as tt
 WHERE t.track_id = tt.track_id 
+"""
+
+artists_insert_query = """
+INSERT INTO "Artists" (artist_id, artist, genres, artist_image, artist_url, popularity)
+SELECT ta.artist_id, ta.artist, ta.genres, ta.artist_image, ta.artist_url, ta.popularity
+FROM "TempArtists" ta
+ON CONFLICT (artist_id) DO NOTHING
+"""
+
+tracks_insert_query = """
+INSERT INTO "Tracks" (track_id, track, artists, album, album_image, release_date, track_url)
+SELECT tt.track_id, tt.track, tt.artists, tt.album, tt.album_image, tt.release_date, tt.track_url
+FROM "TempTracks" tt
+ON CONFLICT (track_id) DO NOTHING
 """

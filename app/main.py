@@ -54,23 +54,26 @@ def callback():
 @app.route('/profile')
 def profile():
     if 'token' in session:
-        # Authenticate Spotify session
-        sp = spotipy.Spotify(auth=session['token'])
-        df_user = get_user_df(sp)
-        user_id = df_user['user_id'][0]
-        session['user_id'] = user_id
-        # Get data from database
-        user_profile = get_user_profile(user_id)
-        if user_profile is None:
-            return redirect(url_for('new'))
-        top_artists = get_top_artists(user_id)
-        top_tracks = get_top_tracks(user_id)
-        top_genres = get_top_genres(user_id)
-        music_features = get_music_features(user_id)
-        # Plot charts
-        genre_data = plot_genre_chart(top_genres)
-        mood_data = plot_mood_gauge(music_features)
-        return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks, genres=genre_data, moods=mood_data)
+        try:
+            # Authenticate Spotify session
+            sp = spotipy.Spotify(auth=session['token'])
+            df_user = get_user_df(sp)
+            user_id = df_user['user_id'][0]
+            session['user_id'] = user_id
+            # Get data from database
+            user_profile = get_user_profile(user_id)
+            if user_profile is None:
+                return redirect(url_for('new'))
+            top_artists = get_top_artists(user_id)
+            top_tracks = get_top_tracks(user_id)
+            top_genres = get_top_genres(user_id)
+            music_features = get_music_features(user_id)
+            # Plot charts
+            genre_data = plot_genre_chart(top_genres)
+            mood_data = plot_mood_gauge(music_features)
+            return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks, genres=genre_data, moods=mood_data)
+        except:
+            return render_template('profile.html', user=None)
     return render_template('profile.html', user=None)
 
 @app.route('/new')
