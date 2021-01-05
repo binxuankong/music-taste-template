@@ -13,18 +13,27 @@
     <div id="user-profile">
         <div style="float:left">
             <h2>{% block title %} {{ user['display_name'] }} {% endblock %}</h2>
-            <p>Last updated: <span class="badge badge-primary">{{ user['last_updated'] }}</span></p>
-            <p>Spotify profile: <a href="{{ user['spotify_url'] }}">{{ user['spotify_url'] }}</a></p>
-            <p>Followers: {{ user['followers'] }}</p>
-            <p><a href="/update" class="btn btn-primary">Update data</a></p>
+            <p>
+                Last updated: &emsp; <span class="badge badge-primary">{{ user['last_updated'] }}</span><br>
+                Spotify profile:&emsp; <a href="{{ user['spotify_url'] }}">{{ user['spotify_url'] }}</a><br>
+                {% if user['public'] %}
+                    Profile privacy:&emsp; <b>Public</b><br>
+                {% else %}
+                    Profile privacy:&emsp; <b>Private</b><br>
+                {% endif %}
+                Match code:&emsp;&emsp; <em>{{ user['code'] }}</em>
+            </p>
+                <a href="/update" class="btn btn-primary">Update data</a>&emsp;
+                <a href="/privacy" class="btn btn-primary">Change privacy</a>&emsp;
+                <a href="/code" class="btn btn-primary">Reset code</a>
         </div>
         <div style="float:right; padding-top: 8px">
             <img src="{{ user['image_url'] }}" alt="User Image" style="height:200px"/>
         </div>
-        <div style="clear:both;"></div>
+        <div style="clear:both; padding-bottom: 48px"></div>
     </div>
     <!-- TOP TAB -->
-    <section id="tabs" class="top-tab" style="width:100%">
+    <section id="tabs" class="top-tab" style="width:100%;">
         <!-- ################################################## TOP ARTISTS ################################################## -->
         <h3>Top Artists</h3>
         <div class="container">

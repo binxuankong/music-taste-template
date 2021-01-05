@@ -10,6 +10,11 @@ h2 {
     padding: 8px;
 }
 
+p em {
+    color: rgb(142, 22, 189);
+    font-weight: 500;
+}
+
 .container {
     padding-bottom: 48px;
 }

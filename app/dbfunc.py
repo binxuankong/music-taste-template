@@ -1,8 +1,10 @@
 import os
+import random
 import pandas as pd
 from sqlalchemy import create_engine
-from app.queries import user_update_query, user_query, top_artists_query, top_tracks_query, top_genres_query, music_features_query, \
-    artists_update_query, tracks_update_query
+from app.codes import NOUNS, ADJECTIVES
+from app.queries import user_query, top_artists_query, top_tracks_query, top_genres_query, music_features_query, user_update_query, \
+    user_privacy_query, user_code_query, artists_update_query, tracks_update_query
 from app.spotifunc import get_user_df, get_top_artists_df, get_top_tracks_df, get_top_genres_df, get_music_features_df
 
 TABLES = ['Users', 'RecentlyPlayed', 'CurrentPlaylists', 'TopArtists', 'TopTracks']
@@ -41,6 +43,27 @@ def get_music_features(user_id):
     df = pd.read_sql_query(music_features_query, engine, params={'user_id': user_id})
     engine.dispose()
     return top_to_dict(df)
+
+def create_new_user(sp):
+    try:
+        df_user = get_user_df(sp)
+        user_id = df_user['user_id'][0]
+        success = sync_all_data(sp)
+        # Create user profile
+        engine = create_engine(DATABASE_URL)
+        df_codes = pd.read_sql_query('SELECT code FROM "UserProfiles"', engine)
+        existing_codes = df_codes['code'].unique().tolist()
+        while True:
+            code = random.choice(ADJECTIVES) + '-' + random.choice(NOUNS) + '-' + str(random.randint(10, 99))
+            if code not in existing_codes:
+                break
+        df_profile = pd.DataFrame([[user_id, code, False]], columns=['user_id', 'code', 'public'])
+        df_profile.to_sql('UserProfiles', engine, index=False, if_exists='append')
+        # Dispose engine
+        engine.dispose()
+        return True
+    except:
+        return False
 
 def sync_all_data(sp):
     try:
@@ -83,6 +106,30 @@ def update_user_profile(df_user):
             image_url=u['image_url'], followers=u['followers'], last_updated=u['last_updated'])
     engine.dispose()
     return u
+
+def update_user_privacy(user_id):
+    try:
+        engine = create_engine(DATABASE_URL)
+        engine.execute(user_privacy_query, user_id=user_id)
+        engine.dispose()
+        return True
+    except:
+        return False
+
+def update_user_code(user_id):
+    try:
+        engine = create_engine(DATABASE_URL)
+        df_codes = pd.read_sql_query('SELECT code FROM "UserProfiles"', engine)
+        existing_codes = df_codes['code'].unique().tolist()
+        while True:
+            code = random.choice(ADJECTIVES) + '-' + random.choice(NOUNS) + '-' + str(random.randint(10, 99))
+            if code not in existing_codes:
+                break
+        engine.execute(user_code_query, user_id=user_id, code=code)
+        engine.dispose()
+        return True
+    except:
+        return False
 
 def sync_data(df, table, engine):
     if len(df) > 0:

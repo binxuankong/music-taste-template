@@ -6,7 +6,8 @@ import pandas as pd
 from flask import Flask, render_template, request, url_for, flash, redirect, session
 from werkzeug.exceptions import abort
 from app.spotifunc import get_user_df
-from app.dbfunc import get_user_profile, get_top_artists, get_top_tracks, get_top_genres, get_music_features, sync_all_data
+from app.dbfunc import get_user_profile, get_top_artists, get_top_tracks, get_top_genres, get_music_features, create_new_user, \
+    sync_all_data, update_user_privacy, update_user_code
 from app.vizfunc import plot_genre_chart, plot_mood_gauge
 
 app = Flask(__name__)
@@ -57,10 +58,11 @@ def profile():
         sp = spotipy.Spotify(auth=session['token'])
         df_user = get_user_df(sp)
         user_id = df_user['user_id'][0]
+        session['user_id'] = user_id
         # Get data from database
         user_profile = get_user_profile(user_id)
         if user_profile is None:
-            return redirect(url_for('update'))
+            return redirect(url_for('new'))
         top_artists = get_top_artists(user_id)
         top_tracks = get_top_tracks(user_id)
         top_genres = get_top_genres(user_id)
@@ -69,7 +71,19 @@ def profile():
         genre_data = plot_genre_chart(top_genres)
         mood_data = plot_mood_gauge(music_features)
         return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks, genres=genre_data, moods=mood_data)
-    return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks, genres=top_genres)
+    return render_template('profile.html', user=None)
+
+@app.route('/new')
+def new():
+    if 'token' in session:
+        # Authenticate Spotify session
+        sp = spotipy.Spotify(auth=session['token'])
+        success = create_new_user(sp)
+        if success:
+            return redirect(url_for('profile'))
+        else:
+            return redirect(url_for('index'))
+    return redirect(url_for('link'))
 
 @app.route('/update')
 def update():
@@ -78,7 +92,27 @@ def update():
         sp = spotipy.Spotify(auth=session['token'])
         success = sync_all_data(sp)
         if success:
-            redirect(url_for('profile'))
+            return redirect(url_for('profile'))
         else:
-            redirect(url_for('index'))
+            return redirect(url_for('index'))
+    return redirect(url_for('link'))
+
+@app.route('/privacy')
+def privacy():
+    if 'user_id' in session:
+        success = update_user_privacy(session['user_id'])
+        if success:
+            return redirect(url_for('profile'))
+        else:
+            return redirect(url_for('index'))
+    return redirect(url_for('link'))
+
+@app.route('/code')
+def code():
+    if 'user_id' in session:
+        success = update_user_code(session['user_id'])
+        if success:
+            return redirect(url_for('profile'))
+        else:
+            return redirect(url_for('index'))
     return redirect(url_for('link'))

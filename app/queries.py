@@ -1,13 +1,8 @@
-user_update_query = """
-UPDATE "Users"
-SET display_name = %(display_name)s, spotify_url = %(spotify_url)s, image_url = %(image_url)s,
-    followers = %(followers)s, last_updated = %(last_updated)s
-WHERE user_id = %(user_id)s
-"""
-
 user_query = """
-SELECT *
+SELECT u.user_id, u.display_name, u.spotify_url, u.image_url, u.last_updated, up.code, up.public 
 FROM "Users" u
+JOIN "UserProfiles" up
+ON u.user_id = up.user_id
 WHERE u.user_id = %(user_id)s
 """
 
@@ -39,6 +34,25 @@ music_features_query = """
 SELECT *
 FROM "MusicFeatures" mf
 WHERE mf.user_id = %(user_id)s
+"""
+
+user_update_query = """
+UPDATE "Users"
+SET display_name = %(display_name)s, spotify_url = %(spotify_url)s, image_url = %(image_url)s,
+    followers = %(followers)s, last_updated = %(last_updated)s
+WHERE user_id = %(user_id)s
+"""
+
+user_privacy_query = """
+UPDATE "UserProfiles"
+SET public = NOT public 
+WHERE user_id = %(user_id)s
+"""
+
+user_code_query = """
+UPDATE "UserProfiles"
+SET code = %(code)s
+WHERE user_id = %(user_id)s
 """
 
 artists_update_query = """
