@@ -24,13 +24,13 @@ def get_top_artists(user_id):
     engine = create_engine(DATABASE_URL)
     df = pd.read_sql_query(top_artists_query, engine, params={'user_id': user_id})
     engine.dispose()
-    return top_to_dict(df)
+    return df
 
 def get_top_tracks(user_id):
     engine = create_engine(DATABASE_URL)
     df = pd.read_sql_query(top_tracks_query, engine, params={'user_id': user_id})
     engine.dispose()
-    return top_to_dict(df)
+    return df
 
 def get_top_genres(user_id):
     engine = create_engine(DATABASE_URL)
@@ -42,7 +42,7 @@ def get_music_features(user_id):
     engine = create_engine(DATABASE_URL)
     df = pd.read_sql_query(music_features_query, engine, params={'user_id': user_id})
     engine.dispose()
-    return top_to_dict(df)
+    return df
 
 def create_new_user(sp):
     df_user = get_user_df(sp)

@@ -6,9 +6,8 @@ import pandas as pd
 from flask import Flask, render_template, request, url_for, flash, redirect, session
 from werkzeug.exceptions import abort
 from app.spotifunc import get_user_df
-from app.dbfunc import get_user_profile, get_top_artists, get_top_tracks, get_top_genres, get_music_features, create_new_user, \
-    sync_all_data, update_user_privacy, update_user_code
-from app.vizfunc import plot_genre_chart, plot_mood_gauge
+from app.dbfunc import get_user_profile, create_new_user, sync_all_data, update_user_privacy, update_user_code
+from app.generate_page import generate_profile_page
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'CALIWASAMISSIONBUTNOWAGLEAVING'
@@ -54,26 +53,17 @@ def callback():
 @app.route('/profile')
 def profile():
     if 'token' in session:
-        try:
-            # Authenticate Spotify session
-            sp = spotipy.Spotify(auth=session['token'])
-            df_user = get_user_df(sp)
-            user_id = df_user['user_id'][0]
-            session['user_id'] = user_id
-            # Get data from database
-            user_profile = get_user_profile(user_id)
-            if user_profile is None:
-                return redirect(url_for('new'))
-            top_artists = get_top_artists(user_id)
-            top_tracks = get_top_tracks(user_id)
-            top_genres = get_top_genres(user_id)
-            music_features = get_music_features(user_id)
-            # Plot charts
-            genre_data = plot_genre_chart(top_genres)
-            mood_data = plot_mood_gauge(music_features)
-            return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks, genres=genre_data, moods=mood_data)
-        except:
-            return render_template('profile.html', user=None)
+        # Authenticate Spotify session
+        sp = spotipy.Spotify(auth=session['token'])
+        df_user = get_user_df(sp)
+        user_id = df_user['user_id'][0]
+        session['user_id'] = user_id
+        # Get data from database
+        user_profile = get_user_profile(user_id)
+        if user_profile is None:
+            return redirect(url_for('new'))
+        else:
+            return generate_profile_page(user_id, user_profile, is_user=True)
     return render_template('profile.html', user=None)
 
 @app.route('/new')
@@ -107,3 +97,14 @@ def code():
         update_user_code(session['user_id'])
         return redirect(url_for('profile'))
     return redirect(url_for('link'))
+
+@app.route('/user/<user_id>')
+def _user(user_id):
+    if 'user_id' in session:
+        if session['user_id'] == user_id:
+            return redirect(url_for('profile'))
+    # Get data from database
+    user_profile = get_user_profile(user_id)
+    if user_profile is None:
+        return redirect(url_for('index'))
+    return generate_profile_page(user_id, user_profile, public=user_profile['public'])

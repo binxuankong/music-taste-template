@@ -1,10 +1,8 @@
 {% extends 'base.html' %}
 
-<head>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-</head>
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile_style.css') }}">
+{% endblock %}
 
 {% block content %}
 
@@ -23,15 +21,25 @@
                 {% endif %}
                 Match code:&emsp;&emsp; <em>{{ user['code'] }}</em>
             </p>
-                <a href="/update" class="btn btn-primary">Update data</a>&emsp;
-                <a href="/privacy" class="btn btn-primary">Change privacy</a>&emsp;
-                <a href="/code" class="btn btn-primary">Reset code</a>
+            <a href="/update" class="btn btn-primary">Update data</a>&emsp;
+            <a href="/privacy" class="btn btn-primary">Change privacy</a>&emsp;
+            <a href="/code" class="btn btn-primary">Reset code</a>
         </div>
         <div style="float:right; padding-top: 8px">
             <img src="{{ user['image_url'] }}" alt="User Image" style="height:200px"/>
         </div>
         <div style="clear:both; padding-bottom: 48px"></div>
     </div>
+
+    <ul class="cloud" style="padding-bottom: 48px">
+        <li data-weight="1">Your</li>
+        <li data-weight="2">music</li>
+        <li data-weight="2">taste</li>
+        <li data-weight="1">is</li>
+        <li data-weight="3">{{ mainstream }}%</li>
+        <li data-weight="1">mainstream</li>
+    </ul>
+
     <!-- TOP TAB -->
     <section id="tabs" class="top-tab" style="width:100%;">
         <!-- ################################################## TOP ARTISTS ################################################## -->

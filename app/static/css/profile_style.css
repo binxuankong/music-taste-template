@@ -1,0 +1,150 @@
+p em {
+    color: rgb(142, 22, 189);
+    font-weight: 500;
+}
+
+.container {
+    padding-bottom: 48px;
+}
+
+ul.cloud {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    line-height: 6rem;
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+ul.cloud li {
+    --size: 4;
+    --color: rgb(0, 0, 0);
+    color: var(--color);
+    font-size: calc(var(--size) * 2rem + 2rem);
+    display: block;
+    padding: 0.125rem 0.25rem;
+    position: relative;
+    text-decoration: none;
+}
+  
+ul.cloud li[data-weight="1"] { --size: 1;}
+ul.cloud li[data-weight="2"] { --size: 2; --color: rgb(30, 215, 96);}
+ul.cloud li[data-weight="3"] { --size: 4; --color: rgb(142, 22, 189);}
+
+.tab-content {
+    padding-top: 8px;
+}
+
+.top-tab {
+    padding: 10%;
+    margin-top: -8%;
+}
+
+.top-tab h3 {
+    border: 2px rgb(30, 215, 96) solid;
+    text-align: center;
+    padding: 6px;
+}
+
+.top-tab #tabs{
+    background: #007b5e;
+    color: #eee;
+}
+
+.top-tab #tabs h6.section-title{
+    color: #eee;
+}
+
+.top-tab #tabs .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color: rgb(142, 22, 189);
+    background-color: transparent;
+    border-color: transparent transparent #f3f3f3;
+    border-bottom: 3px solid !important;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.top-tab .nav-link {
+    border: 1px solid transparent;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    color: rgb(142, 22, 189);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.top-tab .nav-link:hover {
+    border: none;
+}
+
+.top-tab thead {
+    background: #f3f3f3;
+    color: #333;
+}
+
+.top-tab a {
+    text-decoration: none;
+    color: rgb(30, 215, 96);
+    font-weight: 600;
+}
+
+td img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td em {
+    color: rgb(142, 22, 189);
+    font-weight: 500;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 16px;
+}
+
+.card {
+    width: 160px;                 /* Set width of cards */
+    display: flex;                /* Children use Flexbox */
+    flex-direction: column;       /* Rotate Axis */
+    border: 1px solid rgb(142, 22, 189);    /* Set up Border */
+    border-radius: 16px;           /* Slightly Curve edges */
+    overflow: hidden;             /* Fixes the corners */
+    margin: 2px;                  /* Add space between cards */
+}
+
+.card:hover {
+    transition: all 200ms linear;
+    background-color: rgb(142, 22, 189);
+    opacity: 80%;
+}
+
+.card-header {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    border-bottom: 1px solid rgb(142, 22, 189);
+    background-color: rgb(30, 215, 96);
+    padding: 4px 8px;
+}
+
+.card-main {
+    display: flex;              /* Children use Flexbox */
+    flex-direction: column;     /* Rotate Axis to Vertical */
+    justify-content: center;    /* Group Children in Center */
+    align-items: center;        /* Group Children in Center (on cross axis) */
+    padding: 12px 0;            /* Add padding to the top/bottom */
+}
+
+.chart embed {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
