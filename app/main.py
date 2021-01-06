@@ -53,35 +53,40 @@ def callback():
 @app.route('/profile')
 def profile():
     if 'token' in session:
-        # Authenticate Spotify session
-        sp = spotipy.Spotify(auth=session['token'])
-        df_user = get_user_df(sp)
-        user_id = df_user['user_id'][0]
-        session['user_id'] = user_id
-        # Get data from database
-        user_profile = get_user_profile(user_id)
-        if user_profile is None:
-            return redirect(url_for('new'))
-        else:
-            return generate_profile_page(user_id, user_profile, is_user=True)
+        try:
+            sp = spotipy.Spotify(auth=session['token'])
+            df_user = get_user_df(sp)
+            user_id = df_user['user_id'][0]
+            session['user_id'] = user_id
+            user_profile = get_user_profile(user_id)
+            if user_profile is None:
+                return redirect(url_for('new'))
+            else:
+                return generate_profile_page(user_id, user_profile, is_user=True)
+        except:
+            return redirect(url_for('link'))
     return render_template('profile.html', user=None)
 
 @app.route('/new')
 def new():
     if 'token' in session:
-        # Authenticate Spotify session
-        sp = spotipy.Spotify(auth=session['token'])
-        success = create_new_user(sp)
-        return redirect(url_for('profile'))
+        try:
+            sp = spotipy.Spotify(auth=session['token'])
+            success = create_new_user(sp)
+            return redirect(url_for('profile'))
+        except:
+            return redirect(url_for('link'))
     return redirect(url_for('link'))
 
 @app.route('/update')
 def update():
     if 'token' in session:
-        # Authenticate Spotify session
-        sp = spotipy.Spotify(auth=session['token'])
-        sync_all_data(sp)
-        return redirect(url_for('profile'))
+        try:
+            sp = spotipy.Spotify(auth=session['token'])
+            sync_all_data(sp)
+            return redirect(url_for('profile'))
+        except:
+            return redirect(url_for('link'))
     return redirect(url_for('link'))
 
 @app.route('/privacy')
@@ -103,8 +108,7 @@ def _user(user_id):
     if 'user_id' in session:
         if session['user_id'] == user_id:
             return redirect(url_for('profile'))
-    # Get data from database
     user_profile = get_user_profile(user_id)
     if user_profile is None:
-        return redirect(url_for('index'))
+        return render_template('user.html', user=None)
     return generate_profile_page(user_id, user_profile, public=user_profile['public'])

@@ -6,6 +6,8 @@
 
 {% block content %}
 
+{% if user %}
+
     <div id="user-profile">
         <div style="float:left">
             <h2>{% block title %} {{ user['display_name'] }} {% endblock %}</h2>
@@ -232,6 +234,12 @@
         <li data-weight="1">is</li>
         <li data-weight="3">private</li>
     </ul>
+
+{% endif %}
+
+{% else %}
+
+    <h2>No such user</h2>
 
 {% endif %}
 
