@@ -1,6 +1,6 @@
 from flask import render_template
 from app.dbfunc import get_user_profile, get_top_artists, get_top_tracks, get_top_genres, get_music_features, top_to_dict
-from app.vizfunc import plot_genre_chart, plot_mood_gauge
+from app.vizfunc import calculate_mainstream_score, plot_genre_chart, plot_mood_gauge
 
 def generate_profile_page(user_id, user_profile, is_user=False, public=True):
     if not public:
@@ -10,7 +10,7 @@ def generate_profile_page(user_id, user_profile, is_user=False, public=True):
     top_genres = get_top_genres(user_id)
     music_features = get_music_features(user_id)
     # Mainstream meter
-    mainstream_score = int(top_artists['popularity'].mean())
+    mainstream_score = calculate_mainstream_score(top_artists)
     # To dict format
     top_artists = top_to_dict(top_artists)
     top_tracks = top_to_dict(top_tracks)

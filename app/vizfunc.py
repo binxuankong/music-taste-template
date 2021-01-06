@@ -3,6 +3,18 @@ from pygal.style import Style
 
 custom_style = Style(background = 'transparent')
 
+def calculate_mainstream_score(top_artists, weight=16, shift=4):
+    tf_weights = {'Short': 3, 'Medium': 2, 'Long': 1}
+    final_score = 0
+    for timeframe in ['Short', 'Medium', 'Long']:
+        this_score = 0
+        pop_scores = top_artists.loc[top_artists['timeframe'] == timeframe, 'popularity'].tolist()
+        weights = [weight / ((0.1 * i + shift) ** 2) for i in range(len(pop_scores))]
+        for i, pop in enumerate(pop_scores):
+            this_score += pop * weights[i] / sum(weights)
+        final_score += (this_score * tf_weights[timeframe]) / 6
+    return round(final_score)
+
 def plot_genre_chart(top_genres):
     try:
         chart_dict = {}

@@ -64,7 +64,7 @@ def get_top_tracks_df(sp):
             top_list.append(this_top)
     return pd.DataFrame.from_dict(top_list)
 
-def get_top_genres_df(top_artists, weight=128, shift=10):
+def get_top_genres_df(top_artists, weight=16, shift=4):
     df_genre = pd.DataFrame(columns=['user_id', 'rank', 'genre', 'points', 'timeframe'])
     user_id = top_artists['Short'][0]['user_id']
     top_genres_list = []
@@ -72,7 +72,7 @@ def get_top_genres_df(top_artists, weight=128, shift=10):
         top_genres = {}
         for artist in top_artists[timeframe]:
             try:
-                points = weight / ((artist['rank'] + shift) ** 2)
+                points = weight / ((0.1 * (artist['rank'] - 1) + shift) ** 2)
                 genres = artist['genres'].split(';')
                 for genre in genres:
                     genre = genre.strip().title()
