@@ -2,7 +2,7 @@ import os
 import random
 import pandas as pd
 from sqlalchemy import create_engine
-from app.codes import NOUNS, ADJECTIVES
+from app.codes import ADJECTIVES, NOUNS
 from app.queries import user_query, top_artists_query, top_tracks_query, top_genres_query, music_features_query, user_update_query, \
     user_privacy_query, user_code_query, artists_update_query, tracks_update_query, artists_insert_query, tracks_insert_query
 from app.spotifunc import get_user_df, get_top_artists_df, get_top_tracks_df, get_top_genres_df, get_music_features_df

@@ -12,7 +12,7 @@ def calculate_mainstream_score(top_artists, weight=16, shift=4):
         weights = [weight / ((0.1 * i + shift) ** 2) for i in range(len(pop_scores))]
         for i, pop in enumerate(pop_scores):
             this_score += pop * weights[i] / sum(weights)
-        final_score += (this_score * tf_weights[timeframe]) / 6
+        final_score += (this_score * tf_weights[timeframe]) / sum(tf_weights.values())
     return round(final_score)
 
 def plot_genre_chart(top_genres):

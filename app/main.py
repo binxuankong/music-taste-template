@@ -7,7 +7,8 @@ from flask import Flask, render_template, request, url_for, flash, redirect, ses
 from werkzeug.exceptions import abort
 from app.spotifunc import get_user_df
 from app.dbfunc import get_user_profile, create_new_user, sync_all_data, update_user_privacy, update_user_code
-from app.generate_page import generate_profile_page
+from app.comparefunc import get_user_from_code
+from app.generate_page import generate_profile_page, generate_match_page
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'CALIWASAMISSIONBUTNOWAGLEAVING'
@@ -110,5 +111,36 @@ def _user(user_id):
             return redirect(url_for('profile'))
     user_profile = get_user_profile(user_id)
     if user_profile is None:
-        return render_template('user.html', user=None)
+        return render_template('no_user.html')
     return generate_profile_page(user_id, user_profile, public=user_profile['public'])
+
+@app.route('/match', methods=('GET', 'POST'))
+def match():
+    if request.method == 'POST':
+        code = request.form['code']
+        if not code:
+            flash('Code is required!')
+        else:
+            user_id1 = session['user_id']
+            user_id2 = get_user_from_code(code)
+            if user_id2 is None:
+                flash('Please enter a valid code!')
+            elif user_id1 == user_id2:
+                return redirect(url_for('profile'))
+            else:
+                return generate_match_page(user_id1, user_id2)
+    if 'user_id' in session:
+        return render_template('match.html', user=True)
+    return render_template('match.html', user=False)
+
+@app.route('/match/<code>')
+def match_result(code):
+    if 'user_id' in session:
+        user_id1 = session['user_id']
+        user_id2 = get_user_from_code(code)
+        if user_id2 is None:
+            return render_template('index.html')
+        if user_id1 == user_id2:
+            return redirect(url_for('profile'))
+        return generate_match_page(user_id1, user_id2)
+    return redirect(url_for('link'))

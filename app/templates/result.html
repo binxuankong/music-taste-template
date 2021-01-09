@@ -1,49 +1,34 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/result_style.css') }}">
 {% endblock %}
 
 {% block content %}
 
-{% if user %}
-
 <div id="user-profile">
-    <div style="float:left">
-        <h1>{% block title %} {{ user['display_name'] }} {% endblock %}</h1>
-        <p>
-            Last updated: &emsp; <span class="badge badge-primary">{{ user['last_updated'] }}</span><br>
-            Spotify profile:&emsp; <a href="{{ user['spotify_url'] }}">{{ user['spotify_url'] }}</a><br>
-            {% if user['public'] %}
-                Profile privacy:&emsp; <b>Public</b><br>
-            {% else %}
-                Profile privacy:&emsp; <b>Private</b><br>
-            {% endif %}
-            Match code:&emsp;&emsp; <em>{{ user['code'] }}</em>
-        </p>
-        <a href="/update" class="btn btn-primary">Update data</a>&emsp;
-        <a href="/privacy" class="btn btn-primary">Change privacy</a>&emsp;
-        <a href="/code" class="btn btn-primary">Reset code</a>
+    <h1>{% block title %} Music Taste Similarity of {{ users[0]['display_name'] }} and {{ users[1]['display_name'] }}  {% endblock %}</h1>
+    <div style="text-align: center; padding-top: 24px; padding-bottom: 48px">
+        <a href={{ "/user/" + users[0]['user_id'] }}>
+            <img class="pimg" src="{{ users[0]['image_url'] }}" alt="User Image" style="margin-right: 64px"/></a>
+        <a href={{ "/user/" + users[1]['user_id'] }}>
+            <img class="pimg" src="{{ users[1]['image_url'] }}" alt="User Image" style="margin-left: 64px"/></a>
     </div>
-    <div style="float:right; padding-top: 8px">
-        <img src="{{ user['image_url'] }}" alt="User Image" style="height:200px"/>
-    </div>
-    <div style="clear:both; padding-bottom: 48px"></div>
 </div>
 
 <ul class="cloud" style="padding-bottom: 48px">
     <li data-weight="1">Your</li>
     <li data-weight="2">music</li>
-    <li data-weight="2">taste</li>
-    <li data-weight="1">is</li>
-    <li data-weight="3">{{ mainstream }}%</li>
-    <li data-weight="1">mainstream</li>
+    <li data-weight="2">tastes</li>
+    <li data-weight="1">are</li>
+    <li data-weight="3">{{ score }}%</li>
+    <li data-weight="1">similar</li>
 </ul>
 
-<!-- TOP TAB -->
+<!-- SIMILAR TAB -->
 <section id="tabs" class="top-tab" style="width:100%;">
     <!-- ################################################## TOP ARTISTS ################################################## -->
-    <h3>Top Artists</h3>
+    <h3>Similar Artists</h3>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -101,8 +86,8 @@
             </div>
         </div>
     </div>
-    <!-- ################################################## TOP TRACKS ################################################## -->
-    <h3>Top Tracks</h3>
+    <!-- ################################################## SIMILAR TRACKS ################################################## -->
+    <h3>Similar Tracks</h3>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -166,8 +151,8 @@
             </div>
         </div>
     </div>
-    <!-- ################################################## TOP GENRES ################################################## -->
-    <h3>Top Genres</h3>
+    <!-- ################################################## SIMILAR GENRES ################################################## -->
+    <h3>Similar Genres</h3>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -198,46 +183,7 @@
             </div>
         </div>
     </div>
-    <!-- ################################################## MUSIC MOODS ################################################## -->
-    <h3>Music Moods</h3>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <nav>
-                    <div class="nav nav-tabs nav-fill" id="moods-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="moods-recent-tab" data-toggle="tab" href="#moods-recent" role="tab" aria-controls="moods-recent" aria-selected="true">Recent</a>
-                        <a class="nav-item nav-link" id="moods-months-tab" data-toggle="tab" href="#moods-months" role="tab" aria-controls="moods-month" aria-selected="false">Past Few Months</a>
-                        <a class="nav-item nav-link" id="moods-all-tab" data-toggle="tab" href="#moods-all" role="tab" aria-controls="moods-all" aria-selected="false">All Time</a>
-                    </div>
-                </nav>
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="moods-recent" role="tabpanel" aria-labelledby="moods-recent-tab">
-                        <div class="chart">
-                            <embed type="image/svg+xml" src= {{ moods['Short']|safe }} style="width:100%;height:60%" />
-                        </div>  
-                    </div>
-                    <div class="tab-pane fade" id="moods-months" role="tabpanel" aria-labelledby="moods-months-tab">
-                        <div class="chart">
-                            <embed type="image/svg+xml" src= {{ moods['Medium']|safe }} style="width:100%;height:60%" />
-                        </div>  
-                    </div>
-                    <div class="tab-pane fade" id="moods-all" role="tabpanel" aria-labelledby="moods-all-tab">
-                        <div class="chart">
-                            <embed type="image/svg+xml" src= {{ moods['Long']|safe }} style="width:100%;height:60%" />
-                        </div>  
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 </section>
-
-{% else %}
-
-<h2>Profile</h2>
-<p>You need to link your Spotify account to see this page.</p>
-<a type="button" class="btn btn-primary" href="/link">Link your Spotify account</a>
-
-{% endif %}
 
 {% endblock %}

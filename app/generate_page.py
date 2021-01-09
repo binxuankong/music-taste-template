@@ -1,6 +1,7 @@
 from flask import render_template
 from app.dbfunc import get_user_profile, get_top_artists, get_top_tracks, get_top_genres, get_music_features, top_to_dict
 from app.vizfunc import calculate_mainstream_score, plot_genre_chart, plot_mood_gauge
+from app.comparefunc import compare_users, get_similar_artists, get_similar_tracks
 
 def generate_profile_page(user_id, user_profile, is_user=False, public=True):
     if not public:
@@ -24,3 +25,12 @@ def generate_profile_page(user_id, user_profile, is_user=False, public=True):
     else:
         return render_template('user.html', public=True, user=user_profile, artists=top_artists, tracks=top_tracks, genres=genre_data, \
                                moods=mood_data, mainstream=mainstream_score)
+
+def generate_match_page(user1, user2):
+    s, df_u, df_a, df_t, df_g = compare_users(user1, user2)
+    score = round(s * 100, 2)
+    users = df_u.to_dict('records')
+    similar_artists = top_to_dict(get_similar_artists(df_a))
+    similar_tracks = top_to_dict(get_similar_tracks(df_t))
+    similar_genres = plot_genre_chart(df_g)
+    return render_template('result.html', users=users, score=score, artists=similar_artists, tracks=similar_tracks, genres=similar_genres)
