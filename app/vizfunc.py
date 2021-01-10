@@ -1,7 +1,16 @@
 import pygal
 from pygal.style import Style
 
-custom_style = Style(background = 'transparent')
+custom_style = Style(
+    background='transparent',
+    plot_background='#191414',
+    foreground='#FFFFFF',
+    foreground_strong='#FFFFFF',
+    foreground_subtle='#FFFFFF',
+    opacity='.9',
+    opacity_hover='.6',
+    transition='400ms ease-in',
+    value_font_size=0)
 
 def calculate_mainstream_score(top_artists, weight=16, shift=4):
     tf_weights = {'Short': 3, 'Medium': 2, 'Long': 1}
@@ -41,8 +50,6 @@ def plot_mood_gauge(features):
             gauge = pygal.SolidGauge(half_pie=True, inner_radius=0.70, style=custom_style)
             percent_formatter = lambda x: '{:.2f}%'.format(x)
             gauge.value_formatter = percent_formatter
-            gauge.legend_at_bottom = True
-            gauge.legend_at_bottom_columns = 3
             feats = features[timeframe][0]
             for mood in music_moods:
                 gauge.add(music_moods[mood], feats[mood] * 100)

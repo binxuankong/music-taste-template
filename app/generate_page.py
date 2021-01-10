@@ -5,7 +5,7 @@ from app.comparefunc import compare_users, get_similar_artists, get_similar_trac
 
 def generate_profile_page(user_id, user_profile, is_user=False, public=True):
     if not public:
-        return render_template('user.html', public=False, user=user_profile)
+        return render_template('profile.html', is_user=False, public=False, user=user_profile)
     top_artists = get_top_artists(user_id)
     top_tracks = get_top_tracks(user_id)
     top_genres = get_top_genres(user_id)
@@ -20,11 +20,11 @@ def generate_profile_page(user_id, user_profile, is_user=False, public=True):
     genre_data = plot_genre_chart(top_genres)
     mood_data = plot_mood_gauge(music_features)
     if is_user:
-        return render_template('profile.html', user=user_profile, artists=top_artists, tracks=top_tracks, genres=genre_data, \
-                               moods=mood_data, mainstream=mainstream_score)
+        return render_template('profile.html', is_user=True, public=True, user=user_profile, artists=top_artists, tracks=top_tracks, \
+                               genres=genre_data, moods=mood_data, mainstream=mainstream_score)
     else:
-        return render_template('user.html', public=True, user=user_profile, artists=top_artists, tracks=top_tracks, genres=genre_data, \
-                               moods=mood_data, mainstream=mainstream_score)
+        return render_template('profile.html', is_user=False, public=True, user=user_profile, artists=top_artists, tracks=top_tracks, \
+                               genres=genre_data, moods=mood_data, mainstream=mainstream_score)
 
 def generate_match_page(user1, user2):
     s, df_u, df_a, df_t, df_g = compare_users(user1, user2)

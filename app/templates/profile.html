@@ -6,30 +6,34 @@
 
 {% block content %}
 
-{% if user %}
-
 <div id="user-profile">
     <div style="float:left; width:80%">
         <h1>{% block title %} {{ user['display_name'] }} {% endblock %}</h1>
         <p>
-            Last updated: &emsp; <span class="badge badge-primary">{{ user['last_updated'] }}</span><br>
+            Last updated: &emsp; {{ user['last_updated'] }}<br>
             Spotify profile:&emsp; <a href="{{ user['spotify_url'] }}">{{ user['spotify_url'] }}</a><br>
-            {% if user['public'] %}
-                Profile privacy:&emsp; <b>Public</b><br>
-            {% else %}
-                Profile privacy:&emsp; <b>Private</b><br>
+            {% if is_user %}
+                {% if user['public'] %}
+                    Profile privacy:&emsp; <b>Public</b><br>
+                {% else %}
+                    Profile privacy:&emsp; <b>Private</b><br>
+                {% endif %}
+                Match code:&emsp;&emsp; <em>{{ user['code'] }}</em>
             {% endif %}
-            Match code:&emsp;&emsp; <em>{{ user['code'] }}</em>
         </p>
-        <a href="/update" class="btn btn-primary">Update data</a>
-        <a href="/privacy" class="btn btn-primary">Change privacy</a>
-        <a href="/code" class="btn btn-primary">Reset code</a>
+        {% if is_user %}
+        <a href="/update" class="btn btn-secondary">Update data</a>
+        <a href="/privacy" class="btn btn-secondary">Change privacy</a>
+        <a href="/code" class="btn btn-secondary">Reset code</a>
+        {% endif %}
     </div>
-    <div style="float:right; width: 20%;">
-        <img src="{{ user['image_url'] }}" alt="User Image" style="padding-top: 8px; width: 100%"/>
+    <div style="float:right; width:20%;">
+        <img class="profile-pic" src="{{ user['image_url'] }}" alt="User Image"/>
     </div>
     <div style="clear:both; padding-bottom: 48px"></div>
 </div>
+
+{% if public %}
 
 <ul class="cloud" style="padding-bottom: 48px">
     <li data-weight="1">Your</li>
@@ -60,7 +64,9 @@
                         <div class="row">
                             {% for artist in artists['Short'][5*row:5*row+5] %}
                             <div class="card">
-                                <div class="card-header">{{ artist['artist'] }}</div>
+                                <div class="card-header">
+                                    <a href="{{ artist['artist_url'] }}">{{ artist['artist'] }}</a>
+                                </div>
                                 <div class="card-main">
                                     <div class="card-container">
                                         <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image"/></a>
@@ -78,7 +84,9 @@
                             <div class="card">
                                 <div class="card-header">{{ artist['artist'] }}</div>
                                 <div class="card-main">
-                                    <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image"/></a>
+                                    <div class="card-container">
+                                        <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image"/></a>
+                                    </div>
                                 </div>
                             </div>
                             {% endfor %}
@@ -92,7 +100,9 @@
                             <div class="card">
                                 <div class="card-header">{{ artist['artist'] }}</div>
                                 <div class="card-main">
-                                    <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image"/></a>
+                                    <div class="card-container">
+                                        <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image"/></a>
+                                    </div>
                                 </div>
                             </div>
                             {% endfor %}
@@ -236,9 +246,13 @@
 
 {% else %}
 
-<h2>Profile</h2>
-<p>You need to link your Spotify account to see this page.</p>
-<a type="button" class="btn btn-primary" href="/link">Link your Spotify account</a>
+<ul class="cloud" style="padding-bottom: 48px">
+    <li data-weight="1">This</li>
+    <li data-weight="2">user's</li>
+    <li data-weight="2">profile</li>
+    <li data-weight="1">is</li>
+    <li data-weight="3">private</li>
+</ul>
 
 {% endif %}
 

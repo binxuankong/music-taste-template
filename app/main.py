@@ -25,11 +25,6 @@ def index():
         return render_template('index.html', session=session)
     return render_template('index.html')
 
-@app.route('/<int:user_id>')
-def user(user_id):
-    user = get_user(user_id)
-    return render_template('user.html', user=user)
-
 @app.route('/link')
 def link():
     auth_url = f"{API_BASE}/authorize?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope={SCOPE}"
@@ -66,7 +61,7 @@ def profile():
                 return generate_profile_page(user_id, user_profile, is_user=True)
         except:
             return redirect(url_for('link'))
-    return render_template('profile.html', user=None)
+    return render_template('no_profile.html', is_user=True)
 
 @app.route('/new')
 def new():
@@ -111,8 +106,8 @@ def _user(user_id):
             return redirect(url_for('profile'))
     user_profile = get_user_profile(user_id)
     if user_profile is None:
-        return render_template('no_user.html')
-    return generate_profile_page(user_id, user_profile, public=user_profile['public'])
+        return render_template('no_profile.html', is_user=False)
+    return generate_profile_page(user_id, user_profile, is_user=False, public=user_profile['public'])
 
 @app.route('/match', methods=('GET', 'POST'))
 def match():

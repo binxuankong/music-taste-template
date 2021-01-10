@@ -35,25 +35,16 @@
           <li class="nav-item active">
             <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
           </li>
-          {% if session %}
-          <li class="nav-item noactive">
+          <li class="nav-item active">
             <a class="nav-link" href="/link">Link Spotify</a>
           </li>
           <li class="nav-item active">
             <a class="nav-link" href="/match">Match</a>
           </li>
-          {% else %}
-          <li class="nav-item active">
-            <a class="nav-link" href="/link">Link Spotify</a>
-          </li>
-          <li class="nav-item noactive">
-            <a class="nav-link" href="/match">Match</a>
-          </li>
-          {% endif %}
         </ul>
       </div>
     </nav>
-    <div class="container">
+    <div class="container" id="main-container">
       {% for message in get_flashed_messages() %}
           <div class="alert alert-danger">{{ message }}</div>
       {% endfor %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{% block title %} 
+    {% if is_user %}
+    No profile
+    {% else %}
+    No such user
+    {% endif %}
+{% endblock %}</h1>
+
+{% if is_user %}
+
+<p>You need to link your Spotify account to see this page.</p>
+<a class="btn btn-primary" href="/link">Link your Spotify account</a>
+
+{% else %}
+
+<a class="btn btn-primary" href="/">Return to Home Page</a>
+
+{% endif %}
+
+{% endblock %}

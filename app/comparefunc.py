@@ -23,7 +23,7 @@ def get_user_from_code(code):
 def compare_users(u1, u2):
     # Configs
     tf_weights = {'Short': 6, 'Medium': 5, 'Long': 4}
-    mu_weights = {'artist': 4, 'track': 1, 'genre': 8, 'feature': 2}
+    mu_weights = {'artist': 4, 'track': 1, 'genre': 6, 'feature': 2}
     # Get data
     engine = create_engine(DATABASE_URL)
     users = pd.read_sql(users2_query, engine, params={'user_ids': (u1, u2)})
@@ -122,17 +122,19 @@ def get_genre_similarity(u1, u2, timeframe='Long'):
     return df.sort_values(['timeframe', 'points'], ascending=False)
 
 def calculate_similarity(df):
-    return round(df.sum()['points'] / df.sum()['base'], 4)
+    base_score = df.loc[(df['rank_x'] != 0) & (df['rank_y'] != 0)].sum()['base']
+    base_score += df.loc[(df['rank_x'] == 0) | (df['rank_y'] == 0)].sum()['base'] / 2
+    return round(df.sum()['points'] / base_score, 4)
 
 def calculate_feature_similarity(u1, u2, timeframe='Long'):
     features1 = u1.loc[u1['timeframe'] == timeframe].drop(columns=['user_id', 'timeframe']).values.tolist()[0]
     features2 = u2.loc[u2['timeframe'] == timeframe].drop(columns=['user_id', 'timeframe']).values.tolist()[0]
-    pointss = []
+    points = []
     for i in range(len(features1)):
         f1 = abs(features1[i])
         f2 = abs(features2[i])
-        pointss.append(min(f1, f2) / max(f1, f2))
-    return round(sum(pointss) / len(pointss), 4)
+        points.append(min(f1, f2) / max(f1, f2))
+    return round(sum(points) / len(points), 4)
 
 def calculate_points(rank, weight=16, shift=4):
     return weight / ((0.1 * rank + shift) ** 2) 

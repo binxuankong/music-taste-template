@@ -1,17 +1,26 @@
+body {
+    background-color: rgb(25, 20, 20);
+}
+
 h1 {
-    color: rgb(25, 20, 20);
+    color: rgb(255, 255, 255);
     padding-top: 6px;
     padding-bottom: 6px;
 }
 
 h2 {
-    color: rgb(25, 20, 20);
+    color: rgb(255, 255, 255);
     padding-top: 4px;
     padding-bottom: 4px;
 }
 
+p {
+    color: rgb(255, 255, 255);
+}
+
 .navbar-custom {
     background-color: rgb(30, 215, 96);
+    margin-bottom: 8px;
 }
 
 .navbar-custom .navbar-brand {
@@ -23,14 +32,6 @@ h2 {
 .nav-item .nav-link {
     color: rgb(25, 20, 20);
     font-weight: 400;
-}
-
-.noactive .nav-link {
-    opacity: 50%;
-}
-
-.active .nav-link {
-    opacity: 100%;
 }
 
 .navbar-toggler {
@@ -49,6 +50,20 @@ h2 {
 
 .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
     background-color: rgb(30, 215, 96) !important;
-    border-color: rgb(142, 22, 189) !important;
-    color:rgb(25, 20, 20) !important;
+    border-color: rgb(255, 255, 255) !important;
+    color:rgb(255, 255, 255) !important;
+    font-size: 18px;
+    border-radius: 28px;
+    padding: 6px 24px;
+    margin: 2px;
+}
+
+.btn-secondary, .btn-secondary:hover, .btn-secondary:active, .btn-secondary:visited {
+    background-color: rgb(30, 215, 96) !important;
+    border-color: rgb(255, 255, 255) !important;
+    color:rgb(255, 255, 255) !important;
+    font-size: 14px;
+    border-radius: 28px;
+    padding: 4px 14px;
+    margin: 2px;
 }

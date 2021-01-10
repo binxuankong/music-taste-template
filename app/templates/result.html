@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/result_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile_style.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -47,7 +47,9 @@
                             <div class="card">
                                 <div class="card-header">{{ artist['artist'] }}</div>
                                 <div class="card-main">
-                                    <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image" style="height:120px"/></a>
+                                    <div class="card-container">
+                                        <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image"/></a>
+                                    </div>
                                 </div>
                             </div>
                             {% endfor %}
@@ -61,7 +63,9 @@
                             <div class="card">
                                 <div class="card-header">{{ artist['artist'] }}</div>
                                 <div class="card-main">
-                                    <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image" style="height:120px"/></a>
+                                    <div class="card-container">
+                                        <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image"/></a>
+                                    </div>
                                 </div>
                             </div>
                             {% endfor %}
@@ -75,7 +79,9 @@
                             <div class="card">
                                 <div class="card-header">{{ artist['artist'] }}</div>
                                 <div class="card-main">
-                                    <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image" style="height:120px"/></a>
+                                    <div class="card-container">
+                                        <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image"/></a>
+                                    </div>
                                 </div>
                             </div>
                             {% endfor %}

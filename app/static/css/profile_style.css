@@ -7,6 +7,20 @@ p em {
     padding-bottom: 48px;
 }
 
+.profile-pic {
+    border-radius: 50%;
+    padding: 8px 4px;
+    width: 100%;
+}
+
+.pimg {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50%;
+    height: 200px;
+}
+
 ul.cloud {
     list-style: none;
     padding-left: 0;
@@ -22,7 +36,7 @@ ul.cloud {
   
 ul.cloud li {
     --size: 4;
-    --color: rgb(0, 0, 0);
+    --color: rgb(255, 255, 255);
     color: var(--color);
     font-size: calc(var(--size) * 2rem + 2rem);
     display: block;
@@ -46,8 +60,10 @@ ul.cloud li[data-weight="3"] { --size: 4; --color: rgb(142, 22, 189);}
 
 .top-tab h3 {
     border: 2px rgb(30, 215, 96) solid;
+    border-radius: 64px;
+    color:rgb(255, 255, 255);
     text-align: center;
-    padding: 6px;
+    padding: 12px;
 }
 
 .top-tab #tabs{
@@ -83,21 +99,26 @@ ul.cloud li[data-weight="3"] { --size: 4; --color: rgb(142, 22, 189);}
     color: #333;
 }
 
-.top-tab a {
+.top-tab td a {
     text-decoration: none;
     color: rgb(30, 215, 96);
     font-weight: 600;
 }
 
-td img {
+.top-tab td img {
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
 
+td {
+    color:rgb(255, 255, 255);
+    font-weight: 400;
+}
+
 td em {
     color: rgb(142, 22, 189);
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .row {
@@ -117,21 +138,26 @@ td em {
     margin: 2px;                  /* Add space between cards */
 }
 
-.card:hover {
+.card:hover .card-container img {
     transition: all 200ms linear;
-    background-color: rgb(142, 22, 189);
-    opacity: 80%;
+    opacity: 60%;
 }
 
 .card-header {
     text-align: center;
     width: 100%;
     font-size: 12px;
-    font-size: 0.8vw;
+    font-size: 1vw;
     font-weight: 600;
     border-bottom: 1px solid rgb(142, 22, 189);
     background-color: rgb(30, 215, 96);
-    padding: 4px 8px;
+    padding: 4px 2px;
+}
+
+.card-header a {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    font-weight: 600;
 }
 
 .card-main {
