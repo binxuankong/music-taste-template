@@ -1,11 +1,54 @@
 h1 {
-    border: 2px #eee solid;
-    color: rgb(142, 22, 189);
-    text-align: center;
-    padding: 10px;
+    color: rgb(25, 20, 20);
+    padding-top: 6px;
+    padding-bottom: 6px;
 }
 
 h2 {
-    color: rgb(142, 22, 189);
-    padding: 8px;
+    color: rgb(25, 20, 20);
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.navbar-custom {
+    background-color: rgb(30, 215, 96);
+}
+
+.navbar-custom .navbar-brand {
+    color: rgb(142, 22, 189); 
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.nav-item .nav-link {
+    color: rgb(25, 20, 20);
+    font-weight: 400;
+}
+
+.noactive .nav-link {
+    opacity: 50%;
+}
+
+.active .nav-link {
+    opacity: 100%;
+}
+
+.navbar-toggler {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.navbar-toggler .navbar-toggler-icon {
+    margin-bottom: 4px;
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: rgb(25, 20, 20);
+    border-radius: 1px;
+}
+
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: rgb(30, 215, 96) !important;
+    border-color: rgb(142, 22, 189) !important;
+    color:rgb(25, 20, 20) !important;
 }

@@ -15,7 +15,7 @@ ul.cloud {
     align-items: center;
     justify-content: center;
     line-height: 6rem;
-    width: 800px;
+    width: 80%;
     margin-left: auto;
     margin-right: auto;
   }
@@ -40,8 +40,8 @@ ul.cloud li[data-weight="3"] { --size: 4; --color: rgb(142, 22, 189);}
 }
 
 .top-tab {
-    padding: 10%;
-    margin-top: -8%;
+    padding: 5%;
+    margin-top: -3%;
 }
 
 .top-tab h3 {
@@ -64,16 +64,13 @@ ul.cloud li[data-weight="3"] { --size: 4; --color: rgb(142, 22, 189);}
     background-color: transparent;
     border-color: transparent transparent #f3f3f3;
     border-bottom: 3px solid !important;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 1em;
+    font-weight: 800;
 }
 
 .top-tab .nav-link {
-    border: 1px solid transparent;
-    border-top-left-radius: .25rem;
-    border-top-right-radius: .25rem;
     color: rgb(142, 22, 189);
-    font-size: 16px;
+    font-size: 1em;
     font-weight: 600;
 }
 
@@ -111,7 +108,7 @@ td em {
 }
 
 .card {
-    width: 160px;                 /* Set width of cards */
+    width: 18%;                 /* Set width of cards */
     display: flex;                /* Children use Flexbox */
     flex-direction: column;       /* Rotate Axis */
     border: 1px solid rgb(142, 22, 189);    /* Set up Border */
@@ -128,7 +125,9 @@ td em {
 
 .card-header {
     text-align: center;
+    width: 100%;
     font-size: 12px;
+    font-size: 0.8vw;
     font-weight: 600;
     border-bottom: 1px solid rgb(142, 22, 189);
     background-color: rgb(30, 215, 96);
@@ -140,7 +139,29 @@ td em {
     flex-direction: column;     /* Rotate Axis to Vertical */
     justify-content: center;    /* Group Children in Center */
     align-items: center;        /* Group Children in Center (on cross axis) */
-    padding: 12px 0;            /* Add padding to the top/bottom */
+}
+
+.card-container {
+    position: relative;
+    width: 100%; /* The size you want */
+}
+
+.card-container:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%; /* The padding depends on the width, not on the height, so with a padding-bottom of 100% you will get a square */
+}
+  
+.card-container img {
+    position: absolute; /* Take your picture out of the flow */
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0; /* Make the picture taking the size of it's parent */
+    width: 100%; /* This if for the object-fit */
+    height: 100%; /* This if for the object-fit */
+    object-fit: cover; /* Equivalent of the background-size: cover; of a background-image */
+    object-position: center;
 }
 
 .chart embed {

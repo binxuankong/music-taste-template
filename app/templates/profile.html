@@ -9,7 +9,7 @@
 {% if user %}
 
 <div id="user-profile">
-    <div style="float:left">
+    <div style="float:left; width:80%">
         <h1>{% block title %} {{ user['display_name'] }} {% endblock %}</h1>
         <p>
             Last updated: &emsp; <span class="badge badge-primary">{{ user['last_updated'] }}</span><br>
@@ -21,12 +21,12 @@
             {% endif %}
             Match code:&emsp;&emsp; <em>{{ user['code'] }}</em>
         </p>
-        <a href="/update" class="btn btn-primary">Update data</a>&emsp;
-        <a href="/privacy" class="btn btn-primary">Change privacy</a>&emsp;
+        <a href="/update" class="btn btn-primary">Update data</a>
+        <a href="/privacy" class="btn btn-primary">Change privacy</a>
         <a href="/code" class="btn btn-primary">Reset code</a>
     </div>
-    <div style="float:right; padding-top: 8px">
-        <img src="{{ user['image_url'] }}" alt="User Image" style="height:200px"/>
+    <div style="float:right; width: 20%;">
+        <img src="{{ user['image_url'] }}" alt="User Image" style="padding-top: 8px; width: 100%"/>
     </div>
     <div style="clear:both; padding-bottom: 48px"></div>
 </div>
@@ -62,7 +62,9 @@
                             <div class="card">
                                 <div class="card-header">{{ artist['artist'] }}</div>
                                 <div class="card-main">
-                                    <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image" style="height:120px"/></a>
+                                    <div class="card-container">
+                                        <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image"/></a>
+                                    </div>
                                 </div>
                             </div>
                             {% endfor %}
@@ -76,7 +78,7 @@
                             <div class="card">
                                 <div class="card-header">{{ artist['artist'] }}</div>
                                 <div class="card-main">
-                                    <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image" style="height:120px"/></a>
+                                    <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image"/></a>
                                 </div>
                             </div>
                             {% endfor %}
@@ -90,7 +92,7 @@
                             <div class="card">
                                 <div class="card-header">{{ artist['artist'] }}</div>
                                 <div class="card-main">
-                                    <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image" style="height:120px"/></a>
+                                    <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image"/></a>
                                 </div>
                             </div>
                             {% endfor %}
