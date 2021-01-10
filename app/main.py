@@ -3,12 +3,12 @@ import json
 import requests
 import spotipy
 import pandas as pd
-from flask import Flask, render_template, request, url_for, flash, redirect, session
+from flask import Flask, request, url_for, flash, redirect, session
 from werkzeug.exceptions import abort
+from app.generate_page import generate_page, generate_profile_page, generate_match_page
 from app.spotifunc import get_user_df
 from app.dbfunc import get_user_profile, create_new_user, sync_all_data, update_user_privacy, update_user_code
 from app.comparefunc import get_user_from_code
-from app.generate_page import generate_profile_page, generate_match_page
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'CALIWASAMISSIONBUTNOWAGLEAVING'
@@ -21,9 +21,7 @@ CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
 
 @app.route('/')
 def index():
-    if 'token' in session:
-        return render_template('index.html', session=session)
-    return render_template('index.html')
+    return generate_page('index.html')
 
 @app.route('/link')
 def link():
@@ -60,8 +58,8 @@ def profile():
             else:
                 return generate_profile_page(user_id, user_profile, is_user=True)
         except:
-            return redirect(url_for('link'))
-    return render_template('no_profile.html', is_user=True)
+            return generate_page('no_link.html')
+    return generate_page('no_profile.html', is_user=True)
 
 @app.route('/new')
 def new():
@@ -106,7 +104,7 @@ def _user(user_id):
             return redirect(url_for('profile'))
     user_profile = get_user_profile(user_id)
     if user_profile is None:
-        return render_template('no_profile.html', is_user=False)
+        return generate_page('no_profile.html', is_user=False)
     return generate_profile_page(user_id, user_profile, is_user=False, public=user_profile['public'])
 
 @app.route('/match', methods=('GET', 'POST'))
@@ -125,8 +123,8 @@ def match():
             else:
                 return generate_match_page(user_id1, user_id2)
     if 'user_id' in session:
-        return render_template('match.html', user=True)
-    return render_template('match.html', user=False)
+        return generate_page('match.html', user=True)
+    return generate_page('match.html', user=False)
 
 @app.route('/match/<code>')
 def match_result(code):
@@ -134,7 +132,7 @@ def match_result(code):
         user_id1 = session['user_id']
         user_id2 = get_user_from_code(code)
         if user_id2 is None:
-            return render_template('index.html')
+            return generate_page('index.html')
         if user_id1 == user_id2:
             return redirect(url_for('profile'))
         return generate_match_page(user_id1, user_id2)

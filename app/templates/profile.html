@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile_style.css') }}?u={{ last_updated }}">
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@
     <div style="float:left; width:80%">
         <h1>{% block title %} {{ user['display_name'] }} {% endblock %}</h1>
         <p>
-            Last updated: &emsp; {{ user['last_updated'] }}<br>
+            Last updated:&emsp; {{ user['last_updated'] }}<br>
             Spotify profile:&emsp; <a href="{{ user['spotify_url'] }}">{{ user['spotify_url'] }}</a><br>
             {% if is_user %}
                 {% if user['public'] %}

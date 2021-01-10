@@ -1,11 +1,20 @@
+import os
 from flask import render_template
 from app.dbfunc import get_user_profile, get_top_artists, get_top_tracks, get_top_genres, get_music_features, top_to_dict
 from app.vizfunc import calculate_mainstream_score, plot_genre_chart, plot_mood_gauge
 from app.comparefunc import compare_users, get_similar_artists, get_similar_tracks
 
+def dir_last_updated(folder):
+    return str(max(os.path.getmtime(os.path.join(root_path, f))
+                   for root_path, dirs, files in os.walk(folder)
+                   for f in files))
+
+def generate_page(html_page, **kwargs):
+    return render_template(html_page, last_updated=dir_last_updated('app/static'), **kwargs)
+
 def generate_profile_page(user_id, user_profile, is_user=False, public=True):
     if not public:
-        return render_template('profile.html', is_user=False, public=False, user=user_profile)
+        return generate_page('profile.html', is_user=False, public=False, user=user_profile)
     top_artists = get_top_artists(user_id)
     top_tracks = get_top_tracks(user_id)
     top_genres = get_top_genres(user_id)
@@ -20,11 +29,11 @@ def generate_profile_page(user_id, user_profile, is_user=False, public=True):
     genre_data = plot_genre_chart(top_genres)
     mood_data = plot_mood_gauge(music_features)
     if is_user:
-        return render_template('profile.html', is_user=True, public=True, user=user_profile, artists=top_artists, tracks=top_tracks, \
-                               genres=genre_data, moods=mood_data, mainstream=mainstream_score)
+        return generate_page('profile.html', is_user=True, public=True, user=user_profile, artists=top_artists, tracks=top_tracks, \
+                             genres=genre_data, moods=mood_data, mainstream=mainstream_score)
     else:
-        return render_template('profile.html', is_user=False, public=True, user=user_profile, artists=top_artists, tracks=top_tracks, \
-                               genres=genre_data, moods=mood_data, mainstream=mainstream_score)
+        return generate_page('profile.html', is_user=False, public=True, user=user_profile, artists=top_artists, tracks=top_tracks, \
+                             genres=genre_data, moods=mood_data, mainstream=mainstream_score)
 
 def generate_match_page(user1, user2):
     s, df_u, df_a, df_t, df_g = compare_users(user1, user2)
