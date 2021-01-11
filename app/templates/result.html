@@ -20,8 +20,8 @@
     <li data-weight="1">Your</li>
     <li data-weight="2">music</li>
     <li data-weight="2">tastes</li>
-    <li data-weight="1">are</li>
-    <li data-weight="3">{{ score }}%</li>
+    <li data-weight="1">are</li><br>
+    <li data-weight="3"><span class="count" data-target="{{ score }}"> </span>%</li>
     <li data-weight="1">similar</li>
 </ul>
 
@@ -191,5 +191,28 @@
     </div>
 
 </section>
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+const counters = document.querySelectorAll('.count');
+
+counters.forEach(counter => {
+    const updateCount = () => {
+        const target = +counter.getAttribute('data-target');
+        const count = +counter.innerText;
+
+        if (count < target) {
+            counter.innerText = count + 1;
+            setTimeout(updateCount, 10);
+        } else {
+            counter.innerText = target;
+        }
+    };
+    updateCount();
+});
+</script>
 
 {% endblock %}

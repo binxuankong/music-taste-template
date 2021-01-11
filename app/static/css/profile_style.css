@@ -1,5 +1,17 @@
+:root {
+    --black: #000000;
+    --grey: #1c1c16;
+    --white: #ffffff;
+    --red: #ef4f91;
+    --blue: #05a8aa;
+}
+
+p a {
+    color: var(--blue);
+}
+
 p em {
-    color: rgb(142, 22, 189);
+    color: var(--red);
     font-weight: 500;
 }
 
@@ -29,14 +41,14 @@ ul.cloud {
     align-items: center;
     justify-content: center;
     line-height: 6rem;
-    width: 80%;
+    width: 75%;
     margin-left: auto;
     margin-right: auto;
   }
   
 ul.cloud li {
     --size: 4;
-    --color: rgb(255, 255, 255);
+    --color: var(--white);
     color: var(--color);
     font-size: calc(var(--size) * 2rem + 2rem);
     display: block;
@@ -46,8 +58,9 @@ ul.cloud li {
 }
   
 ul.cloud li[data-weight="1"] { --size: 1;}
-ul.cloud li[data-weight="2"] { --size: 2; --color: rgb(30, 215, 96);}
-ul.cloud li[data-weight="3"] { --size: 4; --color: rgb(142, 22, 189);}
+ul.cloud li[data-weight="2"] { --size: 2; --color: var(--blue);}
+ul.cloud li[data-weight="3"] { --size: 4; --color: var(--red);}
+
 
 .tab-content {
     padding-top: 8px;
@@ -59,33 +72,33 @@ ul.cloud li[data-weight="3"] { --size: 4; --color: rgb(142, 22, 189);}
 }
 
 .top-tab h3 {
-    border: 2px rgb(30, 215, 96) solid;
+    border: 2px var(--blue) solid;
     border-radius: 64px;
-    color:rgb(255, 255, 255);
+    color: var(--white);
     text-align: center;
     padding: 12px;
 }
 
 .top-tab #tabs{
-    background: #007b5e;
-    color: #eee;
+    background: var(--blue);
+    color: var(--white);
 }
 
 .top-tab #tabs h6.section-title{
-    color: #eee;
+    color: var(--white);
 }
 
 .top-tab #tabs .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
-    color: rgb(142, 22, 189);
+    color: var(--red);
     background-color: transparent;
-    border-color: transparent transparent #f3f3f3;
+    border-color: transparent transparent var(--white);
     border-bottom: 3px solid !important;
     font-size: 1em;
     font-weight: 800;
 }
 
 .top-tab .nav-link {
-    color: rgb(142, 22, 189);
+    color: var(--red);
     font-size: 1em;
     font-weight: 600;
 }
@@ -95,13 +108,13 @@ ul.cloud li[data-weight="3"] { --size: 4; --color: rgb(142, 22, 189);}
 }
 
 .top-tab thead {
-    background: #f3f3f3;
-    color: #333;
+    background: var(--white);
+    color: var(--black);
 }
 
 .top-tab td a {
     text-decoration: none;
-    color: rgb(30, 215, 96);
+    color: var(--blue);
     font-weight: 600;
 }
 
@@ -112,12 +125,12 @@ ul.cloud li[data-weight="3"] { --size: 4; --color: rgb(142, 22, 189);}
 }
 
 td {
-    color:rgb(255, 255, 255);
+    color:var(--white);
     font-weight: 400;
 }
 
 td em {
-    color: rgb(142, 22, 189);
+    color: var(--red);
     font-weight: 600;
 }
 
@@ -132,7 +145,7 @@ td em {
     width: 18%;                 /* Set width of cards */
     display: flex;                /* Children use Flexbox */
     flex-direction: column;       /* Rotate Axis */
-    border: 1px solid rgb(142, 22, 189);    /* Set up Border */
+    border: 1px solid var(--red);    /* Set up Border */
     border-radius: 16px;           /* Slightly Curve edges */
     overflow: hidden;             /* Fixes the corners */
     margin: 2px;                  /* Add space between cards */
@@ -149,14 +162,14 @@ td em {
     font-size: 12px;
     font-size: 1vw;
     font-weight: 600;
-    border-bottom: 1px solid rgb(142, 22, 189);
-    background-color: rgb(30, 215, 96);
+    border-bottom: 1px solid var(--red);
+    background-color: var(--blue);
     padding: 4px 2px;
 }
 
 .card-header a {
     text-decoration: none;
-    color: rgb(255, 255, 255);
+    color: var(--black);
     font-weight: 600;
 }
 

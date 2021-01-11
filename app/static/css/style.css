@@ -1,36 +1,44 @@
+:root {
+    --black: #000000;
+    --grey: #1c1c16;
+    --white: #ffffff;
+    --red: #ef4f91;
+    --blue: #05a8aa;
+}
+
 body {
-    background-color: rgb(25, 20, 20);
+    background-color: var(--grey);
 }
 
 h1 {
-    color: rgb(255, 255, 255);
+    color: var(--white);
     padding-top: 6px;
     padding-bottom: 6px;
 }
 
 h2 {
-    color: rgb(255, 255, 255);
+    color: var(--white);
     padding-top: 4px;
     padding-bottom: 4px;
 }
 
 p {
-    color: rgb(255, 255, 255);
+    color: var(--white);
 }
 
 .navbar-custom {
-    background-color: rgb(30, 215, 96);
+    background-color: var(--blue);
     margin-bottom: 8px;
 }
 
 .navbar-custom .navbar-brand {
-    color: rgb(142, 22, 189); 
+    color: var(--black);
     font-size: 20px;
     font-weight: 600;
 }
 
 .nav-item .nav-link {
-    color: rgb(25, 20, 20);
+    color: var(--black);
     font-weight: 400;
 }
 
@@ -44,14 +52,14 @@ p {
     display: block;
     width: 22px;
     height: 2px;
-    background-color: rgb(25, 20, 20);
+    background-color: var(--black);
     border-radius: 1px;
 }
 
 .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
-    background-color: rgb(30, 215, 96) !important;
-    border-color: rgb(255, 255, 255) !important;
-    color:rgb(255, 255, 255) !important;
+    background-color: var(--blue) !important;
+    border-color: var(--black )!important;
+    color: var(--black) !important;
     font-size: 18px;
     border-radius: 28px;
     padding: 6px 24px;
@@ -59,9 +67,9 @@ p {
 }
 
 .btn-secondary, .btn-secondary:hover, .btn-secondary:active, .btn-secondary:visited {
-    background-color: rgb(30, 215, 96) !important;
-    border-color: rgb(255, 255, 255) !important;
-    color:rgb(255, 255, 255) !important;
+    background-color: var(--blue) !important;
+    border-color: var(--black )!important;
+    color: var(--black) !important;
     font-size: 14px;
     border-radius: 28px;
     padding: 4px 14px;

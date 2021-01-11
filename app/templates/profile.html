@@ -10,7 +10,7 @@
     <div style="float:left; width:80%">
         <h1>{% block title %} {{ user['display_name'] }} {% endblock %}</h1>
         <p>
-            Last updated:&emsp; {{ user['last_updated'] }}<br>
+            Last updated:&emsp;&nbsp; {{ user['last_updated'] }}<br>
             Spotify profile:&emsp; <a href="{{ user['spotify_url'] }}">{{ user['spotify_url'] }}</a><br>
             {% if is_user %}
                 {% if user['public'] %}
@@ -39,8 +39,8 @@
     <li data-weight="1">Your</li>
     <li data-weight="2">music</li>
     <li data-weight="2">taste</li>
-    <li data-weight="1">is</li>
-    <li data-weight="3">{{ mainstream }}%</li>
+    <li data-weight="1">is</li><br>
+    <li data-weight="3"><span class="count" data-target="{{ mainstream }}"> </span>%</li>
     <li data-weight="1">mainstream</li>
 </ul>
 
@@ -255,5 +255,28 @@
 </ul>
 
 {% endif %}
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+const counters = document.querySelectorAll('.count');
+
+counters.forEach(counter => {
+    const updateCount = () => {
+        const target = +counter.getAttribute('data-target');
+        const count = +counter.innerText;
+
+        if (count < target) {
+            counter.innerText = count + 1;
+            setTimeout(updateCount, 10);
+        } else {
+            counter.innerText = target;
+        }
+    };
+    updateCount();
+});
+</script>
 
 {% endblock %}

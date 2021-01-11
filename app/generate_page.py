@@ -37,7 +37,7 @@ def generate_profile_page(user_id, user_profile, is_user=False, public=True):
 
 def generate_match_page(user1, user2):
     s, df_u, df_a, df_t, df_g = compare_users(user1, user2)
-    score = round(s * 100, 2)
+    score = int(round(s * 100))
     users = df_u.to_dict('records')
     similar_artists = top_to_dict(get_similar_artists(df_a))
     similar_tracks = top_to_dict(get_similar_tracks(df_t))

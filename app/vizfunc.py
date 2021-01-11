@@ -3,7 +3,7 @@ from pygal.style import Style
 
 custom_style = Style(
     background='transparent',
-    plot_background='#191414',
+    plot_background='#1c1c16',
     foreground='#FFFFFF',
     foreground_strong='#FFFFFF',
     foreground_subtle='#FFFFFF',
