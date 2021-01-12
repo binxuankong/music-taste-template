@@ -1,5 +1,72 @@
 {% extends 'base.html' %}
 
-{% block content %}
-    <h1 style="text-align: center;">{% block title %} Welcome to Music Taste Demo {% endblock %}</h1>
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css/animate.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ionicons/css/ionicons.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index_style.css') }}?u={{ last_updated }}">
+{% endblock %}
+
+{% block index %}
+    <section id="intro">
+        <div class="intro-container">
+          <div id="introCarousel" class="carousel  slide carousel-fade" data-ride="carousel">
+    
+            <ol class="carousel-indicators"></ol>
+    
+            <div class="carousel-inner" role="listbox">
+    
+              <div class="carousel-item active" style="background-image: url(static/img/background/kygo.jpg)">
+                <div class="carousel-container">
+                  <div class="container">
+                    <h2 class="animate__animated animate__fadeInDown">{% block title %} Music Taste Demo {% endblock %}</h2>
+                    <p class="animate__animated animate__fadeInUp">Welcome to music taste demo.</p>
+                    <a href="/link" class="btn-get-started scrollto animate__animated animate__fadeInUp">Get Started</a>
+                  </div>
+                </div>
+              </div>
+    
+              <div class="carousel-item" style="background-image: url(static/img/background/frank-ocean.jpg)">
+                <div class="carousel-container">
+                  <div class="container">
+                    <h2 class="animate__animated animate__fadeInDown">Discover your music taste.</h2>
+                    <p class="animate__animated animate__fadeInUp">Find out your favourite artists, songs and genres.</p>
+                    <a href="/link" class="btn-get-started scrollto animate__animated animate__fadeInUp">Get Started</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="carousel-item" style="background-image: url(static/img/background/zedd.jpg)">
+                <div class="carousel-container">
+                  <div class="container">
+                    <h2 class="animate__animated animate__fadeInDown">Match with other people.</h2>
+                    <p class="animate__animated animate__fadeInUp">Compare your music taste with other people and find people with similar music taste as you.</p>
+                    <a href="/link" class="btn-get-started scrollto animate__animated animate__fadeInUp">Get Started</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="carousel-item" style="background-image: url(static/img/background/amf.jpg)">
+                <div class="carousel-container">
+                  <div class="container">
+                    <h2 class="animate__animated animate__fadeInDown">Explore new music.</h2>
+                    <p class="animate__animated animate__fadeInUp">Get recommendation based on your music taste and discover trending artists and songs.</p>
+                    <a href="/link" class="btn-get-started scrollto animate__animated animate__fadeInUp">Get Started</a>
+                  </div>
+                </div>
+              </div>
+    
+            <a class="carousel-control-prev" href="#introCarousel" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon ion-chevron-left" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+    
+            <a class="carousel-control-next" href="#introCarousel" role="button" data-slide="next">
+              <span class="carousel-control-next-icon ion-chevron-right" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+    
+          </div>
+        </div>
+      </section><!-- End Intro Section -->
+      
 {% endblock %}

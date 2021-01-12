@@ -46,7 +46,13 @@ def callback():
 
 @app.route('/profile')
 def profile():
-    if 'token' in session:
+    if 'user' in session:
+        user_profile = get_user_profile(user_id)
+        if user_profile is None:
+            return redirect(url_for('new'))
+        else:
+            return generate_profile_page(user_id, user_profile, is_user=True)
+    elif 'token' in session:
         try:
             sp = spotipy.Spotify(auth=session['token'])
             df_user = get_user_df(sp)
