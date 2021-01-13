@@ -152,5 +152,5 @@ def explore():
         if user_profile is None:
             return redirect(url_for('new'))
         else:
-            return generate_explore_page(session['user_id'], is_user=True)
-    return generate_page('no_profile.html', is_user=True)
+            return generate_explore_page(session['user_id'])
+    return generate_page('explore.html', is_user=False)

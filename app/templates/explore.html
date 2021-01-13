@@ -10,6 +10,8 @@
     <h1>{% block title %} Explore {% endblock %}</h1>
 </div>
 
+{% if user %}
+
 <!-- SIMILAR TAB -->
 <section id="tabs" class="top-tab" style="width:100%;">
     <!-- ################################################## RECOMMEND ARTISTS ################################################## -->
@@ -105,5 +107,14 @@
     </div>
 
 </section>
+
+{% endblock %}
+
+{% else %}
+
+<p>You need to link your Spotify account to see this page.</p>
+<a type="button" class="btn btn-primary" href="/link">Link your Spotify account</a>
+
+{% endif %}
 
 {% endblock %}

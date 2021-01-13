@@ -46,7 +46,7 @@ def generate_match_page(user1, user2):
     similar_genres = plot_genre_chart(df_g)
     return generate_page('result.html', users=users, score=score, artists=similar_artists, tracks=similar_tracks, genres=similar_genres)
 
-def generate_explore_page(user_id, is_user=False):
+def generate_explore_page(user_id):
     df_a, df_t = get_recommendations(user_id)
     reco_artists = df_a.to_dict('records')
     reco_tracks = df_t.to_dict('records')
