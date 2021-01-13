@@ -62,10 +62,11 @@ def recommend_artists(df):
                     'popularity': a['popularity']
                 }
                 recom_list.append(this_recom)
-    if len(recom_list) >= 20:
-        return pd.DataFrame.from_dict(recom_list).sample(n=20)
+    df_recom = pd.DataFrame.from_dict(recom_list).drop_duplicates()
+    if len(df_recom) >= 20:
+        return df_recom.sample(n=20)
     else:
-        return pd.DataFrame.from_dict(recom_list)
+        return df_recom
 
 def recommend_tracks(df):
     sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
