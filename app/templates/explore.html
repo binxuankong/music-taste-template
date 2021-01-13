@@ -25,7 +25,9 @@
                         <div class="row">
                             {% for artist in artists[5*row:5*row+5] %}
                             <div class="card">
-                                <div class="card-header">{{ artist['artist'] }}</div>
+                                <div class="card-header">
+                                    <a href="{{ artist['artist_url'] }}">{{ artist['artist'] }}</a>
+                                </div>
                                 <div class="card-main">
                                     <div class="card-container">
                                         <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image"/></a>
