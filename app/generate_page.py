@@ -50,4 +50,4 @@ def generate_explore_page(user_id):
     df_a, df_t = get_recommendations(user_id)
     reco_artists = df_a.to_dict('records')
     reco_tracks = df_t.to_dict('records')
-    return generate_page('explore.html', is_user=True, artists=reco_artists, tracks=reco_tracks)
+    return generate_page('explore.html', user=True, artists=reco_artists, tracks=reco_tracks)
