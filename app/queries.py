@@ -128,3 +128,31 @@ SELECT track_id, track, artists, album, track_url, album_image
 FROM "Tracks"
 WHERE track_id in %(track_ids)s
 """
+
+recommend_artists_query = """
+SELECT a.artist_id, a.artist, a.genres, a.artist_url, a.artist_image, a.popularity
+FROM "RecommendArtists" ra 
+JOIN "Artists" a 
+ON ra.artist_id = a.artist_id
+WHERE ra.user_id = %(user_id)s
+"""
+
+recommend_tracks_query = """
+SELECT t.track_id, t.track, t.artists, t.album, t.album_image, t.release_date, t.track_url
+FROM "RecommendTracks" rt
+JOIN "Tracks" t
+ON rt.track_id = t.track_id
+WHERE rt.user_id = %(user_id)s
+"""
+
+top_artists3_query = """
+SELECT user_id, artist_id
+FROM "TopArtists"
+WHERE user_id = %(user_id)s AND timeframe = 'Short'
+"""
+
+top_tracks3_query = """
+SELECT user_id, track_id
+FROM "TopTracks"
+WHERE user_id = %(user_id)s AND timeframe = 'Short'
+"""

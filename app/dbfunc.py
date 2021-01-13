@@ -81,10 +81,7 @@ def sync_all_data(sp):
     # Sync artists and tracks
     df_a.to_sql('TempArtists', engine, index=False, if_exists='replace')
     df_t.to_sql('TempTracks', engine, index=False, if_exists='replace')
-    engine.execute(artists_update_query)
-    engine.execute(tracks_update_query)
-    engine.execute(artists_insert_query)
-    engine.execute(tracks_insert_query)
+    update_artists_and_tracks(engine)
     # Dispose engine
     engine.dispose()
 
@@ -130,8 +127,14 @@ def sync_data(df, table, engine):
         delete_user_data(df, table, engine)
         insert_new_data(df, table, engine)
 
+def update_artists_and_tracks(engine):
+    engine.execute(artists_update_query)
+    engine.execute(tracks_update_query)
+    engine.execute(artists_insert_query)
+    engine.execute(tracks_insert_query)
+
 def delete_user_data(df, table, engine):
-    user_id = df['user_id'][0]
+    user_id = df['user_id'].unique()[0]
     # timeframe = df['timeframe'][0]
     # engine.execute('DELETE FROM "{}" WHERE user_id = %(user_id)s AND timeframe = %(timeframe)s'.format(table), user_id=user_id, timeframe=timeframe)
     engine.execute('DELETE FROM "{}" WHERE user_id = %(user_id)s'.format(table), user_id=user_id)

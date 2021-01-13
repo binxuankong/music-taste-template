@@ -5,7 +5,7 @@ import spotipy
 import pandas as pd
 from flask import Flask, request, url_for, flash, redirect, session
 from werkzeug.exceptions import abort
-from app.generate_page import generate_page, generate_profile_page, generate_match_page
+from app.generate_page import generate_page, generate_profile_page, generate_match_page, generate_explore_page
 from app.spotifunc import get_user_df
 from app.dbfunc import get_user_profile, create_new_user, sync_all_data, update_user_privacy, update_user_code
 from app.comparefunc import get_user_from_code
@@ -16,8 +16,8 @@ app.config['SECRET_KEY'] = 'CALIWASAMISSIONBUTNOWAGLEAVING'
 API_BASE = "https://accounts.spotify.com"
 SCOPE = "user-read-recently-played user-top-read"
 REDIRECT_URI = os.environ.get('SPOTIFY_CALLBACK_URI')
-CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
-CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
+CLIENT_ID = os.environ.get('SPOTIPY_CLIENT_ID')
+CLIENT_SECRET = os.environ.get('SPOTIPY_CLIENT_SECRET')
 
 @app.route('/')
 def index():
@@ -46,7 +46,8 @@ def callback():
 
 @app.route('/profile')
 def profile():
-    if 'user' in session:
+    if 'user_id' in session:
+        user_id = session['user_id']
         user_profile = get_user_profile(user_id)
         if user_profile is None:
             return redirect(url_for('new'))
@@ -143,3 +144,13 @@ def match_result(code):
             return redirect(url_for('profile'))
         return generate_match_page(user_id1, user_id2)
     return redirect(url_for('link'))
+
+@app.route('/explore')
+def explore():
+    if 'user_id' in session:
+        user_profile = get_user_profile(session['user_id'])
+        if user_profile is None:
+            return redirect(url_for('new'))
+        else:
+            return generate_explore_page(session['user_id'], is_user=True)
+    return generate_page('no_profile.html', is_user=True)
