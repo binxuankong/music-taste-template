@@ -61,6 +61,7 @@ def profile():
             user_profile = get_user_profile(user_id)
             if user_profile is None:
                 return redirect(url_for('new'))
+            session.permanent = True
             return generate_profile_page(user_id, user_profile, is_user=True)
         except:
             return generate_page('no_link.html')
