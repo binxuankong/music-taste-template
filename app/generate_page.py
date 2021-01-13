@@ -1,7 +1,8 @@
 import os
 import datetime as dt
 from flask import render_template
-from app.dbfunc import get_user_profile, get_top_artists, get_top_tracks, get_top_genres, get_music_features, top_to_dict
+from app.dbfunc import top_to_dict
+from app.userfunc import get_user_profile, get_top_artists, get_top_tracks, get_top_genres, get_music_features
 from app.vizfunc import calculate_mainstream_score, plot_genre_chart, plot_mood_gauge
 from app.comparefunc import compare_users, get_similar_artists, get_similar_tracks
 from app.recofunc import get_recommendations

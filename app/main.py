@@ -8,7 +8,7 @@ from functools import wraps
 from werkzeug.exceptions import abort
 from app.generate_page import generate_page, generate_profile_page, generate_match_page, generate_explore_page
 from app.spotifunc import get_user_df
-from app.dbfunc import get_user_profile, create_new_user, sync_all_data, update_user_privacy, update_user_code
+from app.userfunc import get_user_profile, create_new_user, update_user_profile, update_user_privacy, update_user_code
 from app.comparefunc import get_user_from_code
 
 app = Flask(__name__)
@@ -115,7 +115,7 @@ def login_required(function_to_protect):
 @login_required
 def update():
     sp = spotipy.Spotify(auth=session['token'])
-    sync_all_data(sp)
+    update_user_profile(sp)
     return redirect(url_for('profile'))
 
 @app.route('/privacy')
