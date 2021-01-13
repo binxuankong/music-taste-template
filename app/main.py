@@ -51,8 +51,7 @@ def profile():
         user_profile = get_user_profile(user_id)
         if user_profile is None:
             return redirect(url_for('new'))
-        else:
-            return generate_profile_page(user_id, user_profile, is_user=True)
+        return generate_profile_page(user_id, user_profile, is_user=True)
     elif 'token' in session:
         try:
             sp = spotipy.Spotify(auth=session['token'])
@@ -62,8 +61,7 @@ def profile():
             user_profile = get_user_profile(user_id)
             if user_profile is None:
                 return redirect(url_for('new'))
-            else:
-                return generate_profile_page(user_id, user_profile, is_user=True)
+            return generate_profile_page(user_id, user_profile, is_user=True)
         except:
             return generate_page('no_link.html')
     return generate_page('no_profile.html', is_user=True)
@@ -73,8 +71,11 @@ def new():
     if 'token' in session:
         try:
             sp = spotipy.Spotify(auth=session['token'])
-            success = create_new_user(sp)
-            return redirect(url_for('profile'))
+            user_profile = get_user_profile(user_id)
+            if user_profile is None:
+                create_new_user(sp)
+                return redirect(url_for('profile'))
+            return redirect(url_for('link'))
         except:
             return redirect(url_for('link'))
     return redirect(url_for('link'))
@@ -151,6 +152,5 @@ def explore():
         user_profile = get_user_profile(session['user_id'])
         if user_profile is None:
             return redirect(url_for('new'))
-        else:
-            return generate_explore_page(session['user_id'])
+        return generate_explore_page(session['user_id'])
     return generate_page('explore.html', is_user=False)
