@@ -12,7 +12,7 @@ def get_user_df(sp):
         'user_id': user['id'],
         'display_name': user['display_name'],
         'spotify_url': user['external_urls']['spotify'],
-        'image_url': user['images'][0]['url'],
+        'image_url': user['images'][0]['url'] if len(user['images']) > 0 else None,
         'followers': user['followers']['total'],
         'date_created': dt.datetime.now(),
         'last_updated': dt.datetime.now()
@@ -66,7 +66,7 @@ def get_top_tracks_df(sp):
 
 def get_top_genres_df(top_artists, weight=16, shift=4):
     df_genre = pd.DataFrame(columns=['user_id', 'rank', 'genre', 'points', 'timeframe'])
-    user_id = top_artists['Short'][0]['user_id']
+    user_id = top_artists['Long'][0]['user_id']
     top_genres_list = []
     for timeframe in ['Short', 'Medium', 'Long']:
         top_genres = {}
@@ -96,13 +96,16 @@ def get_music_features_df(sp, top_tracks):
     audio_features = ['danceability', 'energy', 'loudness', 'speechiness', 'acousticness', 'instrumentalness', \
                       'liveness', 'valence', 'tempo']
     df_feature = pd.DataFrame(columns=['user_id'] + audio_features + ['timeframe'])
-    user_id = top_tracks['Short'][0]['user_id']
+    user_id = top_tracks['Long'][0]['user_id']
     for timeframe in ['Short', 'Medium', 'Long']:
         this_feature = {'user_id': user_id, 'timeframe': timeframe}
         all_features = sp.audio_features([t['track_id'] for t in top_tracks[timeframe]])
-        for f in audio_features:
-            this_feature[f] = sum(a[f] for a in all_features) / len(all_features)
-        df_feature = df_feature.append(this_feature, ignore_index=True)
+        try:
+            for f in audio_features:
+                this_feature[f] = sum(a[f] for a in all_features) / len(all_features)
+            df_feature = df_feature.append(this_feature, ignore_index=True)
+        except:
+            pass
     return df_feature
 
 def get_recently_played_df(sp):

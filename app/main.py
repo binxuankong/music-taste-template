@@ -4,6 +4,7 @@ import requests
 import spotipy
 import pandas as pd
 from flask import Flask, request, url_for, flash, redirect, session
+from functools import wraps
 from werkzeug.exceptions import abort
 from app.generate_page import generate_page, generate_profile_page, generate_match_page, generate_explore_page
 from app.spotifunc import get_user_df
@@ -31,6 +32,7 @@ def link():
 @app.route('/callback')
 def callback():
     session.clear()
+    session.permanent = True
     code = request.args.get('code')
     auth_token_url = f"{API_BASE}/api/token"
     res = requests.post(auth_token_url, data={
@@ -61,7 +63,6 @@ def profile():
             user_profile = get_user_profile(user_id)
             if user_profile is None:
                 return redirect(url_for('new'))
-            session.permanent = True
             return generate_profile_page(user_id, user_profile, is_user=True)
         except:
             return generate_page('no_link.html')
@@ -70,41 +71,64 @@ def profile():
 @app.route('/new')
 def new():
     if 'token' in session:
-        try:
-            sp = spotipy.Spotify(auth=session['token'])
-            user_profile = get_user_profile(user_id)
-            if user_profile is None:
-                create_new_user(sp)
-                return redirect(url_for('profile'))
-            return redirect(url_for('link'))
-        except:
-            return redirect(url_for('link'))
+        sp = spotipy.Spotify(auth=session['token'])
+        user_profile = get_user_profile(session['user_id'])
+        if user_profile is None:
+            create_new_user(sp)
+            return redirect(url_for('profile'))
+        return redirect(url_for('link'))
     return redirect(url_for('link'))
+
+def login_required(function_to_protect):
+    @wraps(function_to_protect)
+    def wrapper(*args, **kwargs):
+        token = session.get('token')
+        user_id = session.get('user_id')
+        # Already has user
+        if user_id:
+            user = get_user_profile(user_id)
+            if user:
+                return function_to_protect(*args, **kwargs)
+            else:
+                flash("Session exists, but user does not exist (anymore)")
+                return redirect(url_for('link'))
+        # No user but has token
+        if token:
+            try:
+                sp = spotipy.Spotify(auth=session['token'])
+                df_user = get_user_df(sp)
+                user_id = df_user['user_id'][0]
+                session['user_id'] = user_id
+                user_profile = get_user_profile(user_id)
+                if user_profile is None:
+                    return redirect(url_for('new'))
+                return function_to_protect(*args, **kwargs)
+            except:
+                flash("Spotify session expired. Please link your Spotify")
+                return redirect(url_for('link'))
+        else:
+            flash("Please link your Spotify")
+            return redirect(url_for('link'))
+    return wrapper
 
 @app.route('/update')
+@login_required
 def update():
-    if 'token' in session:
-        try:
-            sp = spotipy.Spotify(auth=session['token'])
-            sync_all_data(sp)
-            return redirect(url_for('profile'))
-        except:
-            return redirect(url_for('link'))
-    return redirect(url_for('link'))
+    sp = spotipy.Spotify(auth=session['token'])
+    sync_all_data(sp)
+    return redirect(url_for('profile'))
 
 @app.route('/privacy')
+@login_required
 def privacy():
-    if 'user_id' in session:
-        update_user_privacy(session['user_id'])
-        return redirect(url_for('profile'))
-    return redirect(url_for('link'))
+    update_user_privacy(session['user_id'])
+    return redirect(url_for('profile'))
 
 @app.route('/code')
+@login_required
 def code():
-    if 'user_id' in session:
-        update_user_code(session['user_id'])
-        return redirect(url_for('profile'))
-    return redirect(url_for('link'))
+    update_user_code(session['user_id'])
+    return redirect(url_for('profile'))
 
 @app.route('/user/<user_id>')
 def _user(user_id):
