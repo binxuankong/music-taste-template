@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import spotipy
+import datetime as dt
 from sqlalchemy import create_engine
 from spotipy.oauth2 import SpotifyClientCredentials
 from app.queries import recommend_artists_query, recommend_tracks_query, top_artists3_query, top_tracks3_query
@@ -8,17 +9,18 @@ from app.dbfunc import sync_data, update_artists_and_tracks
 
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
-def get_recommend_artists(user_id):
+def get_recommendations(user_id):
     engine = create_engine(DATABASE_URL)
-    df = pd.read_sql_query(recommend_artists_query, engine, params={'user_id': user_id})
-    engine.dispose()
-    return df
-
-def get_recommend_tracks(user_id):
-    engine = create_engine(DATABASE_URL)
-    df = pd.read_sql_query(recommend_tracks_query, engine, params={'user_id': user_id})
-    engine.dispose()
-    return df
+    df = pd.read_sql_query('SELECT last_recommended FROM "Users" WHERE user_id=%(user_id)s', engine, params={'user_id': user_id})
+    if not isinstance(df['last_recommended'].min(), dt.datetime):
+        df_ra, df_rt = get_new_recommendations(user_id)
+    elif (dt.datetime.now() - df['last_recommended'].min()).days >= 1:
+        df_ra, df_rt = get_new_recommendations(user_id)
+    else:
+        engine = create_engine(DATABASE_URL)
+        df_ra = pd.read_sql_query(recommend_artists_query, engine, params={'user_id': user_id})
+        df_rt = pd.read_sql_query(recommend_tracks_query, engine, params={'user_id': user_id})
+    return df_ra, df_rt
 
 def get_new_recommendations(user_id):
     engine = create_engine(DATABASE_URL)
@@ -29,6 +31,8 @@ def get_new_recommendations(user_id):
     df_ra = recommend_artists(df_a)
     df_rt = recommend_tracks(df_t)
     # Sync user data
+    engine.execute('UPDATE "Users" SET last_recommended = %(last_recommended)s WHERE user_id = %(user_id)s', \
+        last_recommended=dt.datetime.now(), user_id=user_id)
     sync_data(df_ra[['user_id', 'artist_id']], 'RecommendArtists', engine)
     sync_data(df_rt[['user_id', 'track_id']], 'RecommendTracks', engine)
     # Sync artists and tracks
@@ -37,6 +41,7 @@ def get_new_recommendations(user_id):
     update_artists_and_tracks(engine)
     # Dispose engine
     engine.dispose()
+    return df_ra, df_rt
 
 def recommend_artists(df):
     sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
@@ -54,7 +59,7 @@ def recommend_artists(df):
                     'genres': "; ".join(g for g in a['genres']),
                     'artist_url': a['external_urls']['spotify'],
                     'artist_image': a['images'][0]['url'],
-                    'popularity': a['popularity'],
+                    'popularity': a['popularity']
                 }
                 recom_list.append(this_recom)
     if len(recom_list) >= 20:

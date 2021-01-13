@@ -1,9 +1,10 @@
 import os
+import datetime as dt
 from flask import render_template
 from app.dbfunc import get_user_profile, get_top_artists, get_top_tracks, get_top_genres, get_music_features, top_to_dict
 from app.vizfunc import calculate_mainstream_score, plot_genre_chart, plot_mood_gauge
 from app.comparefunc import compare_users, get_similar_artists, get_similar_tracks
-from app.recofunc import get_recommend_artists, get_recommend_tracks, get_new_recommendations
+from app.recofunc import get_recommendations
 
 def dir_last_updated(folder):
     return str(max(os.path.getmtime(os.path.join(root_path, f))
@@ -46,7 +47,7 @@ def generate_match_page(user1, user2):
     return generate_page('result.html', users=users, score=score, artists=similar_artists, tracks=similar_tracks, genres=similar_genres)
 
 def generate_explore_page(user_id, is_user=False):
-    get_new_recommendations(user_id)
-    reco_artists = get_recommend_artists(user_id).to_dict('records')
-    reco_tracks = get_recommend_tracks(user_id).to_dict('records')
+    df_a, df_t = get_recommendations(user_id)
+    reco_artists = df_a.to_dict('records')
+    reco_tracks = df_t.to_dict('records')
     return generate_page('explore.html', is_user=True, artists=reco_artists, tracks=reco_tracks)
