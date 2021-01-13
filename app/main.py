@@ -79,12 +79,10 @@ def new():
         return redirect(url_for('link'))
     return redirect(url_for('link'))
 
-def login_required(function_to_protect):
+def userid_required(function_to_protect):
     @wraps(function_to_protect)
     def wrapper(*args, **kwargs):
-        token = session.get('token')
         user_id = session.get('user_id')
-        # Already has user
         if user_id:
             user = get_user_profile(user_id)
             if user:
@@ -92,7 +90,15 @@ def login_required(function_to_protect):
             else:
                 flash("Session exists, but user does not exist (anymore)")
                 return redirect(url_for('link'))
-        # No user but has token
+        else:
+            flash("Please link your Spotify")
+            return redirect(url_for('link'))
+    return wrapper
+
+def spotify_required(function_to_protect):
+    @wraps(function_to_protect)
+    def wrapper(*args, **kwargs):
+        token = session.get('token')
         if token:
             try:
                 sp = spotipy.Spotify(auth=session['token'])
@@ -112,20 +118,20 @@ def login_required(function_to_protect):
     return wrapper
 
 @app.route('/update')
-@login_required
+@spotify_required
 def update():
     sp = spotipy.Spotify(auth=session['token'])
     update_user_profile(sp)
     return redirect(url_for('profile'))
 
 @app.route('/privacy')
-@login_required
+@userid_required
 def privacy():
     update_user_privacy(session['user_id'])
     return redirect(url_for('profile'))
 
 @app.route('/code')
-@login_required
+@userid_required
 def code():
     update_user_code(session['user_id'])
     return redirect(url_for('profile'))
