@@ -1,7 +1,7 @@
 import os
+import datetime as dt
 import pandas as pd
 import spotipy
-import datetime as dt
 from sqlalchemy import create_engine
 from spotipy.oauth2 import SpotifyClientCredentials
 from app.queries import recommend_artists_query, recommend_tracks_query, top_artists3_query, top_tracks3_query
@@ -47,7 +47,7 @@ def recommend_artists(df):
     sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
     user_id = df['user_id'].unique()[0]
     recom_list = []
-    seed_artists = df['artist_id'].iloc[:5].tolist()
+    seed_artists = df['artist_id'].iloc[:10].sample(n=5).tolist()
     for seed in seed_artists:
         recom = sp.artist_related_artists(seed)
         for a in recom['artists']:
@@ -70,7 +70,7 @@ def recommend_artists(df):
 def recommend_tracks(df):
     sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
     user_id = df['user_id'].unique()[0]
-    seed_tracks = df['track_id'].iloc[:5].tolist()
+    seed_tracks = df['track_id'].iloc[:10].sample(n=5).tolist()
     recom = sp.recommendations(seed_tracks=seed_tracks, limit=50)
     recom_list = []
     for t in recom['tracks']:
