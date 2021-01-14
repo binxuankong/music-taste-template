@@ -10,96 +10,36 @@
     <h1>{% block title %} Explore {% endblock %}</h1>
 </div>
 
-{% if user %}
-
-<!-- SIMILAR TAB -->
-<section id="tabs" class="top-tab" style="width:100%;">
-    <!-- ################################################## RECOMMEND ARTISTS ################################################## -->
-    <h3>Recommended Artists</h3>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="nav-recent" role="tabpanel" aria-labelledby="nav-recent-tab">
-                        {% include 'artist_row.html' %}
-                    </div>
-                </div>
-            </div>
+<section id="page-tabs" class="top-tab" style="width:100%; padding: 16px 0px;">
+    {% set navigation_bar = [
+        ('/recommendation', 'recommendation', 'Recommendation', 'disabled'),
+        ('/trending', 'trending', 'Trending', ''),
+        ('/popular', 'popular', 'Popular', ''),
+        ('/top', 'top', 'Top', '')
+    ] -%}
+    {% set active_page = active_page|default('recommendation') -%}
+    <nav>
+        <div class="nav nav-tabs nav-fill" id="explore-tab" role="tablist">
+            {% for href, id, caption, disable in navigation_bar %}
+            <a class="nav-item nav-link {% if id == active_page %} active {% endif %} {% if no_user %} {{ disable|e }} {% endif %}"
+            href="{{ href|e }}" role="tab">{{ caption|e }}</a>
+            {% endfor %}
         </div>
-    </div>
-    <!-- ################################################## RECOMMEND TRACKS ################################################## -->
-    <h3>Recommended Tracks</h3>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <nav>
-                    <div class="nav nav-tabs nav-fill" id="tracks-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="tracks-recent-tab" data-toggle="tab" href="#tracks-recent" role="tab" aria-controls="tracks-recent" aria-selected="true">Mix 1</a>
-                        <a class="nav-item nav-link" id="tracks-months-tab" data-toggle="tab" href="#tracks-months" role="tab" aria-controls="tracks-month" aria-selected="false">Mix 2</a>
-                        <a class="nav-item nav-link" id="tracks-all-tab" data-toggle="tab" href="#tracks-all" role="tab" aria-controls="tracks-all" aria-selected="false">Mix 3</a>
-                    </div>
-                </nav>
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="tracks-recent" role="tabpanel" aria-labelledby="tracks-recent-tab">
-                        <table class="table table-striped">
-                            <tbody>
-                                {% for track in tracks[:10] %}
-                                <tr>
-                                    <td width="20%"><a href="{{ track['track_url'] }}"><img src="{{ track['album_image'] }}" alt="Album Image" style="height:80px"/></a></td>
-                                    <td>
-                                        <a href="{{ track['track_url'] }}">{{ track['track'] }}</a><br>
-                                        <em>{{ track['artists'] }}</em><br>
-                                        {{ track['album'] }}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane fade" id="tracks-months" role="tabpanel" aria-labelledby="tracks-months-tab">
-                        <table class="table table-striped">
-                            <tbody>
-                                {% for track in tracks[10:20] %}
-                                <tr>
-                                    <td width="20%"><a href="{{ track['track_url'] }}"><img src="{{ track['album_image'] }}" alt="Album Image" style="height:80px"/></a></td>
-                                    <td>
-                                        <a href="{{ track['track_url'] }}">{{ track['track'] }}</a><br>
-                                        <em>{{ track['artists'] }}</em><br>
-                                        {{ track['album'] }}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane fade" id="tracks-all" role="tabpanel" aria-labelledby="tracks-all-tab">
-                        <table class="table table-striped">
-                            <tbody>
-                                {% for track in tracks[20:30] %}
-                                <tr>
-                                    <td width="20%"><a href="{{ track['track_url'] }}"><img src="{{ track['album_image'] }}" alt="Album Image" style="height:80px"/></a></td>
-                                    <td>
-                                        <a href="{{ track['track_url'] }}">{{ track['track'] }}</a><br>
-                                        <em>{{ track['artists'] }}</em><br>
-                                        {{ track['album'] }}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    </nav>
 </section>
 
-{% else %}
-
-<p>You need to link your Spotify account to see this page.</p>
-<a type="button" class="btn btn-primary" href="/link">Link your Spotify account</a>
-
-{% endif %}
+<section id="tabs" class="top-tab" style="width:100%;">
+    {% set rank=False if active_page == 'recommendation' else True -%}
+    <div class="container">
+        <h3>{{ active_page.title() }} Artists</h3>
+        {% with rank=rank %}
+            {% include 'artist_row.html' %}
+        {% endwith %}
+    </div>
+    <h3>{{ active_page.title() }} Tracks</h3>
+    <div class="container">
+        {% include 'track_table.html' %}
+    </div>
+</section>
 
 {% endblock %}

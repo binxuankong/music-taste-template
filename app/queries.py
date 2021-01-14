@@ -156,3 +156,33 @@ SELECT user_id, track_id
 FROM "TopTracks"
 WHERE user_id = %(user_id)s AND timeframe = 'Short'
 """
+
+popular_artists_query = """
+SELECT ta.artist_id, a.artist, a.artist_image, a.artist_url
+FROM (
+	SELECT artist_id, SUM(60 - "rank") point
+	FROM "TopArtists"
+	WHERE timeframe = %(timeframe)s
+	GROUP BY artist_id
+	ORDER BY point desc
+	limit 20
+) ta
+JOIN "Artists" a
+ON a.artist_id = ta.artist_id
+ORDER BY ta.point desc
+"""
+
+popular_tracks_query = """
+SELECT tt.track_id, t.track, t.artists, t.album, t.album_image, t.track_url 
+FROM (
+	SELECT track_id, SUM(60 - "rank") point
+	FROM "TopTracks"
+	WHERE timeframe = %(timeframe)s
+	GROUP BY track_id
+	ORDER BY point desc
+	limit 20
+) tt
+JOIN "Tracks" t
+ON t.track_id = tt.track_id
+ORDER BY tt.point desc
+"""

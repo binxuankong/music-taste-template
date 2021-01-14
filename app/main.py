@@ -110,10 +110,10 @@ def spotify_required(function_to_protect):
                     return redirect(url_for('new'))
                 return function_to_protect(*args, **kwargs)
             except:
-                flash("Spotify session expired. Please link your Spotify")
+                flash("Spotify session expired. Please link your Spotify.")
                 return redirect(url_for('link'))
         else:
-            flash("Please link your Spotify")
+            flash("Please link your Spotify.")
             return redirect(url_for('link'))
     return wrapper
 
@@ -178,10 +178,20 @@ def match_result(code):
     return redirect(url_for('link'))
 
 @app.route('/explore')
-def explore():
-    if 'user_id' in session:
+def explore(field='recommendation'):
+    if 'user_id' in session and field == 'recommendation':
         user_profile = get_user_profile(session['user_id'])
         if user_profile is None:
             return redirect(url_for('new'))
-        return generate_explore_page(session['user_id'])
-    return generate_page('explore.html', is_user=False)
+        return generate_explore_page(session['user_id'], field)
+    elif 'user_id' in session:
+        return generate_explore_page(session['user_id'], field)
+    elif field == 'recommendation':
+        return generate_explore_page(None, 'trending')
+    return generate_explore_page(None, field)
+
+@app.route('/<field>')
+def explore_page(field):
+    if field in ['recommendation', 'trending', 'popular', 'top']:
+        return explore(field)
+    return redirect(url_for('index'))
