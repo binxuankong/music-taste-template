@@ -1,0 +1,31 @@
+<h3>{{ title }}</h3>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <nav>
+                    <div class="nav nav-tabs nav-fill" id="tracks-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="tracks-recent-tab" data-toggle="tab" href="#tracks-recent" role="tab" aria-controls="tracks-recent" aria-selected="true">Recent</a>
+                        <a class="nav-item nav-link" id="tracks-months-tab" data-toggle="tab" href="#tracks-months" role="tab" aria-controls="tracks-month" aria-selected="false">Past Few Months</a>
+                        <a class="nav-item nav-link" id="tracks-all-tab" data-toggle="tab" href="#tracks-all" role="tab" aria-controls="tracks-all" aria-selected="false">All Time</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="tracks-recent" role="tabpanel" aria-labelledby="tracks-recent-tab">
+                        {% with tracks=tracks['Short'] %}
+                            {% include 'track_table.html' %}
+                        {% endwith %}
+                    </div>
+                    <div class="tab-pane fade" id="tracks-months" role="tabpanel" aria-labelledby="tracks-months-tab">
+                        {% with tracks=tracks['Medium'] %}
+                            {% include 'track_table.html' %}
+                        {% endwith %}
+                    </div>
+                    <div class="tab-pane fade" id="tracks-all" role="tabpanel" aria-labelledby="tracks-all-tab">
+                        {% with tracks=tracks['Long'] %}
+                            {% include 'track_table.html' %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

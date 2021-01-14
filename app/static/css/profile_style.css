@@ -138,7 +138,6 @@ td em {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 16px;
 }
 
 .card {
@@ -146,31 +145,32 @@ td em {
     display: flex;                /* Children use Flexbox */
     flex-direction: column;       /* Rotate Axis */
     border: 1px solid var(--red);    /* Set up Border */
-    border-radius: 16px;           /* Slightly Curve edges */
     overflow: hidden;             /* Fixes the corners */
     margin: 2px;                  /* Add space between cards */
 }
 
-.card:hover .card-container img {
-    transition: all 200ms linear;
-    opacity: 60%;
-}
-
-.card-header {
-    text-align: center;
+.card-info {
+    opacity: 0;
+    position: absolute;
     width: 100%;
-    font-size: 12px;
-    font-size: 1vw;
-    font-weight: 600;
-    border-bottom: 1px solid var(--red);
+    z-index: 3;
+    bottom: -30px;
+    transition: all ease-in-out 0.3s;    
     background-color: var(--blue);
-    padding: 4px 2px;
+    padding: 4px 6px;
 }
 
-.card-header a {
+.card-info a {
+    font-size: 16px;
     text-decoration: none;
-    color: var(--black);
+    color: var(--white);
     font-weight: 600;
+}
+
+.card-info p {
+    font-size: 12px;
+    color: var(--white);
+    margin-bottom: 0;
 }
 
 .card-main {
@@ -178,6 +178,7 @@ td em {
     flex-direction: column;     /* Rotate Axis to Vertical */
     justify-content: center;    /* Group Children in Center */
     align-items: center;        /* Group Children in Center (on cross axis) */
+    background-color: var(--blue);
 }
 
 .card-container {
@@ -201,6 +202,16 @@ td em {
     height: 100%; /* This if for the object-fit */
     object-fit: cover; /* Equivalent of the background-size: cover; of a background-image */
     object-position: center;
+    transition: all 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.card:hover .card-main img {
+    top: -30px;
+}
+  
+.card:hover .card-info {
+    opacity: 1;
+    bottom: 0;
 }
 
 .chart embed {

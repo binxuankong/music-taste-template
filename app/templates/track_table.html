@@ -1,0 +1,14 @@
+<table class="table table-striped">
+    <tbody>
+        {% for track in tracks[:10] %}
+        <tr>
+            <td width="20%"><a href="{{ track['track_url'] }}"><img src="{{ track['album_image'] }}" alt="Album Image" style="height:80px"/></a></td>
+            <td>
+                <a href="{{ track['track_url'] }}">{{ track['track'] }}</a><br>
+                <em>{{ track['artists'] }}</em><br>
+                {{ track['album'] }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>                    
+</table>

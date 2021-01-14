@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<div id="user-profile">
+<section id="user-profile">
     <h1>{% block title %} Music Taste Similarity of {{ users[0]['display_name'] }} and {{ users[1]['display_name'] }}  {% endblock %}</h1>
     <div style="text-align: center; padding-top: 24px; padding-bottom: 48px">
         <a href={{ "/user/" + users[0]['user_id'] }}>
@@ -14,7 +14,7 @@
         <a href={{ "/user/" + users[1]['user_id'] }}>
             <img class="pimg" src="{{ users[1]['image_url'] }}" alt="User Image" style="margin-left: 64px"/></a>
     </div>
-</div>
+</section>
 
 <ul class="cloud" style="padding-bottom: 48px">
     <li data-weight="1">Your</li>
@@ -27,175 +27,15 @@
 
 <!-- SIMILAR TAB -->
 <section id="tabs" class="top-tab" style="width:100%;">
-    <!-- ################################################## SIMILAR ARTISTS ################################################## -->
-    <h3>Similar Artists</h3>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <nav>
-                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="nav-recent-tab" data-toggle="tab" href="#nav-recent" role="tab" aria-controls="nav-recent" aria-selected="true">Recent</a>
-                        <a class="nav-item nav-link" id="nav-months-tab" data-toggle="tab" href="#nav-months" role="tab" aria-controls="nav-month" aria-selected="false">Past Few Months</a>
-                        <a class="nav-item nav-link" id="nav-all-tab" data-toggle="tab" href="#nav-all" role="tab" aria-controls="nav-all" aria-selected="false">All Time</a>
-                    </div>
-                </nav>
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="nav-recent" role="tabpanel" aria-labelledby="nav-recent-tab">
-                        {% for row in range(4) %}
-                        <div class="row">
-                            {% for artist in artists['Short'][5*row:5*row+5] %}
-                            <div class="card">
-                                <div class="card-header">
-                                    <a href="{{ artist['artist_url'] }}">{{ artist['artist'] }}</a>
-                                </div>
-                                <div class="card-main">
-                                    <div class="card-container">
-                                        <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image"/></a>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <div class="tab-pane fade" id="nav-months" role="tabpanel" aria-labelledby="nav-months-tab">
-                        {% for row in range(4) %}
-                        <div class="row">
-                            {% for artist in artists['Medium'][5*row:5*row+5] %}
-                            <div class="card">
-                                <div class="card-header">
-                                    <a href="{{ artist['artist_url'] }}">{{ artist['artist'] }}</a>
-                                </div>
-                                <div class="card-main">
-                                    <div class="card-container">
-                                        <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image"/></a>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <div class="tab-pane fade" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
-                        {% for row in range(4) %}
-                        <div class="row">
-                            {% for artist in artists['Long'][5*row:5*row+5] %}
-                            <div class="card">
-                                <div class="card-header">
-                                    <a href="{{ artist['artist_url'] }}">{{ artist['artist'] }}</a>
-                                </div>
-                                <div class="card-main">
-                                    <div class="card-container">
-                                        <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image"/></a>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ################################################## SIMILAR TRACKS ################################################## -->
-    <h3>Similar Tracks</h3>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <nav>
-                    <div class="nav nav-tabs nav-fill" id="tracks-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="tracks-recent-tab" data-toggle="tab" href="#tracks-recent" role="tab" aria-controls="tracks-recent" aria-selected="true">Recent</a>
-                        <a class="nav-item nav-link" id="tracks-months-tab" data-toggle="tab" href="#tracks-months" role="tab" aria-controls="tracks-month" aria-selected="false">Past Few Months</a>
-                        <a class="nav-item nav-link" id="tracks-all-tab" data-toggle="tab" href="#tracks-all" role="tab" aria-controls="tracks-all" aria-selected="false">All Time</a>
-                    </div>
-                </nav>
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="tracks-recent" role="tabpanel" aria-labelledby="tracks-recent-tab">
-                        <table class="table table-striped">
-                            <tbody>
-                                {% for track in tracks['Short'][:10] %}
-                                <tr>
-                                    <td width="20%"><a href="{{ track['track_url'] }}"><img src="{{ track['album_image'] }}" alt="Album Image" style="height:80px"/></a></td>
-                                    <td>
-                                        <a href="{{ track['track_url'] }}">{{ track['track'] }}</a><br>
-                                        <em>{{ track['artists'] }}</em><br>
-                                        {{ track['album'] }}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane fade" id="tracks-months" role="tabpanel" aria-labelledby="tracks-months-tab">
-                        <table class="table table-striped">
-                            <tbody>
-                                {% for track in tracks['Medium'][:10] %}
-                                <tr>
-                                    <td width="20%"><a href="{{ track['track_url'] }}"><img src="{{ track['album_image'] }}" alt="Album Image" style="height:80px"/></a></td>
-                                    <td>
-                                        <a href="{{ track['track_url'] }}">{{ track['track'] }}</a><br>
-                                        <em>{{ track['artists'] }}</em><br>
-                                        {{ track['album'] }}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane fade" id="tracks-all" role="tabpanel" aria-labelledby="tracks-all-tab">
-                        <table class="table table-striped">
-                            <tbody>
-                                {% for track in tracks['Long'][:10] %}
-                                <tr>
-                                    <td width="20%"><a href="{{ track['track_url'] }}"><img src="{{ track['album_image'] }}" alt="Album Image" style="height:80px"/></a></td>
-                                    <td>
-                                        <a href="{{ track['track_url'] }}">{{ track['track'] }}</a><br>
-                                        <em>{{ track['artists'] }}</em><br>
-                                        {{ track['album'] }}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ################################################## SIMILAR GENRES ################################################## -->
-    <h3>Similar Genres</h3>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <nav>
-                    <div class="nav nav-tabs nav-fill" id="genres-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="genres-recent-tab" data-toggle="tab" href="#genres-recent" role="tab" aria-controls="genres-recent" aria-selected="true">Recent</a>
-                        <a class="nav-item nav-link" id="genres-months-tab" data-toggle="tab" href="#genres-months" role="tab" aria-controls="genres-month" aria-selected="false">Past Few Months</a>
-                        <a class="nav-item nav-link" id="genres-all-tab" data-toggle="tab" href="#genres-all" role="tab" aria-controls="genres-all" aria-selected="false">All Time</a>
-                    </div>
-                </nav>
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="genres-recent" role="tabpanel" aria-labelledby="genres-recent-tab">
-                        <div class="chart">
-                            <embed type="image/svg+xml" src= {{ genres['Short']|safe }} style="width:80%;height:80%" />
-                        </div>  
-                    </div>
-                    <div class="tab-pane fade" id="genres-months" role="tabpanel" aria-labelledby="genres-months-tab">
-                        <div class="chart">
-                            <embed type="image/svg+xml" src= {{ genres['Medium']|safe }} style="width:80%;height:80%" />
-                        </div>  
-                    </div>
-                    <div class="tab-pane fade" id="genres-all" role="tabpanel" aria-labelledby="genres-all-tab">
-                        <div class="chart">
-                            <embed type="image/svg+xml" src= {{ genres['Long']|safe }} style="width:80%;height:80%" />
-                        </div>  
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    {% with title='Similar Artists' %}
+        {% include 'artist_template.html' %}
+    {% endwith %}
+    {% with title='Similar Tracks' %}
+        {% include 'track_template.html' %}
+    {% endwith %}
+    {% with title='Similar Genres' %}
+        {% include 'genre_template.html' %}
+    {% endwith %}
 </section>
 
 {% endblock %}

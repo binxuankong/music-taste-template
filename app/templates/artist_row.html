@@ -1,0 +1,21 @@
+{% for row in range(4) %}
+<div class="row">
+    {% for artist in artists[5*row:5*row+5] %}
+    <div class="card">
+        <div class="card-main">
+            <div class="card-container">
+                <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="{{ artist['artist'] }}"/></a>
+            </div>
+        </div>
+        <div class="card-info">
+            <a href="{{ artist['artist_url'] }}">{{ artist['artist'] }}</a>
+            {% if rank %}
+                <p>#{{ artist['rank'] }}</p>
+            {% else %}
+                <p><br></p>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
