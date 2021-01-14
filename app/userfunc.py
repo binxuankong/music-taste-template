@@ -49,7 +49,7 @@ def get_music_features(user_id):
 def create_new_user(sp):
     df_user = get_user_df(sp)
     user_id = df_user['user_id'][0]
-    sync_all_data(sp)
+    update_user_profile(sp)
     # Create user profile
     engine = create_engine(DATABASE_URL)
     df_codes = pd.read_sql_query('SELECT code FROM "UserProfiles"', engine)

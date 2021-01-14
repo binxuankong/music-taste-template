@@ -71,12 +71,15 @@ def profile():
 @app.route('/new')
 def new():
     if 'token' in session:
-        sp = spotipy.Spotify(auth=session['token'])
-        user_profile = get_user_profile(session['user_id'])
-        if user_profile is None:
-            create_new_user(sp)
-            return redirect(url_for('profile'))
-        return redirect(url_for('link'))
+        try:
+            sp = spotipy.Spotify(auth=session['token'])
+            user_profile = get_user_profile(session['user_id'])
+            if user_profile is None:
+                create_new_user(sp)
+                return redirect(url_for('profile'))
+            return generate_page('no_link.html')
+        except:
+            return generate_page('no_link.html')
     return redirect(url_for('link'))
 
 def userid_required(function_to_protect):
