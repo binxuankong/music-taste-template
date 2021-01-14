@@ -21,22 +21,7 @@
             <div class="col-md-12">
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-recent" role="tabpanel" aria-labelledby="nav-recent-tab">
-                        {% for row in range(4) %}
-                        <div class="row">
-                            {% for artist in artists[5*row:5*row+5] %}
-                            <div class="card">
-                                <div class="card-header">
-                                    <a href="{{ artist['artist_url'] }}">{{ artist['artist'] }}</a>
-                                </div>
-                                <div class="card-main">
-                                    <div class="card-container">
-                                        <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="Artist Image"/></a>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        {% endfor %}
+                        {% include 'artist_row.html' %}
                     </div>
                 </div>
             </div>
