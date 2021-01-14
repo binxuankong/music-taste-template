@@ -36,6 +36,8 @@ def get_new_recommendations(user_id):
     # Get user's top artists and tracks
     df_a = pd.read_sql_query(top_artists3_query, engine, params={'user_id': user_id})
     df_t = pd.read_sql_query(top_tracks3_query, engine, params={'user_id': user_id})
+    if len(df_a) == 0 or len(df_t) == 0:
+        return None, None
     # Get recommendations
     df_ra = recommend_artists(df_a)
     df_rt = recommend_tracks(df_t)
