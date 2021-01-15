@@ -1,14 +1,30 @@
 import os
+import random
 import datetime as dt
+import re
 import pandas as pd
 import spotipy
+import lyricsgenius
 from sqlalchemy import create_engine
 from spotipy.oauth2 import SpotifyClientCredentials
 from app.queries import recommend_artists_query, recommend_tracks_query, top_artists3_query, top_tracks3_query, popular_artists_query, \
-    popular_tracks_query
+    popular_tracks_query, new_of_day_query
 from app.dbfunc import sync_data, update_artists_and_tracks
 
 DATABASE_URL = os.environ.get('DATABASE_URL')
+GENIUS_TOKEN = os.environ.get('GENIUS_TOKEN')
+TRY_COUNT = 5
+
+def get_of_the_day():
+    engine = create_engine(DATABASE_URL)
+    df = pd.read_sql_query('SELECT * FROM "DailyMix" ORDER BY date_created DESC LIMIT 1', engine)
+    if (dt.datetime.now() - df['date_created'].item()).days >= 1:
+        artist, track, lyrics = get_new_of_day()
+    else:
+        artist = pd.read_sql_query('SELECT * FROM "Artists" WHERE artist_id = %(i)s', engine, params={'i': df['artist_id'].item()})
+        track = pd.read_sql_query('SELECT * FROM "Tracks" WHERE track_id = %(i)s', engine, params={'i': df['track_id'].item()})
+        lyrics = pd.read_sql_query('SELECT * FROM "Tracks" WHERE track_id = %(i)s', engine, params={'i': df['lyrics_id'].item()})
+    return artist, track, lyrics
 
 def get_recommendations(user_id):
     engine = create_engine(DATABASE_URL)
@@ -30,6 +46,18 @@ def get_top_artists_and_tracks(timeframe):
     df_a['rank'] = df_a.index + 1
     engine.dispose()
     return df_a, df_t
+
+def get_new_of_day():
+    engine = create_engine(DATABASE_URL)
+    artist = artist_of_day()
+    track = song_of_day()
+    lyrics = lyrics_of_day()
+    engine.execute(new_of_day_query, artist_id=artist['artist_id'].item(), track_id=track['track_id'].item(), \
+        lyrics_id=lyrics['track_id'], date_created=dt.datetime.now())
+    engine.execute('UPDATE "Tracks" SET lyrics = %(lyrics)s WHERE track_id = %(track_id)s', lyrics=lyrics['lyrics'], \
+        track_id=lyrics['track_id'])
+    engine.dispose()
+    return artist, track, lyrics
 
 def get_new_recommendations(user_id):
     engine = create_engine(DATABASE_URL)
@@ -54,15 +82,50 @@ def get_new_recommendations(user_id):
     engine.dispose()
     return df_ra, df_rt
 
+def artist_of_day():
+    engine = create_engine(DATABASE_URL)
+    for i in range(TRY_COUNT):
+        df = pd.read_sql_query('SELECT * FROM "Artists" TABLESAMPLE BERNOULLI(1) LIMIT 1;', engine)
+        if len(df) > 0:
+            engine.dispose()
+            return df
+    enginge.dispose()
+    return None
+
+def song_of_day():
+    engine = create_engine(DATABASE_URL)
+    for i in range(TRY_COUNT):
+        df = pd.read_sql_query('SELECT * FROM "Tracks" TABLESAMPLE BERNOULLI(1) LIMIT 1;', engine)
+        if len(df) > 0:
+            engine.dispose()
+            return df
+    engine.dispose()
+    return None
+
+def lyrics_of_day():
+    engine = create_engine(DATABASE_URL)
+    for i in range(TRY_COUNT):
+        df = pd.read_sql_query('SELECT * FROM "Tracks" TABLESAMPLE BERNOULLI(1) LIMIT 1;', engine)
+        if len(df) > 0:
+            for _, row in df.iterrows():
+                if re.search('[a-zA-Z0-9]', row['track']) is not None:
+                    lyrics = get_lyrics(row['track'], row['artists'].split(';')[0])
+                    if isinstance(lyrics, str):
+                        engine.dispose()
+                        row['lyrics'] = lyrics
+                        return row
+    engine.dispose()
+    return None
+
 def recommend_artists(df):
     sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
     user_id = df['user_id'].unique()[0]
     recom_list = []
-    seed_artists = df['artist_id'].iloc[:10].sample(n=5).tolist()
+    seed_artists = df.loc[df['timeframe'] == 'Short', 'artist_id'].iloc[:10].sample(n=5).tolist()
     for seed in seed_artists:
         recom = sp.artist_related_artists(seed)
         for a in recom['artists']:
-            if a['id'] not in df['artist_id'].iloc[:20]:
+            if a['id'] not in df['artist_id'].values:
                 this_recom = {
                     'user_id': user_id,
                     'artist_id': a['id'],
@@ -82,11 +145,11 @@ def recommend_artists(df):
 def recommend_tracks(df):
     sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
     user_id = df['user_id'].unique()[0]
-    seed_tracks = df['track_id'].iloc[:10].sample(n=5).tolist()
+    seed_tracks = df.loc[df['timeframe'] == 'Short', 'track_id'].iloc[:10].sample(n=5).tolist()
     recom = sp.recommendations(seed_tracks=seed_tracks, limit=40)
     recom_list = []
     for t in recom['tracks']:
-        if t['id'] not in df['track_id'].iloc[:20]:
+        if t['id'] not in df['track_id'].values:
             this_recom = {
                 'user_id': user_id,
                 'track_id': t['id'],
@@ -102,3 +165,13 @@ def recommend_tracks(df):
         if len(recom_list) >= 20:
             break
     return pd.DataFrame.from_dict(recom_list)
+
+def get_lyrics(track, artist):
+    genius = lyricsgenius.Genius(GENIUS_TOKEN)
+    try:
+        song = genius.search_song(track, artist)
+        lyrics = '['.join(song.lyrics.split(']')).split('[')
+        verse = random.choice([l for l in lyrics if len(l) > 100])
+        return verse
+    except:
+        return None

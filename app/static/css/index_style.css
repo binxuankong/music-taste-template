@@ -20,26 +20,26 @@
     }
 }
   
-  #intro .carousel, #intro .carousel-inner, #intro .carousel-item, #intro .carousel-item::before {
+#intro .carousel, #intro .carousel-inner, #intro .carousel-item, #intro .carousel-item::before {
     position: absolute;
     top: 0;
     right: 0;
     left: 0;
     bottom: 0;
-  }
+}
   
-  #intro .carousel-item {
+#intro .carousel-item {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-  }
+}
   
-  #intro .carousel-item::before {
+#intro .carousel-item::before {
     content: '';
     background-color: rgba(0, 0, 0, 0.7);
-  }
+}
   
-  #intro .carousel-container {
+#intro .carousel-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,87 +48,87 @@
     top: 70px;
     left: 50px;
     right: 50px;
-  }
+}
   
-  #intro .container {
+#intro .container {
     text-align: center;
-  }
+}
   
-  #intro h2 {
+#intro h2 {
     color: var(--white);
     margin-bottom: 30px;
     font-size: 48px;
     font-weight: 700;
-  }
+}
   
-  @media (max-width: 768px) {
+@media (max-width: 768px) {
     #intro h2 {
       font-size: 28px;
     }
-  }
+}
   
-  #intro p {
+#intro p {
     width: 80%;
     margin: 0 auto 30px auto;
     color: var(--white);
-  }
+}
   
-  @media (min-width: 1024px) {
+@media (min-width: 1024px) {
     #intro p {
       width: 60%;
     }
-  }
+}
   
-  #intro .carousel-fade {
+#intro .carousel-fade {
     overflow: hidden;
-  }
+}
   
-  #intro .carousel-fade .carousel-inner .carousel-item {
+#intro .carousel-fade .carousel-inner .carousel-item {
     transition-property: opacity;
-  }
+}
   
-  #intro .carousel-fade .carousel-inner .carousel-item,
-  #intro .carousel-fade .carousel-inner .active.carousel-item-left,
-  #intro .carousel-fade .carousel-inner .active.carousel-item-right {
+#intro .carousel-fade .carousel-inner .carousel-item,
+#intro .carousel-fade .carousel-inner .active.carousel-item-left,
+#intro .carousel-fade .carousel-inner .active.carousel-item-right {
     opacity: 0;
-  }
+}
   
-  #intro .carousel-fade .carousel-inner .active,
-  #intro .carousel-fade .carousel-inner .carousel-item-next.carousel-item-left,
-  #intro .carousel-fade .carousel-inner .carousel-item-prev.carousel-item-right {
+#intro .carousel-fade .carousel-inner .active,
+#intro .carousel-fade .carousel-inner .carousel-item-next.carousel-item-left,
+#intro .carousel-fade .carousel-inner .carousel-item-prev.carousel-item-right {
     opacity: 1;
     transition: 0.5s;
-  }
+}
   
-  #intro .carousel-fade .carousel-inner .carousel-item-next,
-  #intro .carousel-fade .carousel-inner .carousel-item-prev,
-  #intro .carousel-fade .carousel-inner .active.carousel-item-left,
-  #intro .carousel-fade .carousel-inner .active.carousel-item-right {
+#intro .carousel-fade .carousel-inner .carousel-item-next,
+#intro .carousel-fade .carousel-inner .carousel-item-prev,
+#intro .carousel-fade .carousel-inner .active.carousel-item-left,
+#intro .carousel-fade .carousel-inner .active.carousel-item-right {
     left: 0;
     transform: translate3d(0, 0, 0);
-  }
-  
-  #intro .carousel-control-prev, #intro .carousel-control-next {
+}
+
+#intro .carousel-control-prev, #intro .carousel-control-next {
     width: 10%;
-  }
+}
   
-  @media (min-width: 1024px) {
+@media (min-width: 1024px) {
     #intro .carousel-control-prev, #intro .carousel-control-next {
-      width: 5%;
+        width: 5%;
     }
-  }
+}
   
-  #intro .carousel-control-next-icon, #intro .carousel-control-prev-icon {
+#intro .carousel-control-next-icon, #intro .carousel-control-prev-icon {
     background: none;
     font-size: 32px;
     line-height: 1;
-  }
+}
   
-  #intro .carousel-indicators li {
+#intro .carousel-indicators li {
     cursor: pointer;
-  }
-  
-  #intro .btn-get-started {
+}
+
+#intro .btn-get-started {
     text-decoration: none;
     font-family: "Montserrat", sans-serif;
     font-weight: 500;
@@ -141,9 +141,9 @@
     margin: 10px;
     color: var(--white);
     background: var(--blue);
-  }
-  
-  #intro .btn-get-started:hover {
+}
+
+#intro .btn-get-started:hover {
     background: var(--white);
     color: var(--blue);
-  }
+}

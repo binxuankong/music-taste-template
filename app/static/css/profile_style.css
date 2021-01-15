@@ -79,6 +79,13 @@ ul.cloud li[data-weight="3"] { --size: 4; --color: var(--red);}
     padding: 12px;
 }
 
+@media (max-width: 768px) {
+    .top-tab h3 {
+      font-size: 20px;
+      padding: 8px;
+    }
+}
+
 .top-tab #tabs{
     background: var(--blue);
     color: var(--white);
@@ -158,6 +165,7 @@ ul.cloud li[data-weight="3"] { --size: 4; --color: var(--red);}
     transition: all ease-in-out 0.3s;    
     background-color: var(--blue);
     padding: 4px 6px;
+    display: flex;
 }
 
 .card-info a {
@@ -165,12 +173,24 @@ ul.cloud li[data-weight="3"] { --size: 4; --color: var(--red);}
     text-decoration: none;
     color: var(--white);
     font-weight: 600;
+    display: flex;
 }
 
 .card-info p {
     font-size: 12px;
     color: var(--white);
+    margin-left: auto;
+    text-align: right;
     margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+    .card-info a {
+      font-size: 10px;
+    }
+    .card-info p {
+        font-size: 8px;
+    }
 }
 
 .card-main {
@@ -218,4 +238,123 @@ ul.cloud li[data-weight="3"] { --size: 4; --color: var(--red);}
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+.daily-container {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    padding-top: 12px;
+    padding-bottom: 24px;
+}
+
+.artist-name {
+    float: left;
+    height: 100%;
+    width: 50%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 1vw;
+}
+
+.artist-image {
+    float: right;
+    width: 50%;
+    top: 0;
+    right: 0;
+}
+
+.artist-name a {
+    text-decoration: none;
+    color: var(--red);
+    font-size: 4vw;
+}
+
+.artist-image img {
+    border-radius: 50%;
+    padding: 1vw;
+    width: 60%;
+    display: block;
+    margin-right: auto;
+}
+
+.track-image {
+    float: left;
+    width: 40%;
+    top: 0;
+    left: 0;
+}
+
+.track-name {
+    float: right;
+    height: 100%;
+    width: 60%;
+    top: 0;
+    right: 0;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    padding-left: 1vw;
+}
+
+.track-image img {
+    padding: 1vw;
+    width: 60%;
+    display: block;
+    margin-left: auto;
+}
+
+.track-name a {
+    text-decoration: none;
+    color: var(--blue);
+    font-size: 2vw;
+}
+
+.track-name em {
+    color: var(--red);
+    font-size: 2vw;
+}
+
+.track-name p {
+    color: var(--white);
+    font-size: 2vw;
+}
+
+.lyric-image {
+    float: left;
+    width: 80%;
+    top: 0;
+    left: 0;
+    padding-left: 2vw;
+}
+
+.lyric-name {
+    float: right;
+    height: 100%;
+    width: 20%;
+    top: 0;
+    right: 0;
+    position: absolute;
+    display: flex;
+    align-items: flex-end;
+}
+
+.lyric-image p {
+    color: var(--white);
+    font-size: 1.8vw;
+}
+
+.lyric-name a {
+    text-decoration: none;
+    color: var(--blue);
+    font-size: 1.2vw;
+}
+
+.lyric-name em {
+    color: var(--red);
+    font-size: 1.2vw;
 }

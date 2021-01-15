@@ -146,15 +146,27 @@ WHERE rt.user_id = %(user_id)s
 """
 
 top_artists3_query = """
-SELECT user_id, artist_id
-FROM "TopArtists"
-WHERE user_id = %(user_id)s AND timeframe = 'Short'
+SELECT DISTINCT t_top.user_id, t_top.rank, t_top.artist_id, t_outer.timeframe from "TopArtists" t_outer
+JOIN LATERAL (
+    SELECT * FROM "TopArtists" t_inner
+    WHERE t_inner.timeframe = t_outer.timeframe
+    AND user_id = %(user_id)s
+    ORDER BY t_inner.rank
+    LIMIT 20
+) t_top ON true
+ORDER BY t_outer.timeframe, t_top.rank;
 """
 
 top_tracks3_query = """
-SELECT user_id, track_id
-FROM "TopTracks"
-WHERE user_id = %(user_id)s AND timeframe = 'Short'
+SELECT DISTINCT t_top.user_id, t_top.rank, t_top.track_id, t_outer.timeframe from "TopTracks" t_outer
+JOIN LATERAL (
+    SELECT * FROM "TopTracks" t_inner
+    WHERE t_inner.timeframe = t_outer.timeframe
+    AND user_id = %(user_id)s
+    ORDER BY t_inner.rank
+    LIMIT 20
+) t_top ON true
+ORDER BY t_outer.timeframe, t_top.rank;
 """
 
 popular_artists_query = """
@@ -185,4 +197,9 @@ FROM (
 JOIN "Tracks" t
 ON t.track_id = tt.track_id
 ORDER BY tt.point desc
+"""
+
+new_of_day_query = """
+INSERT INTO "DailyMix" (artist_id, track_id, lyrics_id, date_created)
+VALUES (%(artist_id)s, %(track_id)s, %(lyrics_id)s, %(date_created)s)
 """

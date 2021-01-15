@@ -2,6 +2,7 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile_style.css') }}?u={{ last_updated }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/aos/aos.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -28,6 +29,56 @@
     </nav>
 </section>
 
+{% if active_page == 'explore' %}
+
+<section id="tabs" class="top-tab" style="width:100%;">
+    <h3>Artist of the Day</h3>
+    <div class="container" style="padding-bottom:24px;">
+        <div class="daily-container">
+            <div class='artist-name' data-aos="fade-right" data-aos-delay="400">
+                <div><a href="{{ artist['artist_url'] }}">{{ artist['artist'] }}</a></div>
+            </div>
+            <div class='artist-image' data-aos="fade-left" data-aos-delay="800">
+                <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="{{ artist['artist'] }}"/></a>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+    <h3>Song of the Day</h3>
+    <div class="container" style="padding-bottom:24px;">
+        <div class="daily-container">
+            <div class='track-image' data-aos="fade-right" data-aos-delay="800">
+                <a href="{{ track['track_url'] }}"><img src="{{ track['album_image'] }}" alt="{{ track['track'] }}"/></a>
+            </div>
+            <div class='track-name' data-aos="fade-left" data-aos-delay="400">
+                <div>
+                    <a href="{{ track['track_url'] }}">{{ track['track'] }}</a><br>
+                    <em>{{ track['artists'] }}</em><br>
+                    <p>{{ track['album'] }}</p>
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+    <h3>Lyrics of the Day</h3>
+    <div class="container" style="padding-bottom:24px;">
+        <div class="daily-container">
+            <div class='lyric-image' data-aos="fade-right" data-aos-delay="400">
+                <div><p style="white-space: pre-line">{{ lyrics['lyrics'] }}</p></div>
+            </div>
+            <div class='lyric-name' data-aos="fade-left" data-aos-delay="800">
+                <div>
+                    <a href="{{ track['track_url'] }}">{{ lyrics['track'] }}</a><br>
+                    <em>- {{ lyrics['artists'].split(';')[0] }}</em><br>
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+</section>
+
+{% else %}
+
 <section id="tabs" class="top-tab" style="width:100%;">
     {% set rank=False if active_page == 'recommendation' else True -%}
     <div class="container">
@@ -36,10 +87,19 @@
             {% include 'artist_row.html' %}
         {% endwith %}
     </div>
-    <h3>{{ active_page.title() }} Tracks</h3>
     <div class="container">
+        <h3>{{ active_page.title() }} Tracks</h3>
         {% include 'track_table.html' %}
     </div>
 </section>
 
+{% endif %}
+
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='css/aos/aos.js') }}"></script>
+<script>
+    AOS.init();
+</script>
 {% endblock %}

@@ -5,7 +5,7 @@ from app.dbfunc import top_to_dict
 from app.userfunc import get_user_profile, get_top_artists, get_top_tracks, get_top_genres, get_music_features
 from app.vizfunc import calculate_mainstream_score, plot_genre_chart, plot_mood_gauge
 from app.comparefunc import compare_users, get_similar_artists, get_similar_tracks
-from app.recofunc import get_recommendations, get_top_artists_and_tracks
+from app.recofunc import get_of_the_day, get_recommendations, get_top_artists_and_tracks
 
 def dir_last_updated(folder):
     return str(max(os.path.getmtime(os.path.join(root_path, f))
@@ -49,7 +49,13 @@ def generate_match_page(user1, user2):
 
 def generate_explore_page(user_id, field):
     ranges = {'trending': 'Short', 'popular': 'Medium', 'top': 'Long'}
-    if field == 'recommendation' and user_id is not None:
+    if field == 'explore':
+        artists, tracks, lyrics = get_of_the_day()
+        artist = artists.iloc[0]
+        track = tracks.iloc[0]
+        lyric = lyrics.iloc[0]
+        return generate_page('explore.html', no_user=user_id is None, active_page=field, artist=artist, track=track, lyrics=lyric)
+    elif field == 'recommendation' and user_id is not None:
         df_a, df_t = get_recommendations(user_id)
     elif field in ranges.keys():
         df_a, df_t = get_top_artists_and_tracks(ranges[field])

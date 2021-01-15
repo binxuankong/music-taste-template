@@ -44,6 +44,8 @@ def callback():
     })
     res_body = res.json()
     session['token'] = res_body.get('access_token')
+    sp = spotipy.Spotify(auth=session['token'])
+    update_user_profile(sp)
     return redirect(url_for('profile'))
 
 @app.route('/profile')
@@ -177,7 +179,7 @@ def match_result(code):
     return redirect(url_for('link'))
 
 @app.route('/explore')
-def explore(field='recommendation'):
+def explore(field='explore'):
     if 'user_id' in session and field == 'recommendation':
         user_profile = get_user_profile(session['user_id'])
         if user_profile is None:
@@ -186,7 +188,7 @@ def explore(field='recommendation'):
     elif 'user_id' in session:
         return generate_explore_page(session['user_id'], field)
     elif field == 'recommendation':
-        return generate_explore_page(None, 'trending')
+        return generate_explore_page(None, 'explore')
     return generate_explore_page(None, field)
 
 @app.route('/<field>')
