@@ -53,8 +53,7 @@ def generate_explore_page(user_id, field):
         artists, tracks, lyrics = get_of_the_day()
         artist = artists.iloc[0]
         track = tracks.iloc[0]
-        lyric = lyrics.iloc[0]
-        return generate_page('explore.html', no_user=user_id is None, active_page=field, artist=artist, track=track, lyrics=lyric)
+        return generate_page('explore.html', no_user=user_id is None, active_page=field, artist=artist, track=track, lyrics=lyrics)
     elif field == 'recommendation' and user_id is not None:
         df_a, df_t = get_recommendations(user_id)
     elif field in ranges.keys():

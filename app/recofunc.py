@@ -24,6 +24,7 @@ def get_of_the_day():
         artist = pd.read_sql_query('SELECT * FROM "Artists" WHERE artist_id = %(i)s', engine, params={'i': df['artist_id'].item()})
         track = pd.read_sql_query('SELECT * FROM "Tracks" WHERE track_id = %(i)s', engine, params={'i': df['track_id'].item()})
         lyrics = pd.read_sql_query('SELECT * FROM "Tracks" WHERE track_id = %(i)s', engine, params={'i': df['lyrics_id'].item()})
+        lyrics = lyrics.iloc[0]
     return artist, track, lyrics
 
 def get_recommendations(user_id):
