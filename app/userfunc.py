@@ -97,7 +97,10 @@ def update_user_profile(sp):
         engine.execute(user_update_query, user_id=u['user_id'], display_name=u['display_name'], spotify_url=u['spotify_url'], \
             image_url=u['image_url'], followers=u['followers'], last_updated=u['last_updated'])
     sync_all_data(sp)
-    get_new_recommendations(u['user_id'])
+    try:
+        get_new_recommendations(u['user_id'])
+    except:
+        pass
     engine.dispose()
     return u
 

@@ -7,8 +7,8 @@ custom_style = Style(
     foreground='#FFFFFF',
     foreground_strong='#FFFFFF',
     foreground_subtle='#FFFFFF',
-    opacity='.9',
-    opacity_hover='.6',
+    opacity='.8',
+    opacity_hover='1',
     transition='400ms ease-in',
     value_font_size=0)
 

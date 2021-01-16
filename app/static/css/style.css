@@ -28,12 +28,25 @@ p {
 
 .navbar-custom {
     background-color: var(--blue);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 64;
+}
+
+#main-content {
+    padding-top: 56px;
+}
+
+.navbar-custom .navbar-logo img {
+    max-height: 40px;
 }
 
 .navbar-custom .navbar-brand {
     color: var(--black);
     font-size: 20px;
     font-weight: 600;
+    margin-left: 8px;
     margin-right: 32px;
 }
 

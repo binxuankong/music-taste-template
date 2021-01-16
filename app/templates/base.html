@@ -24,10 +24,13 @@
 
     {% block head %} {% endblock %}
     <title>{% block title %} {% endblock %}</title>
+    <meta content="" name="Music taste matchmaking and dating">
+    <meta content="" name="music, music taste, matchmaking, dating, artist, album, song, track, genre">
   </head>
-
+  
   <body>
     <nav class="navbar navbar-custom navbar-expand-md">
+      <a class="navbar-logo" href="{{ url_for('index')}}"><img src="{{ url_for('static', filename='img/navbar-icon.png') }}" alt=""></a>
       <a class="navbar-brand" href="{{ url_for('index')}}">Music Taste</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

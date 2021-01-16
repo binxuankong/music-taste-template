@@ -18,7 +18,7 @@
                 {% else %}
                     Profile privacy:&emsp; <b>Private</b><br>
                 {% endif %}
-                Match code:&emsp;&emsp; <em>{{ user['code'] }}</em>
+                Match code:&emsp;&emsp; <span>{{ user['code'] }}</span>
             {% endif %}
         </p>
         {% if is_user %}
@@ -28,7 +28,11 @@
         {% endif %}
     </div>
     <div style="float:right; width:20%;">
-        <img class="profile-pic" src="{{ user['image_url'] }}" alt="User Image"/>
+        {% if user['image_url'] is none %}
+        <img class="profile-pic" src="{{ url_for('static', filename='/img/no-picture.png') }}" alt=""/>
+        {% else %}
+        <img class="profile-pic" src="{{ user['image_url'] }}" alt=""/>
+        {% endif %}
     </div>
     <div style="clear:both; padding-bottom: 48px"></div>
 </section>

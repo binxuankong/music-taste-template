@@ -12,7 +12,7 @@
     background: var(--black);
     overflow: hidden;
     position: relative;
-  }
+}
   
 @media (max-height: 500px) {
     #intro {

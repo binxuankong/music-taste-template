@@ -4,7 +4,7 @@
     <div class="card">
         <div class="card-main">
             <div class="card-container">
-                <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" alt="{{ artist['artist'] }}"/></a>
+                <a href="{{ artist['artist_url'] }}"><img src="{{ artist['artist_image'] }}" onerror="this.onerror=null; this.src=url(static/img/no-profile.png)" alt=""/></a>
             </div>
         </div>
         <div class="card-info">
