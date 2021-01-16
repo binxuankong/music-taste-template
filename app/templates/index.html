@@ -20,7 +20,7 @@
                   <div class="container">
                     <h2 class="animate__animated animate__fadeInDown">{% block title %} Music Taste Demo {% endblock %}</h2>
                     <p class="animate__animated animate__fadeInUp">Welcome to music taste demo.</p>
-                    <a href="/link" class="btn-get-started scrollto animate__animated animate__fadeInUp">Get Started</a>
+                    <a href="{{ url_for('link') }}" class="btn-get-started scrollto animate__animated animate__fadeInUp">Get Started</a>
                   </div>
                 </div>
               </div>
@@ -30,7 +30,7 @@
                   <div class="container">
                     <h2 class="animate__animated animate__fadeInDown">Discover your music taste.</h2>
                     <p class="animate__animated animate__fadeInUp">Find out your favourite artists, songs and genres.</p>
-                    <a href="/profile" class="btn-get-started scrollto animate__animated animate__fadeInUp">Discover</a>
+                    <a href="{{ url_for('profile') }}" class="btn-get-started scrollto animate__animated animate__fadeInUp">Discover</a>
                   </div>
                 </div>
               </div>
@@ -40,7 +40,7 @@
                   <div class="container">
                     <h2 class="animate__animated animate__fadeInDown">Match with other people.</h2>
                     <p class="animate__animated animate__fadeInUp">Compare your music taste with other people and find people with similar music taste as you.</p>
-                    <a href="/match" class="btn-get-started scrollto animate__animated animate__fadeInUp">Match</a>
+                    <a href="{{ url_for('match') }}" class="btn-get-started scrollto animate__animated animate__fadeInUp">Match</a>
                   </div>
                 </div>
               </div>
@@ -50,7 +50,7 @@
                   <div class="container">
                     <h2 class="animate__animated animate__fadeInDown">Explore new music.</h2>
                     <p class="animate__animated animate__fadeInUp">Get recommendation based on your music taste and discover trending artists and songs.</p>
-                    <a href="/explore" class="btn-get-started scrollto animate__animated animate__fadeInUp">Explore</a>
+                    <a href="{{ url_for('explore') }}" class="btn-get-started scrollto animate__animated animate__fadeInUp">Explore</a>
                   </div>
                 </div>
               </div>

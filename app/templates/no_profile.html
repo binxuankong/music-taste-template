@@ -13,11 +13,11 @@
 {% if is_user %}
 
 <p>You need to link your Spotify account to see this page.</p>
-<a class="btn btn-primary" href="/link">Link your Spotify account</a>
+<a class="btn btn-primary" href="{{ url_for('link') }}">Link your Spotify account</a>
 
 {% else %}
 
-<a class="btn btn-primary" href="/">Return to Home Page</a>
+<a class="btn btn-primary" href="{{ url_for('index') }}">Return to Home Page</a>
 
 {% endif %}
 

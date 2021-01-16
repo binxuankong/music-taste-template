@@ -22,9 +22,9 @@
             {% endif %}
         </p>
         {% if is_user %}
-        <a href="/update" class="btn btn-secondary">Update data</a>
-        <a href="/privacy" class="btn btn-secondary">Change privacy</a>
-        <a href="/code" class="btn btn-secondary">Reset code</a>
+        <a href="{{ url_for('update') }}" class="btn btn-secondary">Update data</a>
+        <a href="{{ url_for('privacy') }}" class="btn btn-secondary">Change privacy</a>
+        <a href="{{ url_for('code') }}" class="btn btn-secondary">Reset code</a>
         {% endif %}
     </div>
     <div style="float:right; width:20%;">
