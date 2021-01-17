@@ -25,14 +25,14 @@ p span {
 }
 
 .profile-pic {
-    border: var(--blue) solid;
+    border: 2px var(--blue) solid;
     border-radius: 50%;
     margin: 8px 4px;
     width: 100%;
 }
 
 .pimg {
-    border: var(--blue) solid;
+    border: 2px var(--blue) solid;
     display: inline-block;
     margin-left: auto;
     margin-right: auto;

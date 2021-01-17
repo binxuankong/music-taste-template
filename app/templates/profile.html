@@ -20,6 +20,9 @@
                 {% endif %}
                 Match code:&emsp;&emsp; <span>{{ user['code'] }}</span>
             {% endif %}
+            {% if public %}
+            Match code:&emsp;&emsp; <span>{{ user['code'] }}</span>
+            {% endif %}
         </p>
         {% if is_user %}
         <a href="{{ url_for('update') }}" class="btn btn-secondary">Update data</a>
