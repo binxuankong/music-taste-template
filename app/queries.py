@@ -203,3 +203,17 @@ new_of_day_query = """
 INSERT INTO "DailyMix" (artist_id, track_id, lyrics_id, date_created)
 VALUES (%(artist_id)s, %(track_id)s, %(lyrics_id)s, %(date_created)s)
 """
+
+similar_users_query = """
+SELECT ta2.user_id, u.display_name, u.image_url,
+SUM(100 - greatest(ta1.rank, ta2.rank) - abs(ta1.rank - ta2.rank)) AS point
+FROM "TopArtists" ta1
+LEFT JOIN "TopArtists" ta2
+ON ta1.artist_id = ta2.artist_id AND ta1.user_id <> ta2.user_id
+JOIN "Users" u
+ON ta2.user_id = u.user_id
+WHERE ta1.user_id = %(user_id)s
+GROUP BY ta2.user_id, u.display_name, u.image_url
+ORDER BY point desc
+LIMIT 10
+"""
