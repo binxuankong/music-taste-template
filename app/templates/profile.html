@@ -20,7 +20,7 @@
                 {% endif %}
                 Match code:&emsp;&emsp; <span>{{ user['code'] }}</span>
             {% endif %}
-            {% if public %}
+            {% if not is_user and public %}
             Match code:&emsp;&emsp; <span>{{ user['code'] }}</span>
             {% endif %}
         </p>
