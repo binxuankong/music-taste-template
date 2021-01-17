@@ -6,6 +6,11 @@
     --blue: #05a8aa;
 }
 
+h1 a, a:hover{
+    text-decoration: none;
+    color: var(--blue);
+}
+
 p a {
     color: var(--blue);
 }
@@ -20,12 +25,14 @@ p span {
 }
 
 .profile-pic {
+    border: 1px var(--blue) solid;
     border-radius: 50%;
     padding: 8px 4px;
     width: 100%;
 }
 
 .pimg {
+    border: 1px var(--blue) solid;
     display: inline-block;
     margin-left: auto;
     margin-right: auto;
