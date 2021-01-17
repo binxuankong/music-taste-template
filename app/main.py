@@ -137,8 +137,11 @@ def code():
     update_user_code(session['user_id'])
     return redirect(url_for('profile'))
 
-@app.route('/user/<user_id>')
-def _user(user_id):
+@app.route('/user/<ref>')
+def _user(ref):
+    user_id = get_user_from_code(ref)
+    if user_id is None:
+        user_id = ref
     if 'user_id' in session:
         if session['user_id'] == user_id:
             return redirect(url_for('profile'))
