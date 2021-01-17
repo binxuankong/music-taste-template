@@ -42,9 +42,13 @@ def generate_match_page(user1, user2):
     s, df_u, df_a, df_t, df_g = compare_users(user1, user2)
     score = int(round(s * 100))
     users = df_u.to_dict('records')
-    similar_artists = top_to_dict(get_similar_artists(df_a))
-    similar_tracks = top_to_dict(get_similar_tracks(df_t))
-    similar_genres = plot_genre_chart(df_g)
+    similar_artists = similar_tracks = {'Short': [], 'Medium': [], 'Long': []}
+    if len(df_a) > 0:
+        similar_artists = top_to_dict(get_similar_artists(df_a))
+    if len(df_t) > 0:
+        similar_tracks = top_to_dict(get_similar_tracks(df_t))
+    if len(df_g) > 0:
+        similar_genres = plot_genre_chart(df_g)
     return generate_page('result.html', users=users, score=score, artists=similar_artists, tracks=similar_tracks, genres=similar_genres)
 
 def generate_explore_page(user_id, field):
