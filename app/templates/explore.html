@@ -84,7 +84,7 @@
 
 <section id="tabs" class="top-tab" style="width:100%;">
     {% set rank = False if active_page == 'recommendation' else True -%}
-    {% set active_page = 'recommended' if active_page == 'recommendation' -%}
+    {% set active_page = 'recommended' if active_page == 'recommendation' else active_page -%}
     <div class="container">
         <h3>{{ active_page.title() }} Artists</h3>
         {% with rank=rank %}
