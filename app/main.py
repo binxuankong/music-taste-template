@@ -11,4 +11,4 @@ def dir_last_updated(folder):
 
 @app.route('/')
 def index():
-    return render_template('base.html', last_updated=dir_last_updated('app/static'))
+    return render_template('index.html', last_updated=dir_last_updated('app/static'))
