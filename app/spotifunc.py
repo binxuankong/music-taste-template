@@ -3,7 +3,7 @@ import datetime as dt
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
-RANGES = {'short_term': 'Short', 'medium_term': 'Medium', 'long_term': 'Long'}
+RANGES = {'short_term': 0, 'medium_term': 1, 'long_term': 2}
 LIMIT = 50
 
 def get_user_df(sp):
@@ -66,9 +66,9 @@ def get_top_tracks_df(sp):
 
 def get_top_genres_df(top_artists, shift=4):
     df_genre = pd.DataFrame(columns=['user_id', 'rank', 'genre', 'points', 'timeframe'])
-    user_id = top_artists['Long'][0]['user_id']
+    user_id = top_artists[2][0]['user_id']
     top_genres_list = []
-    for timeframe in ['Short', 'Medium', 'Long']:
+    for timeframe in RANGES.values():
         top_genres = {}
         for artist in top_artists[timeframe]:
             try:
@@ -96,8 +96,8 @@ def get_music_features_df(sp, top_tracks):
     audio_features = ['danceability', 'energy', 'loudness', 'speechiness', 'acousticness', 'instrumentalness', \
                       'liveness', 'valence', 'tempo']
     df_feature = pd.DataFrame(columns=['user_id'] + audio_features + ['timeframe'])
-    user_id = top_tracks['Long'][0]['user_id']
-    for timeframe in ['Short', 'Medium', 'Long']:
+    user_id = top_tracks[2][0]['user_id']
+    for timeframe in RANGES.values():
         this_feature = {'user_id': user_id, 'timeframe': timeframe}
         all_features = sp.audio_features([t['track_id'] for t in top_tracks[timeframe]])
         try:

@@ -83,6 +83,13 @@ FROM "TempTracks" tt
 ON CONFLICT (track_id) DO NOTHING
 """
 
+genres_insert_query = """
+INSERT INTO "Genres" (genre)
+SELECT genre
+FROM "TempGenres" tg
+ON CONFLICT (genre) DO NOTHING
+"""
+
 users2_query = """
 SELECT u.user_id, u.display_name, u.spotify_url, u.image_url
 FROM "Users" u

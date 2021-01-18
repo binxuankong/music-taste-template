@@ -42,6 +42,10 @@ p {
     max-height: 40px;
 }
 
+.navbar-nav {
+    margin-right: 8px;
+}
+
 .navbar-custom .navbar-brand {
     color: var(--black);
     font-size: 20px;
@@ -53,6 +57,7 @@ p {
 .nav-item .nav-link {
     color: var(--black);
     font-weight: 400;
+    margin-right: 2px;
 }
 
 .navbar-toggler {
@@ -67,6 +72,39 @@ p {
     height: 2px;
     background-color: var(--black);
     border-radius: 1px;
+}
+
+.search-form-tigger, .search-form-tigger:hover {
+    text-decoration: none;
+    background: none;
+    color: var(--black);
+    font-size: 22px;
+    line-height: 1;
+    margin: 4px 0px;
+}
+
+.search-form-wrapper {
+    display: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    padding: 20px 15px;
+    margin-top: 42px;
+    z-index: 64;
+}
+
+@media (max-width: 768px) {
+    .search-form-wrapper {
+        margin-top: 264px;
+    }
+}
+
+.search-form-wrapper.open {
+    display: block;
+}
+
+#search-bar input {
+    border: 2px solid var(--red);
 }
 
 .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {

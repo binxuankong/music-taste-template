@@ -73,11 +73,14 @@ def profile():
 @app.route('/new')
 def new():
     if 'token' in session:
-        sp = spotipy.Spotify(auth=session['token'])
-        user_profile = get_user_profile(session['user_id'])
-        if user_profile is None:
-            create_new_user(sp)
-            return redirect(url_for('profile'))
+        try:
+            sp = spotipy.Spotify(auth=session['token'])
+            user_profile = get_user_profile(session['user_id'])
+            if user_profile is None:
+                create_new_user(sp)
+                return redirect(url_for('profile'))
+        except:
+            return redirect(url_for('link'))
     return redirect(url_for('link'))
 
 def userid_required(function_to_protect):
@@ -199,3 +202,8 @@ def explore_page(field):
     if field in ['recommendation', 'trending', 'popular', 'top']:
         return explore(field)
     return redirect(url_for('index'))
+
+@app.route('/search')
+def search():
+    query = request.args['search']
+    print(query)

@@ -12,22 +12,23 @@ custom_style = Style(
     transition='400ms ease-in',
     value_font_size=0)
 
+TF_WEIGHTS = {0: 3, 1: 2, 2: 1}
+
 def calculate_mainstream_score(top_artists, shift=4):
-    tf_weights = {'Short': 3, 'Medium': 2, 'Long': 1}
     final_score = 0
-    for timeframe in ['Short', 'Medium', 'Long']:
+    for timeframe in TF_WEIGHTS.keys():
         this_score = 0
         pop_scores = top_artists.loc[top_artists['timeframe'] == timeframe, 'popularity'].tolist()
         weights = [shift**2 / ((0.1 * i + shift) ** 2) for i in range(len(pop_scores))]
         for i, pop in enumerate(pop_scores):
             this_score += (pop**2 * weights[i]) / (100 * sum(weights))
-        final_score += (this_score * tf_weights[timeframe]) / sum(tf_weights.values())
+        final_score += (this_score * TF_WEIGHTS[timeframe]) / sum(TF_WEIGHTS.values())
     return round(final_score)
 
 def plot_genre_chart(top_genres):
     try:
         chart_dict = {}
-        for timeframe in ['Short', 'Medium', 'Long']:
+        for timeframe in TF_WEIGHTS.keys():
             pie_chart = pygal.Pie(style=custom_style)
             percent_formatter = lambda x: '{:.2f}%'.format(x)
             pie_chart.value_formatter = percent_formatter
@@ -46,7 +47,7 @@ def plot_mood_gauge(features):
         music_moods = {'valence': 'Happy', 'danceability': 'Danceable', 'energy': 'Energy', 'acousticness': 'Acoustic', \
                        'instrumentalness': 'Instrumental', 'liveness': 'Live Music', }
         gauge_dict = {}
-        for timeframe in ['Short', 'Medium', 'Long']:
+        for timeframe in TF_WEIGHTS.keys():
             gauge = pygal.SolidGauge(half_pie=True, inner_radius=0.70, style=custom_style)
             percent_formatter = lambda x: '{:.2f}%'.format(x)
             gauge.value_formatter = percent_formatter

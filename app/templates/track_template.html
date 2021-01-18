@@ -11,17 +11,17 @@
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="tracks-recent" role="tabpanel" aria-labelledby="tracks-recent-tab">
-                        {% with tracks=tracks['Short'][:10] %}
+                        {% with tracks=tracks[0][:10] %}
                             {% include 'track_table.html' %}
                         {% endwith %}
                     </div>
                     <div class="tab-pane fade" id="tracks-months" role="tabpanel" aria-labelledby="tracks-months-tab">
-                        {% with tracks=tracks['Medium'][:10] %}
+                        {% with tracks=tracks[1][:10] %}
                             {% include 'track_table.html' %}
                         {% endwith %}
                     </div>
                     <div class="tab-pane fade" id="tracks-all" role="tabpanel" aria-labelledby="tracks-all-tab">
-                        {% with tracks=tracks['Long'][:10] %}
+                        {% with tracks=tracks[2][:10] %}
                             {% include 'track_table.html' %}
                         {% endwith %}
                     </div>

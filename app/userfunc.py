@@ -73,15 +73,15 @@ def sync_all_data(sp):
     # Artists and tracks
     df_a = df_ta.drop(columns=['user_id', 'rank', 'timeframe']).drop_duplicates()
     df_t = df_tt.drop(columns=['user_id', 'rank', 'timeframe']).drop_duplicates()
+    # Sync artists and tracks
+    df_a.to_sql('TempArtists', engine, index=False, if_exists='replace')
+    df_t.to_sql('TempTracks', engine, index=False, if_exists='replace')
+    update_artists_and_tracks(engine)
     # Sync user data
     sync_data(df_ta[['user_id', 'rank', 'artist_id', 'timeframe']], 'TopArtists', engine)
     sync_data(df_tt[['user_id', 'rank', 'track_id', 'timeframe']], 'TopTracks', engine)
     sync_data(df_tg, 'TopGenres', engine)
     sync_data(df_mf, 'MusicFeatures', engine)
-    # Sync artists and tracks
-    df_a.to_sql('TempArtists', engine, index=False, if_exists='replace')
-    df_t.to_sql('TempTracks', engine, index=False, if_exists='replace')
-    update_artists_and_tracks(engine)
     # Dispose engine
     engine.dispose()
 

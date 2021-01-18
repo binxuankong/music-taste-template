@@ -6,7 +6,7 @@ from app.queries import users2_query, top_artists2_query, top_tracks2_query, top
     similar_artists_query, similar_tracks_query, similar_users_query
 
 DATABASE_URL = os.environ.get('DATABASE_URL')
-TF_WEIGHTS = {'Short': 6, 'Medium': 5, 'Long': 4}
+TF_WEIGHTS = {0: 6, 1: 5, 2: 4}
 MU_WEIGHTS = {'artist': 4, 'track': 1, 'genre': 6, 'feature': 2}
 
 def get_user_from_code(code):
@@ -23,9 +23,6 @@ def get_user_from_code(code):
         return None
 
 def compare_users(u1, u2):
-    # Configs
-    TF_WEIGHTS = {'Short': 6, 'Medium': 5, 'Long': 4}
-    MU_WEIGHTS = {'artist': 4, 'track': 1, 'genre': 6, 'feature': 2}
     # Get data
     engine = create_engine(DATABASE_URL)
     users = pd.read_sql(users2_query, engine, params={'user_ids': (u1, u2)})
@@ -49,7 +46,7 @@ def compare_users(u1, u2):
     similar_tracks = pd.DataFrame()
     similar_genres = pd.DataFrame()
     # Compare
-    for timeframe in ['Short', 'Medium', 'Long']:
+    for timeframe in TF_WEIGHTS.keys():
         tf_points = 0
         # Artist
         df_artist = get_artist_similarity(u1_a, u2_a, timeframe)
@@ -64,10 +61,9 @@ def compare_users(u1, u2):
         tf_points += MU_WEIGHTS['genre'] * calculate_similarity(df_genre)
         similar_genres = similar_genres.append(df_genre.loc[df_genre['points'] > 0])
         # Features
-        tf_points += MU_WEIGHTS['feature'] * calculate_feature_similarity(u1_m, u2_m)
+        tf_points += MU_WEIGHTS['feature'] * calculate_feature_similarity(u1_m, u2_m, timeframe)
         # Timeframe overall points
         tf_points /= sum(MU_WEIGHTS.values())
-        print('{} term music taste similarity: {:.2f}'.format(timeframe, tf_points * 100))
         final_points += TF_WEIGHTS[timeframe] * tf_points
     # Final similarity score
     final_points /= sum(TF_WEIGHTS.values())
@@ -95,7 +91,7 @@ def get_similar_users(user_id):
         u2_m = df_m.loc[df_m['user_id'] == u2]
         points = 0
         # Compare
-        for timeframe in ['Short', 'Medium', 'Long']:
+        for timeframe in TF_WEIGHTS.keys():
             tf_points = 0
             df_artist = get_artist_similarity(u1_a, u2_a, timeframe)
             tf_points += MU_WEIGHTS['artist'] * calculate_similarity(df_artist)
@@ -130,7 +126,7 @@ def get_similar_tracks(df_t):
     df = df_t.merge(tracks, on=['track_id'])
     return df.sort_values(['timeframe', 'points'], ascending=False)
 
-def get_artist_similarity(u1, u2, timeframe='Long'):
+def get_artist_similarity(u1, u2, timeframe):
     df1 = u1.loc[u1['timeframe'] == timeframe]
     df2 = u2.loc[u2['timeframe'] == timeframe]
     df = df1.merge(df2, on=['artist_id', 'timeframe'], how='outer').fillna(0)
@@ -140,7 +136,7 @@ def get_artist_similarity(u1, u2, timeframe='Long'):
     # df = df.rename(columns={'rank_x': u1['user_id'].unique()[0], 'rank_y': u2['user_id'].unique()[0]})
     return df
 
-def get_track_similarity(u1, u2, timeframe='Long'):
+def get_track_similarity(u1, u2, timeframe):
     df1 = u1.loc[u1['timeframe'] == timeframe]
     df2 = u2.loc[u2['timeframe'] == timeframe]
     df = df1.merge(df2, on=['track_id', 'timeframe'], how='outer').fillna(0)
@@ -150,7 +146,7 @@ def get_track_similarity(u1, u2, timeframe='Long'):
     # df = df.rename(columns={'rank_x': u1['user_id'].unique()[0], 'rank_y': u2['user_id'].unique()[0]})
     return df
 
-def get_genre_similarity(u1, u2, timeframe='Long'):
+def get_genre_similarity(u1, u2, timeframe):
     df1 = u1.loc[u1['timeframe'] == timeframe]
     df2 = u2.loc[u2['timeframe'] == timeframe]
     df = df1.merge(df2, on=['genre', 'timeframe'], how='outer').fillna(0)
@@ -165,7 +161,7 @@ def calculate_similarity(df):
     base_score += df.loc[(df['rank_x'] == 0) | (df['rank_y'] == 0)].sum()['base'] / 2
     return round(df.sum()['points'] / base_score, 4)
 
-def calculate_feature_similarity(u1, u2, timeframe='Long'):
+def calculate_feature_similarity(u1, u2, timeframe):
     features1 = u1.loc[u1['timeframe'] == timeframe].drop(columns=['user_id', 'timeframe']).values.tolist()[0]
     features2 = u2.loc[u2['timeframe'] == timeframe].drop(columns=['user_id', 'timeframe']).values.tolist()[0]
     points = []

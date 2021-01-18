@@ -42,7 +42,7 @@ def generate_match_page(user1, user2):
     s, df_u, df_a, df_t, df_g = compare_users(user1, user2)
     score = int(round(s * 100))
     users = df_u.to_dict('records')
-    similar_artists = similar_tracks = {'Short': [], 'Medium': [], 'Long': []}
+    similar_artists = similar_tracks = {0: [], 1: [], 2: []}
     if len(df_a) > 0:
         similar_artists = top_to_dict(get_similar_artists(df_a))
     if len(df_t) > 0:
@@ -52,7 +52,7 @@ def generate_match_page(user1, user2):
     return generate_page('result.html', users=users, score=score, artists=similar_artists, tracks=similar_tracks, genres=similar_genres)
 
 def generate_explore_page(user_id, field):
-    ranges = {'trending': 'Short', 'popular': 'Medium', 'top': 'Long'}
+    ranges = {'trending': 0, 'popular': 1, 'top': 2}
     if field == 'explore':
         artists, tracks, lyrics = get_of_the_day()
         artist = artists.iloc[0]

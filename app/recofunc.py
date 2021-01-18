@@ -23,7 +23,8 @@ def get_of_the_day():
     else:
         artist = pd.read_sql_query('SELECT * FROM "Artists" WHERE artist_id = %(i)s', engine, params={'i': df['artist_id'].item()})
         track = pd.read_sql_query('SELECT * FROM "Tracks" WHERE track_id = %(i)s', engine, params={'i': df['track_id'].item()})
-        lyrics = pd.read_sql_query('SELECT * FROM "Tracks" WHERE track_id = %(i)s', engine, params={'i': df['lyrics_id'].item()})
+        lyrics = pd.read_sql_query('SELECT * FROM "Lyrics" l JOIN "Tracks" t on l.track_id = t.track_id WHERE l.track_id = %(i)s',
+                                   engine, params={'i': df['lyrics_id'].item()})
         lyrics = lyrics.iloc[0]
     return artist, track, lyrics
 
@@ -55,8 +56,8 @@ def get_new_of_day():
     lyrics = lyrics_of_day()
     engine.execute(new_of_day_query, artist_id=artist['artist_id'].item(), track_id=track['track_id'].item(), \
         lyrics_id=lyrics['track_id'], date_created=dt.datetime.now())
-    engine.execute('UPDATE "Tracks" SET lyrics = %(lyrics)s WHERE track_id = %(track_id)s', lyrics=lyrics['lyrics'], \
-        track_id=lyrics['track_id'])
+    engine.execute('INSERT INTO "Lyrics" (track_id, lyrics) VALUES (%(track_id)s, %(lyrics)s)', track_id=lyrics['track_id'], \
+        lyrics=lyrics['lyrics'])
     engine.dispose()
     return artist, track, lyrics
 
@@ -70,15 +71,15 @@ def get_new_recommendations(user_id):
     # Get recommendations
     df_ra = recommend_artists(df_a)
     df_rt = recommend_tracks(df_t)
+    # Sync artists and tracks
+    df_ra.drop(columns=['user_id']).to_sql('TempArtists', engine, index=False, if_exists='replace')
+    df_rt.drop(columns=['user_id']).to_sql('TempTracks', engine, index=False, if_exists='replace')
+    update_artists_and_tracks(engine)
     # Sync user data
     engine.execute('UPDATE "Users" SET last_recommended = %(last_recommended)s WHERE user_id = %(user_id)s', \
         last_recommended=dt.datetime.now(), user_id=user_id)
     sync_data(df_ra[['user_id', 'artist_id']], 'RecommendArtists', engine)
     sync_data(df_rt[['user_id', 'track_id']], 'RecommendTracks', engine)
-    # Sync artists and tracks
-    df_ra.drop(columns=['user_id']).to_sql('TempArtists', engine, index=False, if_exists='replace')
-    df_rt.drop(columns=['user_id']).to_sql('TempTracks', engine, index=False, if_exists='replace')
-    update_artists_and_tracks(engine)
     # Dispose engine
     engine.dispose()
     return df_ra, df_rt
@@ -122,7 +123,7 @@ def recommend_artists(df):
     sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
     user_id = df['user_id'].unique()[0]
     recom_list = []
-    seed_artists = df.loc[df['timeframe'] == 'Short', 'artist_id'].iloc[:10].sample(n=5).tolist()
+    seed_artists = df.loc[df['timeframe'] == 0, 'artist_id'].iloc[:10].sample(n=5).tolist()
     for seed in seed_artists:
         recom = sp.artist_related_artists(seed)
         for a in recom['artists']:
@@ -146,7 +147,7 @@ def recommend_artists(df):
 def recommend_tracks(df):
     sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials())
     user_id = df['user_id'].unique()[0]
-    seed_tracks = df.loc[df['timeframe'] == 'Short', 'track_id'].iloc[:10].sample(n=5).tolist()
+    seed_tracks = sample_seed(df, 'track_id')
     recom = sp.recommendations(seed_tracks=seed_tracks, limit=40)
     recom_list = []
     for t in recom['tracks']:
@@ -176,3 +177,19 @@ def get_lyrics(track, artist):
         return verse
     except:
         return None
+
+def sample_seed(df, id_type):
+    seeds = df.loc[df['timeframe'] == 0]
+    if len(seeds) >= 5:
+        return seeds[id_type].iloc[:10].sample(n=5).tolist()
+    medium = df.loc[df['timeframe'] == 1]
+    seeds = seeds.merge(medium, on=['user_id', 'rank', 'artist_id'], how='outer')\
+        .drop(columns=['timeframe_x', 'timeframe_y']).drop_duplicates(subset=['artist_id']).sort_values(by='rank')
+    if len(seeds) >= 5:
+        return seeds[id_type].iloc[:10].sample(n=5).tolist()
+    long = df.loc[df['timeframe'] == 2]
+    seeds = seeds.merge(long, on=['user_id', 'rank', 'artist_id'], how='outer')\
+        .drop(columns=['timeframe_y']).drop_duplicates(subset=['artist_id']).sort_values(by='rank')
+    if len(seeds) >= 5:
+        return seeds[id_type].iloc[:10].sample(n=5).tolist()
+    return seeds[id_type].tolist()

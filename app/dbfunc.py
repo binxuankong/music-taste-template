@@ -22,7 +22,7 @@ def insert_new_data(df, table, engine):
 
 def top_to_dict(top_df):
     top_dict = {}
-    top_dict['Short'] = top_df.loc[top_df['timeframe'] == 'Short'].to_dict('records')
-    top_dict['Medium'] = top_df.loc[top_df['timeframe'] == 'Medium'].to_dict('records')
-    top_dict['Long'] = top_df.loc[top_df['timeframe'] == 'Long'].to_dict('records')
+    top_dict[0] = top_df.loc[top_df['timeframe'] == 0].to_dict('records')
+    top_dict[1] = top_df.loc[top_df['timeframe'] == 1].to_dict('records')
+    top_dict[2] = top_df.loc[top_df['timeframe'] == 2].to_dict('records')
     return top_dict
