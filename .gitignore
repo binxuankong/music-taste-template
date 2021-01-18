@@ -1,4 +1,5 @@
 env
+musicenv/
 .env
 .DS_Store
 .cache
