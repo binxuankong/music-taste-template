@@ -1,11 +1,11 @@
-import os
 import pandas as pd
 from sqlalchemy import create_engine
 from app.codes import ADJECTIVES, NOUNS
 from app.queries import users2_query, top_artists2_query, top_tracks2_query, top_genres2_query, music_features2_query, \
     similar_artists_query, similar_tracks_query, similar_users_query
+from secrets import secrets
 
-DATABASE_URL = os.environ.get('DATABASE_URL')
+DATABASE_URL = secrets['DATABASE_URL']
 TF_WEIGHTS = {0: 6, 1: 5, 2: 4}
 MU_WEIGHTS = {'artist': 4, 'track': 1, 'genre': 6, 'feature': 2}
 

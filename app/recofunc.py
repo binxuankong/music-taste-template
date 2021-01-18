@@ -1,4 +1,3 @@
-import os
 import random
 import datetime as dt
 import re
@@ -10,9 +9,10 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from app.queries import recommend_artists_query, recommend_tracks_query, top_artists3_query, top_tracks3_query, popular_artists_query, \
     popular_tracks_query, new_of_day_query
 from app.dbfunc import sync_data, update_artists_and_tracks
+from secrets import secrets
 
-DATABASE_URL = os.environ.get('DATABASE_URL')
-GENIUS_TOKEN = os.environ.get('GENIUS_TOKEN')
+DATABASE_URL = secrets['DATABASE_URL']
+GENIUS_TOKEN = secrets['GENIUS_TOKEN']
 TRY_COUNT = 5
 
 def get_of_the_day():

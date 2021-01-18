@@ -1,4 +1,3 @@
-import os
 import json
 import requests
 import spotipy
@@ -10,15 +9,16 @@ from app.generate_page import generate_page, generate_profile_page, generate_mat
 from app.spotifunc import get_user_df
 from app.userfunc import get_user_profile, create_new_user, update_user_profile, update_user_privacy, update_user_code
 from app.comparefunc import get_user_from_code
+from secrets import secrets
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'CALIWASAMISSIONBUTNOWAGLEAVING'
 
 API_BASE = "https://accounts.spotify.com"
 SCOPE = "user-read-recently-played user-top-read"
-REDIRECT_URI = os.environ.get('SPOTIFY_CALLBACK_URI')
-CLIENT_ID = os.environ.get('SPOTIPY_CLIENT_ID')
-CLIENT_SECRET = os.environ.get('SPOTIPY_CLIENT_SECRET')
+REDIRECT_URI = secrets['SPOTIFY_CALLBACK_URI']
+CLIENT_ID = secrets['SPOTIPY_CLIENT_ID']
+CLIENT_SECRET = secrets['SPOTIPY_CLIENT_SECRET']
 
 @app.route('/')
 def index():

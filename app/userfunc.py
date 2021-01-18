@@ -1,4 +1,3 @@
-import os
 import random
 import pandas as pd
 from sqlalchemy import create_engine
@@ -8,9 +7,10 @@ from app.queries import user_query, top_artists_query, top_tracks_query, top_gen
 from app.dbfunc import sync_data, update_artists_and_tracks, top_to_dict
 from app.spotifunc import get_user_df, get_top_artists_df, get_top_tracks_df, get_top_genres_df, get_music_features_df
 from app.recofunc import get_new_recommendations
+from secrets import secrets
 
 TABLES = ['Users', 'RecentlyPlayed', 'CurrentPlaylists', 'TopArtists', 'TopTracks']
-DATABASE_URL = os.environ.get('DATABASE_URL')
+DATABASE_URL = secrets['DATABASE_URL']
 
 def get_user_profile(user_id):
     try:
