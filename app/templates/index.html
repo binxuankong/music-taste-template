@@ -1,71 +1,32 @@
-{% extends 'base.html' %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Bin Xuan Kong">
 
-{% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css/animate.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index_style.css') }}?u={{ last_updated }}">
-{% endblock %}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?u={{ last_updated }}">
 
-{% block index %}
-    <section id="intro">
-        <div class="intro-container">
-          <div id="index-intro" class="carousel  slide carousel-fade" data-ride="carousel">
-    
-            <ol class="carousel-indicators"></ol>
-    
-            <div class="carousel-inner" role="listbox">
-    
-              <div class="carousel-item active" style="background-image: url(static/img/background/kygo.jpg)">
-                <div class="carousel-container">
-                  <div class="container">
-                    <h2 class="animate__animated animate__fadeInDown">{% block title %} SoundBud {% endblock %}</h2>
-                    <p class="animate__animated animate__fadeInUp">Welcome to SoundBud demo.</p>
-                    <a href="{{ url_for('link') }}" class="btn-get-started scrollto animate__animated animate__fadeInUp">Get Started</a>
-                  </div>
-                </div>
-              </div>
-    
-              <div class="carousel-item" style="background-image: url(static/img/background/frank_ocean.jpg)">
-                <div class="carousel-container">
-                  <div class="container">
-                    <h2 class="animate__animated animate__fadeInDown">Discover your music taste.</h2>
-                    <p class="animate__animated animate__fadeInUp">Find out your favourite artists, songs and genres.</p>
-                    <a href="{{ url_for('profile') }}" class="btn-get-started scrollto animate__animated animate__fadeInUp">Discover</a>
-                  </div>
-                </div>
-              </div>
+    <!-- Favicons -->
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="apple-touch=icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
 
-              <div class="carousel-item" style="background-image: url(static/img/background/zedd.jpg)">
-                <div class="carousel-container">
-                  <div class="container">
-                    <h2 class="animate__animated animate__fadeInDown">Match with other people.</h2>
-                    <p class="animate__animated animate__fadeInUp">Compare your music taste with other people and find people with similar music taste as you.</p>
-                    <a href="{{ url_for('match') }}" class="btn-get-started scrollto animate__animated animate__fadeInUp">Match</a>
-                  </div>
-                </div>
-              </div>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Montserrat:300,400,500,700" rel="stylesheet">
 
-              <div class="carousel-item" style="background-image: url(static/img/background/amf.jpg)">
-                <div class="carousel-container">
-                  <div class="container">
-                    <h2 class="animate__animated animate__fadeInDown">Explore new music.</h2>
-                    <p class="animate__animated animate__fadeInUp">Get recommendation based on your music taste and discover trending artists and songs.</p>
-                    <a href="{{ url_for('explore') }}" class="btn-get-started scrollto animate__animated animate__fadeInUp">Explore</a>
-                  </div>
-                </div>
-              </div>
-    
-            <a class="carousel-control-prev" href="#index-intro" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon ion-chevron-left" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-    
-            <a class="carousel-control-next" href="#index-intro" role="button" data-slide="next">
-              <span class="carousel-control-next-icon ion-chevron-right" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
-    
-          </div>
-        </div>
-      </section><!-- End Intro Section -->
-      
-{% endblock %}
+    <title>Music Taste Demo</title>
+    <meta content="" name="Music taste matchmaking and dating">
+    <meta content="" name="music, music taste, matchmaking, dating, artist, album, song, track, genre">
+  </head>
+  
+  <body>
+    <div class="background">
+      <a href="https://soundbud.ml"><img src="{{ url_for('static', filename='img/favicon.png') }}"></a>
+      <h1>Our website has been migrated to a different server.<br>Click the button below to visit our new website.</h1>
+      <a href="https://soundbud.ml" class="btn-primary">Get Started</a>
+    </div>
+  </body>
+</html>

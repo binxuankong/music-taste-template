@@ -6,123 +6,48 @@
     --blue: #05a8aa;
 }
 
-body {
+.background {
     background-color: var(--grey);
+    width: 100vw;
+    height: 100vh;
+    margin: auto;
+    text-align: center;
+}
+
+img{
+    width: 256px;
+    height: auto;
+    margin-top: 64px;
+    margin-bottom: 16px;
 }
 
 h1 {
-    color: var(--white);
-    padding-top: 6px;
-    padding-bottom: 6px;
-}
-
-h2 {
-    color: var(--white);
-    padding-top: 4px;
-    padding-bottom: 4px;
-}
-
-p {
-    color: var(--white);
-}
-
-.navbar-custom {
-    background-color: var(--blue);
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 64;
-}
-
-#main-content {
-    padding-top: 56px;
-}
-
-.navbar-custom .navbar-logo img {
-    max-height: 40px;
-}
-
-.navbar-nav {
-    margin-right: 8px;
-}
-
-.navbar-custom .navbar-brand {
-    color: var(--black);
-    font-size: 20px;
-    font-weight: 600;
-    margin-left: 8px;
-    margin-right: 32px;
-}
-
-.nav-item .nav-link {
-    color: var(--black);
-    font-weight: 400;
-    margin-right: 2px;
-}
-
-.navbar-toggler {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-.navbar-toggler .navbar-toggler-icon {
-    margin-bottom: 4px;
-    display: block;
-    width: 22px;
-    height: 2px;
-    background-color: var(--black);
-    border-radius: 1px;
-}
-
-.search-form-tigger, .search-form-tigger:hover {
-    text-decoration: none;
-    background: none;
-    color: var(--black);
-    font-size: 22px;
-    line-height: 1;
-    margin: 4px 0px;
-}
-
-.search-form-wrapper {
-    display: none;
-    position: fixed;
-    left: 0;
-    right: 0;
-    padding: 20px 15px;
-    margin-top: 42px;
-    z-index: 64;
-}
-
-@media (max-width: 768px) {
-    .search-form-wrapper {
-        margin-top: 264px;
-    }
-}
-
-.search-form-wrapper.open {
-    display: block;
-}
-
-#search-bar input {
-    border: 2px solid var(--red);
+    color: var(--blue);
+    font-size: 48px;
+    padding: 16px 64px;
+    margin: 16px;
 }
 
 .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
-    background-color: var(--blue) !important;
-    border-color: var(--black )!important;
-    color: var(--black) !important;
-    font-size: 18px;
-    border-radius: 28px;
-    padding: 6px 24px;
-    margin: 2px;
+    text-decoration: none;
+    background-color: var(--red) !important;
+    border-color: var(--red )!important;
+    color: var(--white) !important;
+    font-size: 32px;
+    border-radius: 64px;
+    padding: 12px 32px;
+    margin: 16px;
 }
 
-.btn-secondary, .btn-secondary:hover, .btn-secondary:active, .btn-secondary:visited {
-    background-color: var(--blue) !important;
-    border-color: var(--black )!important;
-    color: var(--black) !important;
-    font-size: 14px;
-    border-radius: 28px;
-    padding: 4px 14px;
-    margin: 2px;
+@media (max-width: 768px) {
+    img {
+        width: 228px;
+        height: auto;
+    }
+    h1 {
+        font-size: 32px;
+    }
+    .btn-primary {
+        font-size: 32px;
+    }
 }
